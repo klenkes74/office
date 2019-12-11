@@ -1,0 +1,18 @@
+{
+  "kind": "CreateFolder",
+  "namespace": "de.kaiserpfalzedv.office.folders",
+  "version": "1.0.0-SNAPSHOT",
+  "metadata": {
+    "name": "I19-001",
+    "scope": "kes",
+    "created": "2019-12-08T23:17:10.673Z"
+  },
+  "spec": {
+    "uuid": "f4c41a1c-73fe-418e-98b3-d1187fcbd45b",
+    "key": "I19-001",
+    "shortName": "Roland",
+    "name": "Roland",
+    "description": "Roland",
+    "created": "2019-12-08T23:17:10.673Z"
+  }
+}
