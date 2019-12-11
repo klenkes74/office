@@ -11,8 +11,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>de.kaiserpfalzedv.office</groupId>
     <artifactId>office-folders-store</artifactId>
+    <name>KP Office :: Folders :: Panache Store</name>
 
     <properties>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
@@ -62,25 +62,6 @@
             <artifactId>quarkus-jdbc-h2</artifactId>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.4.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.4.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <version>1.4.2</version>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>

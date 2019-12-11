@@ -13,7 +13,9 @@
 
     <groupId>de.kaiserpfalzedv.base</groupId>
     <artifactId>office-base-api</artifactId>
-    
+
+    <name>KP Office :: Base API</name>
+
     <properties>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <maven.compiler.parameters>true</maven.compiler.parameters>
