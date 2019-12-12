@@ -18,14 +18,17 @@
 
 package de.kaiserpfalzedv.office.folders;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.office.folders.api.FolderCommand;
 import de.kaiserpfalzedv.office.folders.api.FolderCommandService;
 import org.immutables.value.Value;
 
 @Value.Immutable
-@Value.Modifiable
+@JsonSerialize(as = ImmutableCreateFolder.class)
+@JsonDeserialize(builder = ImmutableCreateFolder.Builder.class)
 public interface CreateFolder extends FolderCommand {
-    public static final String KIND = "de.kaiserpfalzedv.office.folders.CreateFolder";
+    String KIND = "de.kaiserpfalzedv.office.folders.CreateFolder";
 
     @Value.Default
     default String getKind() { return KIND; }

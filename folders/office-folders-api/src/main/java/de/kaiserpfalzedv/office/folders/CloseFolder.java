@@ -18,14 +18,17 @@
 
 package de.kaiserpfalzedv.office.folders;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.office.folders.api.FolderCommand;
 import de.kaiserpfalzedv.office.folders.api.FolderCommandService;
 import org.immutables.value.Value;
 
 @Value.Immutable
-@Value.Modifiable
+@JsonSerialize(as = ImmutableCloseFolder.class)
+@JsonDeserialize(builder = ImmutableCloseFolder.Builder.class)
 public interface CloseFolder extends FolderCommand {
-    public static final String KIND = "de.kaiserpfalzedv.office.folders.CloseFolder";
+    String KIND = "de.kaiserpfalzedv.office.folders.CloseFolder";
 
     @Value.Default
     default String getKind() { return KIND; }

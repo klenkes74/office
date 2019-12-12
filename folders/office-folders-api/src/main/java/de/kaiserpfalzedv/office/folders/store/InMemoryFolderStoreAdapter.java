@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.office.folders.store;
 
+import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 import de.kaiserpfalzedv.office.folders.ImmutableFolderSpec;
 import org.slf4j.Logger;
@@ -66,8 +67,17 @@ public class InMemoryFolderStoreAdapter implements FolderStoreAdapter {
     }
 
     @Override
-    public FolderSpec save(final FolderSpec data) {
+    public FolderSpec save(final FolderSpec data) throws DataAlreadyExistsException {
         LOGGER.debug("Saving data: data={}", data);
+
+        if (folders.containsKey(data.getUuid())) {
+            throw new DataAlreadyExistsException(folders.get(data.getUuid()).getIdentity());
+        }
+
+        if (folderByScopeAndKey.containsKey(data.getScope().orElse("./.") + "::" + data.getKey())) {
+            throw new DataAlreadyExistsException(
+                    folderByScopeAndKey.get(data.getScope().orElse("./.") + "::" + data.getKey()).getIdentity());
+        }
 
         OffsetDateTime now = OffsetDateTime.now();
 
@@ -102,5 +112,11 @@ public class InMemoryFolderStoreAdapter implements FolderStoreAdapter {
             data = ImmutableFolderSpec.copyOf(data).withClosed(OffsetDateTime.now()).withModified(OffsetDateTime.now());
             folders.put(id, data);
         }
+    }
+
+    public long count() {
+        LOGGER.debug("Getting count: count={}", folders.size());
+
+        return folders.size();
     }
 }

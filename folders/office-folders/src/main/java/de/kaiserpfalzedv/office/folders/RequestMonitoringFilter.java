@@ -40,6 +40,6 @@ public class RequestMonitoringFilter implements ContainerRequestFilter {
         final String method = context.getMethod();
         final String path = info.getPath();
 
-        LOGGER.info("Request %s %s", method, path);
+        LOGGER.info("Request {} {}", method, path);
     }
 }

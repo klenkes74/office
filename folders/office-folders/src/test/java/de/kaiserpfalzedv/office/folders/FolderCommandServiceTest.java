@@ -18,12 +18,16 @@
 
 package de.kaiserpfalzedv.office.folders;
 
+import de.kaiserpfalzedv.base.ImmutableMetadata;
+import de.kaiserpfalzedv.base.ImmutableObjectIdentifier;
+import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.office.folders.store.InMemoryFolderStoreAdapter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -31,14 +35,40 @@ public class FolderCommandServiceTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderCommandServiceTest.class);
 
     private static final UUID ID = UUID.randomUUID();
-    private static final UUID EMPTY_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
+    private static final CreateFolder CREATE_FOLDER = ImmutableCreateFolder.builder()
+            .kind(Folder.KIND)
+            .metadata(ImmutableMetadata.builder()
+                    .identity(ImmutableObjectIdentifier.builder()
+                            .kind(Folder.KIND)
+                            .version(Folder.VERSION)
+                            .uuid(ID)
+                            .scope("kes")
+                            .name("I'19-0001")
+                            .build()
+                    )
+                    .created(OffsetDateTime.now())
+                    .build()
+            )
+            .spec(ImmutableFolderSpec.builder()
+                    .uuid(ID)
+                    .scope("kes")
+                    .key("I'19-0001")
+                    .name("Adoptionsverfahren Lichti ./. Hellwig")
+                    .shortName("Lichti ./. Hellwig")
+                    .description("Adoptionsverfahren Alexandra Maria Lichti")
+                    .created(OffsetDateTime.now())
+                    .modified(OffsetDateTime.now())
+                    .build()
+            )
+            .build();
 
     private FolderCommandService service;
 
     @BeforeEach
-    void setUpFolderCommandService() {
+    void setUpFolderCommandService() throws DataAlreadyExistsException {
         service = new FolderCommandService(new InMemoryFolderStoreAdapter());
+        service.write(CREATE_FOLDER);
     }
 
 
@@ -60,8 +90,8 @@ public class FolderCommandServiceTest {
     }
 
     @Test
-    public void shouldReturnEmptyDataWhenGiven0000UUID() {
-        Folder result = service.load(EMPTY_ID);
+    public void shouldReturnEmptyDataWhenGivenRandomUUID() {
+        Folder result = service.load(UUID.randomUUID());
         LOGGER.trace("Loaded: {}", result);
 
         assert !result.getSpec().isPresent();

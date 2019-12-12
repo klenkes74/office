@@ -18,13 +18,16 @@
 
 package de.kaiserpfalzedv.base.status;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.base.spec.Spec;
 import org.immutables.value.Value;
 
 import java.util.Optional;
 
 @Value.Immutable
-@Value.Modifiable
+@JsonSerialize(as = ImmutableNackStatus.class)
+@JsonDeserialize(builder = ImmutableNackStatus.Builder.class)
 public interface NackStatus<T extends Spec<T>> extends Status<T> {
     @Override
     @Value.Default

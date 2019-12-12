@@ -1,6 +1,6 @@
 package de.kaiserpfalzedv.office.folders;
 
-import de.kaiserpfalzedv.office.folders.store.Folder;
+import de.kaiserpfalzedv.office.folders.store.FolderStoreAdapter;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.persistence.NoResultException;
+import javax.inject.Inject;
 import java.util.TimeZone;
 
 @ApplicationScoped
@@ -24,6 +24,9 @@ public class Application {
 
     @ConfigProperty(name = "office-folders.tz", defaultValue = "UTC")
     String tz;
+
+    @Inject
+    FolderStoreAdapter store;
 
     void onStart(@Observes StartupEvent event) {
         LOGGER.info("Started: {} (v{})", name, version);
@@ -39,13 +42,7 @@ public class Application {
 
     @Scheduled(every = "10s")
     void logWatchdog() {
-        long folders = 0;
-        try {
-            folders = Folder.count();
-        } catch (NoResultException e) {
-            // need nothing to do. Only logging will log wrong number (unless the database is empty, then 0 is correct!
-        }
-
+        long folders = store.count();
         LOGGER.info("log watchdog. folder count={}", folders);
     }
 }

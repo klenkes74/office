@@ -1,5 +1,6 @@
 package de.kaiserpfalzedv.office.folders.store;
 
+import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 import de.kaiserpfalzedv.office.folders.ImmutableFolderSpec;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +39,7 @@ public class InMemoryFolderStoreAdapterTest {
     private FolderStoreAdapter service;
 
     @BeforeEach
-    public void generateMockService() {
+    public void generateMockService() throws DataAlreadyExistsException {
         service = new InMemoryFolderStoreAdapter();
 
         service.save(FOLDER);

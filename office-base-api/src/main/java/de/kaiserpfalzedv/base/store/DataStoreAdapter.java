@@ -31,7 +31,9 @@ public interface DataStoreAdapter<T extends Spec<T>> {
 
     Collection<T> loadByScope(final String scope);
 
-    T save(final T data);
+    T save(final T data) throws DataAlreadyExistsException;
 
     void close(final UUID id);
+
+    long count();
 }

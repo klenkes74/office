@@ -18,6 +18,9 @@
 
 package de.kaiserpfalzedv.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
@@ -25,7 +28,8 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @Value.Immutable
-@Value.Modifiable
+@JsonSerialize(as = ImmutableMetadata.class)
+@JsonDeserialize(builder = ImmutableMetadata.Builder.class)
 public interface Metadata extends Serializable {
     ObjectIdentifier getIdentity();
 
@@ -37,6 +41,7 @@ public interface Metadata extends Serializable {
 
     Optional<OffsetDateTime> getInvalidAfter();
 
+    @JsonIgnore
     @Value.Default
     default boolean isInvalid() {
         return getInvalidAfter().isPresent();

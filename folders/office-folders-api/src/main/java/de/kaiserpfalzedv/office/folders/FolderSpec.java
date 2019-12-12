@@ -18,6 +18,8 @@
 
 package de.kaiserpfalzedv.office.folders;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.base.ImmutableMetadata;
 import de.kaiserpfalzedv.base.ImmutableObjectIdentifier;
 import de.kaiserpfalzedv.base.Metadata;
@@ -33,7 +35,8 @@ import java.util.UUID;
  * This is the base folder. It is used to organize other objects.
  */
 @Value.Immutable
-@Value.Modifiable
+@JsonSerialize(as = ImmutableFolderSpec.class)
+@JsonDeserialize(builder = ImmutableFolderSpec.Builder.class)
 public interface FolderSpec extends Spec<FolderSpec> {
     UUID getUuid();
     Optional<String> getScope();

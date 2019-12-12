@@ -28,7 +28,6 @@ import java.util.UUID;
 @Table(name = "FOLDERS_CHANGES")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "_ACTION", length = 256)
-@Access(AccessType.PROPERTY)
 public class FolderChange extends PanacheEntity {
     @Column(name = "_ACTIVE", length = 256, insertable = false, updatable = false, nullable = false)
     public String kind;

@@ -18,6 +18,8 @@
 
 package de.kaiserpfalzedv.base;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
@@ -25,7 +27,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Value.Immutable
-@Value.Modifiable
+@JsonSerialize(as = ImmutableObjectIdentifier.class)
+@JsonDeserialize(builder = ImmutableObjectIdentifier.Builder.class)
 public interface ObjectIdentifier extends Serializable {
     /**
      * Tpye of the object that is identified.

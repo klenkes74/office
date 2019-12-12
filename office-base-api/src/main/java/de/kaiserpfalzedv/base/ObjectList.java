@@ -18,15 +18,18 @@
 
 package de.kaiserpfalzedv.base;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.immutables.value.Value;
 
 import java.util.List;
 import java.util.Optional;
 
 @Value.Immutable
-@Value.Modifiable
+@JsonSerialize(as = ImmutableObjectList.class)
+@JsonDeserialize(builder = ImmutableObjectList.Builder.class)
 public interface ObjectList<T extends SingleObject<?>>  extends BaseAPI<ObjectList<T>> {
-    static final String KIND = "de.kaiserpfalz.base.list";
+    String KIND = "de.kaiserpfalz.base.list";
 
     @Value.Default
     default String getKind() {

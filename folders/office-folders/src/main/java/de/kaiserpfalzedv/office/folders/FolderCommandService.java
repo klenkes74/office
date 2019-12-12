@@ -25,6 +25,7 @@ import de.kaiserpfalzedv.base.communication.CommandService;
 import de.kaiserpfalzedv.base.communication.Result;
 import de.kaiserpfalzedv.base.status.ImmutableNackStatus;
 import de.kaiserpfalzedv.base.status.ImmutableOkStatus;
+import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.office.folders.store.FolderStoreAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +58,7 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
         throw new IllegalArgumentException("Unknown argument of type " + command.getClass().getSimpleName());
     }
 
-    public FolderCreated write(final CreateFolder command) {
+    public FolderCreated write(final CreateFolder command) throws DataAlreadyExistsException {
         LOGGER.debug("Creating folder: {}", command);
 
         ImmutableFolderCreated.Builder result = ImmutableFolderCreated.builder()
@@ -145,10 +146,14 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
                     .metadata(ImmutableMetadata.builder()
                             .identity(ImmutableObjectIdentifier.builder()
                                     .kind(Folder.KIND)
+                                    .uuid(UUID.randomUUID())
                                     .scope(scope)
                                     .name(key)
                                     .build()
                             )
+                            .created(OffsetDateTime.now())
+                            .modified(OffsetDateTime.now())
+                            .invalidAfter(OffsetDateTime.now().plusHours(1))
                             .build()
                     )
                     .addStatus(ImmutableNackStatus.builder()

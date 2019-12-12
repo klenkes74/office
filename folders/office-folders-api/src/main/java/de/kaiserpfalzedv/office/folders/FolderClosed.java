@@ -18,11 +18,14 @@
 
 package de.kaiserpfalzedv.office.folders;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.office.folders.api.FolderResult;
 import org.immutables.value.Value;
 
 @Value.Immutable
-@Value.Modifiable
+@JsonSerialize(as = ImmutableFolderClosed.class)
+@JsonDeserialize(builder = ImmutableFolderClosed.Builder.class)
 public interface FolderClosed extends FolderResult<CloseFolder> {
     @Value.Default
     default String getKind() { return "FolderCreated"; }

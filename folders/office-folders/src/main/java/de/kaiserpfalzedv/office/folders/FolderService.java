@@ -3,8 +3,8 @@ package de.kaiserpfalzedv.office.folders;
 import de.kaiserpfalzedv.base.*;
 import de.kaiserpfalzedv.base.status.ImmutableNackStatus;
 import de.kaiserpfalzedv.base.status.ImmutableOkStatus;
-import de.kaiserpfalzedv.base.status.ModifiableOkStatus;
 import de.kaiserpfalzedv.base.status.Status;
+import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import org.eclipse.microprofile.metrics.annotation.ConcurrentGauge;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
@@ -101,7 +101,7 @@ public class FolderService {
     ) {
         return ImmutableFolder.builder()
                 .from(service.load(uuid))
-                .addStatus(ModifiableOkStatus.create().setMessage(Optional.empty()))
+                .addStatus(ImmutableOkStatus.builder().message(Optional.empty()).build())
                 .build();
     }
 
@@ -125,11 +125,22 @@ public class FolderService {
     @Metered(name = "folders.createFolder")
     @Counted(name = "folders.createFolder.count")
     @ConcurrentGauge(name = "folders.createFolder.concurrent")
-    public FolderCreated createFolder(final ModifiableCreateFolder command) {
-        return ImmutableFolderCreated.builder()
-                .from(service.write(command))
-                .addStatus(ModifiableOkStatus.create().setMessage(Optional.empty()))
-                .build();
+    public FolderCreated createFolder(final ImmutableCreateFolder command) {
+        try {
+            return ImmutableFolderCreated.builder()
+                    .from(service.write(command))
+                    .addStatus(ImmutableOkStatus.builder().message(Optional.empty()).build())
+                    .build();
+        } catch (DataAlreadyExistsException e) {
+            return ImmutableFolderCreated.builder()
+                    .metadata(command.getMetadata())
+                    .spec(command.getSpec())
+                    .addStatus(ImmutableNackStatus.builder()
+                            .message(Optional.of(e.getMessage() + e.getIdentifier()))
+                            .build()
+                    )
+                    .build();
+        }
     }
 
     @POST
@@ -138,10 +149,11 @@ public class FolderService {
     @Metered(name = "folders.closeFolder")
     @Counted(name = "folders.closeFolder.count")
     @ConcurrentGauge(name = "folders.closeFolder.concurrent")
-    public FolderClosed closeFolder(final ModifiableCloseFolder command) {
-        return ModifiableFolderClosed.create()
+    public FolderClosed closeFolder(final ImmutableCloseFolder command) {
+        return ImmutableFolderClosed.builder()
                 .from(service.close(command))
-                .addStatus(ModifiableOkStatus.create().setMessage(Optional.empty()));
+                .addStatus(ImmutableOkStatus.builder().message(Optional.empty()).build())
+                .build();
     }
 
     @DELETE
@@ -151,8 +163,9 @@ public class FolderService {
     @Counted(name = "folders.closeFolder.count")
     @ConcurrentGauge(name = "folders.closeFolder.concurrent")
     public FolderClosed closeFolder(@PathParam("uuid") final UUID id) {
-        return ModifiableFolderClosed.create()
+        return ImmutableFolderClosed.builder()
                 .from(service.close(id))
-                .addStatus(ModifiableOkStatus.create().setMessage(Optional.empty()));
+                .addStatus(ImmutableOkStatus.builder().message(Optional.empty()).build())
+                .build();
     }
 }

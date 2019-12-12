@@ -18,12 +18,15 @@
 
 package de.kaiserpfalzedv.office.folders;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.base.BaseAPI;
 import de.kaiserpfalzedv.base.SingleObject;
 import org.immutables.value.Value;
 
 @Value.Immutable
-@Value.Modifiable
+@JsonSerialize(as = ImmutableFolder.class)
+@JsonDeserialize(builder = ImmutableFolder.Builder.class)
 public interface Folder extends SingleObject<FolderSpec>, BaseAPI<FolderSpec> {
     String KIND = Folder.class.getCanonicalName();
     String VERSION = "1.0.0";
