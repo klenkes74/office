@@ -16,25 +16,19 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.folders;
+package de.kaiserpfalzedv.office.folders.store;
 
-import de.kaiserpfalzedv.base.BaseAPI;
-import de.kaiserpfalzedv.base.SingleObject;
-import org.immutables.value.Value;
+import de.kaiserpfalzedv.office.folders.CreateFolder;
 
-@Value.Immutable
-@Value.Modifiable
-public interface Folder extends SingleObject<FolderSpec>, BaseAPI<FolderSpec> {
-    String KIND = Folder.class.getCanonicalName();
-    String VERSION = "1.0.0";
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import java.time.OffsetDateTime;
 
-    @Value.Default
-    default String getKind() {
-        return KIND;
-    }
-
-    @Value.Default
-    default String getVersion() {
-        return VERSION;
-    }
+@Entity
+@DiscriminatorValue(CreateFolder.KIND)
+public class FolderCreate extends FolderChange {
+    public String name;
+    public String shortName;
+    public String description;
+    public OffsetDateTime created;
 }

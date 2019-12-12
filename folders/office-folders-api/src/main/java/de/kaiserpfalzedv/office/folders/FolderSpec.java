@@ -18,7 +18,6 @@
 
 package de.kaiserpfalzedv.office.folders;
 
-import com.jcabi.manifests.Manifests;
 import de.kaiserpfalzedv.base.ImmutableMetadata;
 import de.kaiserpfalzedv.base.ImmutableObjectIdentifier;
 import de.kaiserpfalzedv.base.Metadata;
@@ -52,7 +51,7 @@ public interface FolderSpec extends Spec<FolderSpec> {
     default ObjectIdentifier getIdentity() {
         return ImmutableObjectIdentifier.builder()
                 .kind(Folder.KIND)
-                .version(Manifests.read("Implementation-Version"))
+                .version(Folder.VERSION)
                 .uuid(getUuid())
                 .scope(getScope())
                 .name(getKey())

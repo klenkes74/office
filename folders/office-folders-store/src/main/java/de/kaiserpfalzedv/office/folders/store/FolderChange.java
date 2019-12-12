@@ -16,11 +16,28 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.communication;
+package de.kaiserpfalzedv.office.folders.store;
 
-import de.kaiserpfalzedv.base.spec.Spec;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-public interface DataConverter<S extends Spec<S>, T> {
-    S convertToAPI(T data);
-    T convertFromAPI(S spec);
+import javax.persistence.*;
+import java.util.UUID;
+
+
+@Entity
+@Table(name = "FOLDERS_CHANGES")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "_ACTION", length = 256)
+@Access(AccessType.PROPERTY)
+public class FolderChange extends PanacheEntity {
+    @Column(name = "_ACTIVE", length = 256, insertable = false, updatable = false, nullable = false)
+    public String kind;
+
+    @Column(name = "_UUID")
+    public UUID uuid;
+
+    @Column(name = "_SCOPE")
+    public String scope;
+    @Column(name = "_KEY")
+    public String key;
 }

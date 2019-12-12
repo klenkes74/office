@@ -16,21 +16,11 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.communication;
+package de.kaiserpfalzedv.base.store;
 
 import de.kaiserpfalzedv.base.spec.Spec;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-
-public interface DataRepository<T extends Spec<T>> {
-    Optional<T> loadById(final UUID id);
-    Optional<T> loadByName(final String scope, final String name);
-
-    Collection<T> loadByScope(final String scope);
-
-    T write(final T data);
-    void close(final UUID id);
+public interface DataConverter<S extends Spec<S>, T> {
+    S convertToAPI(T data);
+    T convertFromAPI(S spec);
 }

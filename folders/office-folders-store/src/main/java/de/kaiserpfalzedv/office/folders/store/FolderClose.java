@@ -16,10 +16,14 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.folders.data;
+package de.kaiserpfalzedv.office.folders.store;
 
-import javax.enterprise.context.ApplicationScoped;
+import de.kaiserpfalzedv.office.folders.CloseFolder;
 
-@ApplicationScoped
-public class MockFolderRepository extends de.kaiserpfalzedv.office.folders.mocks.MockFolderRepository {
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue(CloseFolder.KIND)
+public class FolderClose extends FolderChange {
 }

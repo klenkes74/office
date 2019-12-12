@@ -1,6 +1,6 @@
 package de.kaiserpfalzedv.office.folders;
 
-import de.kaiserpfalzedv.office.folders.data.Folder;
+import de.kaiserpfalzedv.office.folders.store.Folder;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;

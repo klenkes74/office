@@ -18,12 +18,14 @@
 
 package de.kaiserpfalzedv.office.folders;
 
-import de.kaiserpfalzedv.base.*;
+import de.kaiserpfalzedv.base.BaseAPI;
+import de.kaiserpfalzedv.base.ImmutableMetadata;
+import de.kaiserpfalzedv.base.ImmutableObjectIdentifier;
 import de.kaiserpfalzedv.base.communication.CommandService;
 import de.kaiserpfalzedv.base.communication.Result;
 import de.kaiserpfalzedv.base.status.ImmutableNackStatus;
 import de.kaiserpfalzedv.base.status.ImmutableOkStatus;
-import de.kaiserpfalzedv.office.folders.api.FolderRepository;
+import de.kaiserpfalzedv.office.folders.store.FolderStoreAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,18 +33,20 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 @ApplicationScoped
 public class FolderCommandService implements CommandService<FolderSpec>, Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderCommandService.class);
 
     @Inject
-    FolderRepository repository;
+    FolderStoreAdapter repository;
 
     public FolderCommandService() {}
 
-    public FolderCommandService(final FolderRepository repositroy) {
+    public FolderCommandService(final FolderStoreAdapter repositroy) {
         this.repository = repositroy;
     }
 
@@ -63,7 +67,7 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
                 );
 
         if (command.getSpec().isPresent()) {
-            result = result.spec(repository.write(command.getSpec().get()));
+            result.spec(repository.save(command.getSpec().get()));
         }
 
         return result.build();
@@ -118,7 +122,7 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
         if (data.isPresent()) {
             FolderSpec spec = data.get();
 
-            result = result
+            result
                     .metadata(ImmutableMetadata.builder()
                             .identity(ImmutableObjectIdentifier.builder()
                                     .kind(Folder.KIND)
@@ -137,7 +141,7 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
                             .build()
                     );
         } else {
-            result = result
+            result
                     .metadata(ImmutableMetadata.builder()
                             .identity(ImmutableObjectIdentifier.builder()
                                     .kind(Folder.KIND)

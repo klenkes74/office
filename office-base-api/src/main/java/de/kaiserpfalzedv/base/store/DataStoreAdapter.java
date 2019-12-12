@@ -16,25 +16,22 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.folders;
+package de.kaiserpfalzedv.base.store;
 
-import de.kaiserpfalzedv.base.BaseAPI;
-import de.kaiserpfalzedv.base.SingleObject;
-import org.immutables.value.Value;
+import de.kaiserpfalzedv.base.spec.Spec;
 
-@Value.Immutable
-@Value.Modifiable
-public interface Folder extends SingleObject<FolderSpec>, BaseAPI<FolderSpec> {
-    String KIND = Folder.class.getCanonicalName();
-    String VERSION = "1.0.0";
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
-    @Value.Default
-    default String getKind() {
-        return KIND;
-    }
+public interface DataStoreAdapter<T extends Spec<T>> {
+    Optional<T> loadById(final UUID id);
 
-    @Value.Default
-    default String getVersion() {
-        return VERSION;
-    }
+    Optional<T> loadByName(final String scope, final String name);
+
+    Collection<T> loadByScope(final String scope);
+
+    T save(final T data);
+
+    void close(final UUID id);
 }

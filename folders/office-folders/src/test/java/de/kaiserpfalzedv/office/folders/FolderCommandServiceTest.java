@@ -18,14 +18,13 @@
 
 package de.kaiserpfalzedv.office.folders;
 
-import de.kaiserpfalzedv.office.folders.mocks.MockFolderRepository;
+import de.kaiserpfalzedv.office.folders.store.InMemoryFolderStoreAdapter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.UUID;
 
 public class FolderCommandServiceTest {
@@ -39,7 +38,7 @@ public class FolderCommandServiceTest {
 
     @BeforeEach
     void setUpFolderCommandService() {
-        service = new FolderCommandService(new MockFolderRepository());
+        service = new FolderCommandService(new InMemoryFolderStoreAdapter());
     }
 
 
@@ -48,6 +47,7 @@ public class FolderCommandServiceTest {
         Folder result = service.load(ID);
         LOGGER.trace("Loaded: {}", result);
 
+        assert result.getSpec().isPresent();
         assert ID.equals(result.getSpec().get().getUuid());
     }
 

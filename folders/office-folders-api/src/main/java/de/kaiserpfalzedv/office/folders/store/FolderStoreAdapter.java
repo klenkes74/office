@@ -16,10 +16,10 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.folders.api;
+package de.kaiserpfalzedv.office.folders.store;
 
-import de.kaiserpfalzedv.base.communication.DataRepository;
+import de.kaiserpfalzedv.base.store.DataStoreAdapter;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 
-public interface FolderRepository extends DataRepository<FolderSpec> {
+public interface FolderStoreAdapter extends DataStoreAdapter<FolderSpec> {
 }
