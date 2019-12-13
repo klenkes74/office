@@ -3,19 +3,22 @@ package de.kaiserpfalzedv.office.folders.store;
 import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 import de.kaiserpfalzedv.office.folders.ImmutableFolderSpec;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
-public class InMemoryFolderStoreAdapterTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryFolderStoreAdapterTest.class);
+@QuarkusTest
+public class JPAFolderStoreAdapterTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JPAFolderStoreAdapterTest.class);
 
     private static final UUID ID = UUID.randomUUID();
     private static final String SCOPE = "kes";
@@ -39,11 +42,15 @@ public class InMemoryFolderStoreAdapterTest {
     private FolderStoreAdapter service;
 
     @BeforeEach
+    @Transactional
     public void generateMockService() throws DataAlreadyExistsException {
-        service = new InMemoryFolderStoreAdapter();
+        service = new JPAFolderStoreAdapter();
 
-        LOGGER.info("Setup for test: service={}, folder={}", service, FOLDER);
-        service.save(FOLDER);
+        if (Folder.find("uuid", FOLDER.getUuid()).count() == 0) {
+            service.save(FOLDER);
+        }
+
+        assert Folder.count("uuid", FOLDER.getUuid()) == 1;
     }
 
     @Test
@@ -104,6 +111,7 @@ public class InMemoryFolderStoreAdapterTest {
     }
 
     @Test
+    @Transactional
     public void shouldSetCloseDateWhenFolderIsClosed() {
         service.close(ID);
 
@@ -112,5 +120,25 @@ public class InMemoryFolderStoreAdapterTest {
 
         assert result.isPresent();
         assert result.get().getClosed().isPresent();
+    }
+
+    @Test
+    @Transactional
+    public void shouldRetrieveALotOfFoldersWhenTheyExist() throws DataAlreadyExistsException {
+        for (int i = 10; i < 50; i++) {
+            service.save(
+                    ImmutableFolderSpec.copyOf(FOLDER)
+                            .withUuid(UUID.randomUUID())
+                            .withKey("I'19-00" + i)
+                            .withName(FOLDER.getName() + " Nr. " + i)
+                            .withShortName(FOLDER.getShortName() + " Nr. " + i)
+                            .withDescription(FOLDER.getDescription() + " (Nr. " + i + ")")
+            );
+        }
+
+        Collection<FolderSpec> result = service.loadByScope(FOLDER.getScope().orElse("./."));
+        LOGGER.info("Loaded: {}", result);
+
+        assert result.size() == Folder.count();
     }
 }
