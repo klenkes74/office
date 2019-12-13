@@ -24,6 +24,9 @@ import de.kaiserpfalzedv.office.folders.api.FolderCommand;
 import de.kaiserpfalzedv.office.folders.api.FolderCommandService;
 import org.immutables.value.Value;
 
+/**
+ * A new folder is created.
+ */
 @Value.Immutable
 @JsonSerialize(as = ImmutableCreateFolder.class)
 @JsonDeserialize(builder = ImmutableCreateFolder.Builder.class)
@@ -31,9 +34,18 @@ public interface CreateFolder extends FolderCommand {
     String KIND = "de.kaiserpfalzedv.office.folders.CreateFolder";
 
     @Value.Default
-    default String getKind() { return KIND; }
+    default String getKind() {
+        return KIND;
+    }
 
+    @Value.Default
     default FolderCreated execute(FolderCommandService service) {
         return (FolderCreated) service.execute(this);
+    }
+
+    @Value.Default
+    @Override
+    default FolderSpec apply(final FolderSpec orig) {
+        return getSpec().orElseThrow(IllegalStateException::new);
     }
 }

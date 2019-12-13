@@ -42,13 +42,11 @@ import java.util.UUID;
 public class FolderCommandService implements CommandService<FolderSpec>, Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderCommandService.class);
 
+    private FolderStoreAdapter storeAdapter;
+
     @Inject
-    FolderStoreAdapter repository;
-
-    public FolderCommandService() {}
-
-    public FolderCommandService(final FolderStoreAdapter repositroy) {
-        this.repository = repositroy;
+    public FolderCommandService(final FolderStoreAdapter adapter) {
+        this.storeAdapter = adapter;
     }
 
     @Override
@@ -68,7 +66,7 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
                 );
 
         if (command.getSpec().isPresent()) {
-            result.spec(repository.save(command.getSpec().get()));
+            result.spec(storeAdapter.save(command.getSpec().get()));
         }
 
         return result.build();
@@ -77,7 +75,7 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
     public FolderClosed close(final CloseFolder command) {
         LOGGER.debug("Closing folder: {}", command);
 
-        repository.close(command.getMetadata().getIdentity().getUuid());
+        storeAdapter.close(command.getMetadata().getIdentity().getUuid());
 
         return ImmutableFolderClosed.builder()
                 .metadata(ImmutableMetadata.builder()
@@ -93,7 +91,7 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
     public FolderClosed close(final UUID id) {
         LOGGER.debug("Closing folder: {}", id);
 
-        repository.close(id);
+        storeAdapter.close(id);
 
         return ImmutableFolderClosed.builder()
                 .metadata(ImmutableMetadata.builder()
@@ -115,7 +113,7 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
     public Folder load(final String scope, final String key) {
         LOGGER.debug("Loading folder: scope={}, key={}", scope, key);
 
-        Optional<FolderSpec> data = repository.loadByName(scope, key);
+        Optional<FolderSpec> data = storeAdapter.loadByName(scope, key);
 
 
         ImmutableFolder.Builder result = ImmutableFolder.builder();
@@ -183,7 +181,7 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
                         .message(Optional.of("Folder " + uuid + " not found"))
                         .build()
                 );
-        return repository
+        return storeAdapter
                 .loadById(uuid)
                 .map(f -> result
                         .metadata(ImmutableMetadata.builder()
@@ -214,6 +212,6 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
                 size != null ? size : "undefined");
 
 
-        return repository.loadByScope(scope);
+        return storeAdapter.loadByScope(scope);
     }
 }

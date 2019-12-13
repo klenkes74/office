@@ -13,7 +13,9 @@
     "uuid": "b88f0e4e-74ea-4daf-812b-c798014e991b",
     "scope": "kes",
     "key": "I'19-0001",
-    "name": "Adoptionsverfahren Lichti ./. Hellwig",
+    "name": "Softwaretest Akte",
+    "shortName": "Softwaretest",
+    "description": "Einfach eine Akte für einen Softwaretest",
     "created": "2019-12-11T12:00:00-01:00",
     "modified": "2019-12-11T12:00:00-01:00"
   }

@@ -25,4 +25,6 @@ public interface Command<T extends Spec<?>> extends BaseAPI<T> {
     default Result<T> execute(CommandService<T> service) {
         return service.execute(this);
     }
+
+    T apply(T orig);
 }

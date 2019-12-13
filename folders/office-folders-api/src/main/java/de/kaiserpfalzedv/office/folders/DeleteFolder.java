@@ -20,18 +20,15 @@ package de.kaiserpfalzedv.office.folders;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.base.ImmutableMetadata;
 import de.kaiserpfalzedv.office.folders.api.FolderCommand;
 import de.kaiserpfalzedv.office.folders.api.FolderCommandService;
 import org.immutables.value.Value;
 
-/**
- * The action to close a folder. The exact meaning of a closed folder depends on the using application. Normally closed
- * should mean no further changes to the contents may be done.
- */
 @Value.Immutable
 @JsonSerialize(as = ImmutableCloseFolder.class)
 @JsonDeserialize(builder = ImmutableCloseFolder.Builder.class)
-public interface CloseFolder extends FolderCommand {
+public interface DeleteFolder extends FolderCommand {
     String KIND = "de.kaiserpfalzedv.office.folders.CloseFolder";
 
     @Value.Default
@@ -48,6 +45,9 @@ public interface CloseFolder extends FolderCommand {
     @Value.Default
     default FolderSpec apply(final FolderSpec orig) {
         return ImmutableFolderSpec.copyOf(orig)
-                .withClosed(getSpec().orElseThrow(IllegalStateException::new).getClosed());
+                .withMetadata(
+                        ImmutableMetadata.copyOf(getMetadata())
+                                .withInvalidAfter(getMetadata().getCreated())
+                );
     }
 }

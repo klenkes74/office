@@ -21,9 +21,11 @@ package de.kaiserpfalzedv.office.folders.store;
 import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 import de.kaiserpfalzedv.office.folders.ImmutableFolderSpec;
+import io.quarkus.arc.DefaultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Optional;
@@ -31,6 +33,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@DefaultBean
+@ApplicationScoped
 public class InMemoryFolderStoreAdapter implements FolderStoreAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryFolderStoreAdapter.class);
 

@@ -3,6 +3,7 @@ package de.kaiserpfalzedv.office.folders.store;
 import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 import de.kaiserpfalzedv.office.folders.ImmutableFolderSpec;
+import io.quarkus.arc.DefaultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +12,7 @@ import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
 import java.util.*;
 
+@DefaultBean
 @ApplicationScoped
 public class JPAFolderStoreAdapter implements FolderStoreAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(JPAFolderStoreAdapter.class);
