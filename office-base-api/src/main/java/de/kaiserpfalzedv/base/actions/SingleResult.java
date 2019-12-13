@@ -16,7 +16,7 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.communication;
+package de.kaiserpfalzedv.base.actions;
 
 import de.kaiserpfalzedv.base.SingleObject;
 import de.kaiserpfalzedv.base.spec.Spec;

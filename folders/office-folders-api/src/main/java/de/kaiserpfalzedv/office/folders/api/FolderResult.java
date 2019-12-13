@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.office.folders.api;
 
 import com.jcabi.manifests.Manifests;
-import de.kaiserpfalzedv.base.communication.Result;
+import de.kaiserpfalzedv.base.actions.Result;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 
 public interface FolderResult<T extends FolderCommand> extends Result<FolderSpec> {

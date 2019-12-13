@@ -16,12 +16,15 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.communication;
+package de.kaiserpfalzedv.base.actions;
 
 import de.kaiserpfalzedv.base.BaseAPI;
-import de.kaiserpfalzedv.base.ObjectList;
-import de.kaiserpfalzedv.base.SingleObject;
 import de.kaiserpfalzedv.base.spec.Spec;
 
-public interface ResultList<T extends SingleObject<?>> extends ObjectList<T> {
+public interface Command<T extends Spec<?>> extends BaseAPI<T> {
+    default Result<T> execute(CommandService<T> service) {
+        return service.execute(this);
+    }
+
+    T apply(T orig);
 }

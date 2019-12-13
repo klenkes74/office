@@ -20,7 +20,7 @@ package de.kaiserpfalzedv.office.folders;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.base.communication.SingleResult;
+import de.kaiserpfalzedv.base.actions.SingleResult;
 import de.kaiserpfalzedv.office.folders.api.FolderCommand;
 import de.kaiserpfalzedv.office.folders.api.FolderResult;
 import org.immutables.value.Value;

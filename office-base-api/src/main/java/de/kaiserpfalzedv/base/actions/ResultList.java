@@ -16,8 +16,10 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-/**
- * The base infrastructure for a CQRS environment. The {@link Command} is sent and the {@Link Result} is the answer to
- * the command.
- */
-package de.kaiserpfalzedv.base.communication;
+package de.kaiserpfalzedv.base.actions;
+
+import de.kaiserpfalzedv.base.ObjectList;
+import de.kaiserpfalzedv.base.SingleObject;
+
+public interface ResultList<T extends SingleObject<?>> extends ObjectList<T> {
+}

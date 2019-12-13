@@ -18,7 +18,7 @@
 
 package de.kaiserpfalzedv.office.folders.api;
 
-import de.kaiserpfalzedv.base.communication.CommandService;
+import de.kaiserpfalzedv.base.actions.CommandService;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 
 public interface FolderCommandService extends CommandService<FolderSpec> {

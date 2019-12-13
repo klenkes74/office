@@ -21,7 +21,7 @@ package de.kaiserpfalzedv.office.folders.api;
 
 import com.jcabi.manifests.Manifests;
 import de.kaiserpfalzedv.base.SingleObject;
-import de.kaiserpfalzedv.base.communication.Command;
+import de.kaiserpfalzedv.base.actions.Command;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 
 

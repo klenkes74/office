@@ -16,15 +16,9 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.communication;
-
-import de.kaiserpfalzedv.base.BaseAPI;
-import de.kaiserpfalzedv.base.spec.Spec;
-
 /**
- * A CommandService executes the command.
- * @param <T> The base data type that is worked on with the command.
+ * The base infrastructure for a CQRS environment. The {@link de.kaiserpfalzedv.base.actions.Command} is sent and the
+ * {@link de.kaiserpfalzedv.base.actions.Result} is the answer to
+ * the command.
  */
-public interface CommandService<T extends Spec<?>> {
-    Result<T> execute(BaseAPI<T> command);
-}
+package de.kaiserpfalzedv.base.actions;
