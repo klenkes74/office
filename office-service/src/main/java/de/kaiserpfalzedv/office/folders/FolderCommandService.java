@@ -23,7 +23,6 @@ import de.kaiserpfalzedv.base.actions.Result;
 import de.kaiserpfalzedv.base.api.BaseAPI;
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
-import de.kaiserpfalzedv.base.api.status.ImmutableNackStatus;
 import de.kaiserpfalzedv.base.api.status.ImmutableOkStatus;
 import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.folders.*;
@@ -111,23 +110,22 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
                 .build();
     }
 
-    public Folder load(final String scope, final String key) {
+    public Optional<Folder> load(final String scope, final String key) {
         LOGGER.debug("Loading folder: scope={}, key={}", scope, key);
 
-        Optional<FolderSpec> data = storeAdapter.loadByName(scope, key);
+        return processLoadedFolder(storeAdapter.loadByName(scope, key));
+    }
 
-
-        ImmutableFolder.Builder result = ImmutableFolder.builder();
-
+    private Optional<Folder> processLoadedFolder(Optional<FolderSpec> data) {
         if (data.isPresent()) {
             FolderSpec spec = data.get();
 
-            result
+            return Optional.of(ImmutableFolder.builder()
                     .metadata(ImmutableMetadata.builder()
                             .identity(ImmutableObjectIdentifier.builder()
                                     .kind(Folder.KIND)
                                     .uuid(spec.getUuid())
-                                    .scope(scope)
+                                    .scope(spec.getScope())
                                     .name(spec.getKey())
                                     .build()
                             )
@@ -139,71 +137,18 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
                     .addStatus(ImmutableOkStatus.builder()
                             .message(Optional.of("Folder " + spec.getUuid() + " found"))
                             .build()
-                    );
-        } else {
-            result
-                    .metadata(ImmutableMetadata.builder()
-                            .identity(ImmutableObjectIdentifier.builder()
-                                    .kind(Folder.KIND)
-                                    .uuid(UUID.randomUUID())
-                                    .scope(scope)
-                                    .name(key)
-                                    .build()
-                            )
-                            .created(OffsetDateTime.now())
-                            .modified(OffsetDateTime.now())
-                            .invalidAfter(OffsetDateTime.now().plusHours(1))
-                            .build()
                     )
-                    .addStatus(ImmutableNackStatus.builder()
-                            .message(Optional.of("Folder scope=" + scope + ":" + key + " not found"))
-                            .build()
-                    );
+                    .build()
+            );
+        } else {
+            return Optional.empty();
         }
-
-        return result.build();
     }
 
-    public Folder load(final UUID uuid) {
+    public Optional<Folder> load(final UUID uuid) {
         LOGGER.debug("Loading folder: uuid={}", uuid);
 
-        ImmutableFolder.Builder result = ImmutableFolder.builder()
-                .metadata(ImmutableMetadata.builder()
-                        .identity(ImmutableObjectIdentifier.builder()
-                                .kind(Folder.KIND)
-                                .uuid(uuid)
-                                .name(uuid.toString())
-                                .build()
-                        )
-                        .created(OffsetDateTime.now())
-                        .build()
-                )
-                .addStatus(ImmutableNackStatus.builder()
-                        .message(Optional.of("Folder " + uuid + " not found"))
-                        .build()
-                );
-        return storeAdapter
-                .loadById(uuid)
-                .map(f -> result
-                        .metadata(ImmutableMetadata.builder()
-                                .identity(ImmutableObjectIdentifier.builder()
-                                        .kind(Folder.KIND)
-                                        .uuid(f.getUuid())
-                                        .name(f.getKey())
-                                        .scope(f.getScope())
-                                        .build()
-                                )
-                                .created(OffsetDateTime.now())
-                                .build()
-                        )
-                        .spec(f)
-                        .addStatus(ImmutableOkStatus.builder()
-                                .message(Optional.of("Folder " + uuid + " found"))
-                                .build()
-                        )
-                        .build())
-                .orElseGet(result::build);
-
+        return processLoadedFolder(storeAdapter.loadById(uuid));
     }
 
     public Collection<FolderSpec> load(final String scope, final Long start, final Long size) {

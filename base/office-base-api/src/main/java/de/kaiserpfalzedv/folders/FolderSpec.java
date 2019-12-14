@@ -47,6 +47,8 @@ public interface FolderSpec extends Spec<FolderSpec> {
     Optional<String> getDescription();
 
     Optional<OffsetDateTime> getClosed();
+
+
     OffsetDateTime getCreated();
     OffsetDateTime getModified();
 

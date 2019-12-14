@@ -1,9 +1,7 @@
 package de.kaiserpfalzedv.office.folders;
 
 import de.kaiserpfalzedv.base.api.*;
-import de.kaiserpfalzedv.base.api.status.ImmutableNackStatus;
 import de.kaiserpfalzedv.base.api.status.ImmutableOkStatus;
-import de.kaiserpfalzedv.base.api.status.Status;
 import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.folders.*;
 import org.eclipse.microprofile.metrics.annotation.ConcurrentGauge;
@@ -14,15 +12,17 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.time.OffsetDateTime;
 import java.util.*;
 
 @ApplicationScoped
 @Path("/folders")
-public class FolderService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FolderService.class);
+public class FolderWebService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FolderWebService.class);
 
     @Inject
     FolderCommandService service;
@@ -42,17 +42,14 @@ public class FolderService {
         OffsetDateTime now = OffsetDateTime.now();
 
         Collection<FolderSpec> data = service.load(scope, start, size);
-        List<Folder> folders = new ArrayList<>(data.size());
-
-        for (FolderSpec a : data) {
-            folders.add(convertFolderSpecToFolder(a));
+        if (data.isEmpty()) {
+            throw new WebApplicationException("No folders for scope='" + scope + "' found", Response.Status.NOT_FOUND);
         }
 
-        Status<?> status;
-        if (data.isEmpty()) {
-            status = ImmutableNackStatus.builder().value(Optional.of("200")).message(Optional.of("No entries found.")).build();
-        } else {
-            status = ImmutableOkStatus.builder().message((Optional.of(data.size() + " entries found."))).build();
+
+        List<Folder> folders = new ArrayList<>(data.size());
+        for (FolderSpec a : data) {
+            folders.add(convertFolderSpecToFolder(a));
         }
 
         return ImmutableObjectList.builder()
@@ -66,8 +63,7 @@ public class FolderService {
                         .created(now)
                         .build())
                 .spec(folders)
-                .addStatus(status)
-
+                .addStatus(ImmutableOkStatus.builder().message((Optional.of(data.size() + " entries found."))).build())
                 .build();
     }
 
@@ -100,10 +96,16 @@ public class FolderService {
     public Folder getByUuid(
             @PathParam("uuid") final UUID uuid
     ) {
-        return ImmutableFolder.builder()
-                .from(service.load(uuid))
-                .addStatus(ImmutableOkStatus.builder().message(Optional.empty()).build())
-                .build();
+        Optional<Folder> result = service.load(uuid);
+
+        if (result.isPresent()) {
+            return ImmutableFolder.builder()
+                    .from(result.get())
+                    .build();
+        } else {
+            throw new WebApplicationException("Folder with uuid='" + uuid + "' not found.",
+                    Response.Status.NOT_FOUND);
+        }
     }
 
     @GET
@@ -116,7 +118,16 @@ public class FolderService {
             @PathParam("scope") final String scope,
             @PathParam("key") final String key
     ) {
-        return ImmutableFolder.builder().from(service.load(scope, key)).build();
+        Optional<Folder> result = service.load(scope, key);
+
+        if (result.isPresent()) {
+            return ImmutableFolder.builder()
+                    .from(result.get())
+                    .build();
+        } else {
+            throw new WebApplicationException("Folder with scope='" + scope + "' and key='" + key + "' not found.",
+                    Response.Status.NOT_FOUND);
+        }
     }
 
 
@@ -126,21 +137,14 @@ public class FolderService {
     @Metered(name = "folders.createFolder")
     @Counted(name = "folders.createFolder.count")
     @ConcurrentGauge(name = "folders.createFolder.concurrent")
-    public FolderCreated createFolder(final ImmutableCreateFolder command) {
+    public FolderCreated createFolder(@Valid final ImmutableCreateFolder command) {
         try {
             return ImmutableFolderCreated.builder()
                     .from(service.write(command))
                     .addStatus(ImmutableOkStatus.builder().message(Optional.empty()).build())
                     .build();
         } catch (DataAlreadyExistsException e) {
-            return ImmutableFolderCreated.builder()
-                    .metadata(command.getMetadata())
-                    .spec(command.getSpec())
-                    .addStatus(ImmutableNackStatus.builder()
-                            .message(Optional.of(e.getMessage() + e.getIdentifier()))
-                            .build()
-                    )
-                    .build();
+            throw new WebApplicationException(e.getMessage(), Response.Status.EXPECTATION_FAILED);
         }
     }
 

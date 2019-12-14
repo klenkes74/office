@@ -37,11 +37,5 @@ public interface NackStatus<T extends Spec<T>> extends Status<T> {
 
     @Override
     @Value.Default
-    default Optional<String> getValue() {
-        return Optional.of("500");
-    }
-
-    @Override
-    @Value.Default
     default Optional<String> getMessage() { return Optional.of("Developer too lazy to do a message"); }
 }

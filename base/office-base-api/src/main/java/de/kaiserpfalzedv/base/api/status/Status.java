@@ -21,7 +21,6 @@ package de.kaiserpfalzedv.base.api.status;
 import java.io.Serializable;
 import java.util.Optional;
 
-
 public interface Status<T extends Serializable> extends Serializable {
     String getType();
 

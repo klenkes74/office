@@ -16,14 +16,27 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store;
+package de.kaiserpfalzedv.folders.store;
 
-import de.kaiserpfalzedv.folders.CloseFolder;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.UUID;
+
 
 @Entity
-@DiscriminatorValue(CloseFolder.KIND)
-public class FolderClose extends FolderChange {
+@Table(name = "FOLDERS_CHANGES")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "_ACTION", length = 256)
+public class FolderChange extends PanacheEntity {
+    @Column(name = "_ACTIVE", length = 256, insertable = false, updatable = false, nullable = false)
+    public String kind;
+
+    @Column(name = "_UUID")
+    public UUID uuid;
+
+    @Column(name = "_SCOPE")
+    public String scope;
+    @Column(name = "_KEY")
+    public String key;
 }

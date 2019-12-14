@@ -1,8 +1,8 @@
-package de.kaiserpfalzedv.base.store;
+package de.kaiserpfalzedv.folders.store;
 
+import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.folders.FolderSpec;
 import de.kaiserpfalzedv.folders.ImmutableFolderSpec;
-import de.kaiserpfalzedv.folders.store.FolderStoreAdapter;
 import io.quarkus.arc.DefaultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

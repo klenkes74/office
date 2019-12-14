@@ -2,7 +2,9 @@ package de.kaiserpfalzedv.base.store;
 
 import de.kaiserpfalzedv.folders.FolderSpec;
 import de.kaiserpfalzedv.folders.ImmutableFolderSpec;
+import de.kaiserpfalzedv.folders.store.Folder;
 import de.kaiserpfalzedv.folders.store.FolderStoreAdapter;
+import de.kaiserpfalzedv.folders.store.JPAFolderStoreAdapter;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
