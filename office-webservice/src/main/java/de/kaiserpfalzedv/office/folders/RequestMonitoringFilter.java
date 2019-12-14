@@ -18,9 +18,11 @@
 
 package de.kaiserpfalzedv.office.folders;
 
+import io.quarkus.security.identity.SecurityIdentity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
@@ -35,11 +37,14 @@ public class RequestMonitoringFilter implements ContainerRequestFilter {
     @Context
     UriInfo info;
 
+    @Inject
+    SecurityIdentity securityIdentity;
+
+
     @Override
     public void filter(ContainerRequestContext context) throws IOException {
-        final String method = context.getMethod();
-        final String path = info.getPath();
-
-        LOGGER.info("Request {} {}", method, path);
+        LOGGER.debug("{'method': '{}', 'path': '{}', 'principal': '{}', 'roles': {}}",
+                context.getMethod(), info.getPath(),
+                securityIdentity.getPrincipal().getName(), securityIdentity.getRoles());
     }
 }

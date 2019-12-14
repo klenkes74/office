@@ -3,12 +3,14 @@ package de.kaiserpfalzedv.office.folders;
 import de.kaiserpfalzedv.base.api.*;
 import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.folders.*;
+import io.quarkus.security.identity.SecurityIdentity;
 import org.eclipse.microprofile.metrics.annotation.ConcurrentGauge;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -25,9 +27,13 @@ public class FolderWebService {
     @Inject
     FolderCommandService service;
 
+    @Inject
+    SecurityIdentity securityIdentity;
+
 
     @GET
     @Path("/{scope}")
+    @RolesAllowed({"user", "admin"})
     @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.listAll")
     @Counted(name = "folders.listAll.count")
@@ -87,6 +93,7 @@ public class FolderWebService {
 
     @GET
     @Path("/{uuid}")
+    @RolesAllowed({"user", "admin"})
     @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.loadByUuid")
     @Counted(name = "folders.loadByUuid.count")
@@ -110,6 +117,7 @@ public class FolderWebService {
 
     @GET
     @Path("/{scope}/{key}")
+    @RolesAllowed({"user", "admin"})
     @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.loadByKey")
     @Counted(name = "folders.loadByKey.count")
@@ -134,6 +142,7 @@ public class FolderWebService {
 
 
     @PUT
+    @RolesAllowed("admin")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.createFolder")
@@ -152,6 +161,7 @@ public class FolderWebService {
     }
 
     @POST
+    @RolesAllowed("admin")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.closeFolder")
@@ -165,6 +175,7 @@ public class FolderWebService {
 
     @DELETE
     @Path("/{uuid}")
+    @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.closeFolder")
     @Counted(name = "folders.closeFolder.count")
