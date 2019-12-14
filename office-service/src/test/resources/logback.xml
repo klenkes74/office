@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+  ~
+  ~  This file is part of Kaiserpfalz EDV-Service Office.
+  ~
+  ~  This is free software: you can redistribute it and/or modify it under the terms of
+  ~   the GNU Lesser General Public License as published by the Free Software
+  ~   Foundation, either version 3 of the License.
+  ~
+  ~  This file is distributed in the hope that it will be useful, but WITHOUT ANY
+  ~  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+  ~  License for more details.
+  ~
+  ~  You should have received a copy of the GNU Lesser General Public License along
+  ~  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  -->
+
+<configuration>
+    <property name="TARGET" value="./target"/>
+
+    <appender NAME="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{HH:mm:ss.ssssss} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${TARGET}/debug.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.ssssss} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <logger name="de.kaiserpfalzedv" level="trace" additivity="true"/>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DEBUG"/>
+    </root>
+
+</configuration>
