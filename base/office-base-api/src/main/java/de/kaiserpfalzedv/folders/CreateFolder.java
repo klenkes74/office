@@ -31,12 +31,8 @@ import org.immutables.value.Value;
 @JsonSerialize(as = ImmutableCreateFolder.class)
 @JsonDeserialize(builder = ImmutableCreateFolder.Builder.class)
 public interface CreateFolder extends FolderCommand {
-    String KIND = "de.kaiserpfalzedv.folders.CreateFolder";
-
-    @Value.Default
-    default String getKind() {
-        return KIND;
-    }
+    String CREATE_FOLDER_KIND = Folder.KIND;
+    String CREATE_FOLDER_VERSION = Folder.VERSION;
 
     @Value.Default
     default FolderCreated execute(FolderCommandService service) {

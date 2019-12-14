@@ -3,13 +3,10 @@ package de.kaiserpfalzedv.base.store;
 import de.kaiserpfalzedv.base.api.BaseAPI;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
 import de.kaiserpfalzedv.base.api.ObjectIdentifier;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.util.UUID;
 
@@ -45,21 +42,5 @@ public class DataAlreadyExistsExceptionTest {
         DataAlreadyExistsException result = new DataAlreadyExistsException(IDENTIFIER, cause);
 
         assert cause.getMessage().equals(result.getCause().getMessage());
-    }
-
-    @BeforeAll
-    static void redirectJavaUtilLogging() {
-        if (!SLF4JBridgeHandler.isInstalled()) {
-            SLF4JBridgeHandler.install();
-            LOGGER.debug("SLF4Bridge for JUL installed ...");
-        }
-    }
-
-    @AfterAll
-    static void removeJavaUtilLogging() {
-        if (SLF4JBridgeHandler.isInstalled()) {
-            SLF4JBridgeHandler.uninstall();
-            LOGGER.debug("SLF4JBridge for JUL deinstalled ...");
-        }
     }
 }

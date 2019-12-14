@@ -19,12 +19,20 @@
 package de.kaiserpfalzedv.base.api;
 
 
+import de.kaiserpfalzedv.base.api.spec.EmptySpec;
 import de.kaiserpfalzedv.base.api.status.Status;
 
 import java.io.Serializable;
 import java.util.List;
 
+/*
+ *
+ *
+ * @author rlichti
+ * @since 2019-12-04
+ */
 public interface BaseAPI<T extends Serializable> extends Serializable {
+    String KIND = BaseAPI.class.getCanonicalName();
     String VERSION = "1.0.0";
 
     /**
@@ -33,13 +41,13 @@ public interface BaseAPI<T extends Serializable> extends Serializable {
      * @return the kind of object.
      */
     default String getKind() {
-        return getClass().getSimpleName();
+        return KIND;
     }
 
     /**
-     * The version following {@linkplain https://semver.org/}.  The tupple of scope, kind and version must be unique.
+     * The version following {@linkplain <a href="https://semver.org/"semver.org</a>}.  The tupple of scope, kind and version must be unique.
      *
-     * @return the version as string conforming to {@link https://semver.org/}.
+     * @return the version as string conforming to {@linkplain <a href="https://semver.org/">semver.org</a>}.
      */
     default String getVersion() {
         return VERSION;
@@ -57,5 +65,5 @@ public interface BaseAPI<T extends Serializable> extends Serializable {
      *
      * @return a list of status changes or status messages.
      */
-    List<Status> getStatus();
+    List<Status<EmptySpec<Serializable>>> getStatus();
 }

@@ -27,6 +27,6 @@ import org.immutables.value.Value;
 @JsonSerialize(as = ImmutableFolderClosed.class)
 @JsonDeserialize(builder = ImmutableFolderClosed.Builder.class)
 public interface FolderClosed extends FolderResult<CloseFolder> {
-    @Value.Default
-    default String getKind() { return "FolderCreated"; }
+    String FOLDER_CLOSED_KIND = Folder.KIND;
+    String FOLDER_CLOSED_VERSION = Folder.VERSION;
 }

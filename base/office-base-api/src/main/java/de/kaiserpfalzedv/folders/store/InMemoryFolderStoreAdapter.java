@@ -39,6 +39,7 @@ public class InMemoryFolderStoreAdapter implements FolderStoreAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryFolderStoreAdapter.class);
 
     private static final int INITIAL_SIZE = 20;
+    public static final String DEFAULT_SCOPE = "./.";
 
     private final ConcurrentHashMap<UUID, FolderSpec> folders = new ConcurrentHashMap<>(INITIAL_SIZE);
     private final ConcurrentHashMap<String, Set<FolderSpec>> folderByScope = new ConcurrentHashMap<>(INITIAL_SIZE);
@@ -72,35 +73,50 @@ public class InMemoryFolderStoreAdapter implements FolderStoreAdapter {
 
     @Override
     public FolderSpec save(final FolderSpec data) throws DataAlreadyExistsException {
-        LOGGER.debug("Saving data: data={}", data);
+        checkDoubleUUID(data);
+        checkDoubleScopeAndKey(data);
 
-        if (folders.containsKey(data.getUuid())) {
-            throw new DataAlreadyExistsException(folders.get(data.getUuid()).getIdentity());
-        }
+        FolderSpec saved = modifyModifyDate(data);
+        LOGGER.debug("Saving data: data={}", saved);
 
-        if (folderByScopeAndKey.containsKey(data.getScope().orElse("./.") + "::" + data.getKey())) {
-            throw new DataAlreadyExistsException(
-                    folderByScopeAndKey.get(data.getScope().orElse("./.") + "::" + data.getKey()).getIdentity());
-        }
+        ensureScopeExistsInStorage(saved);
 
+        folders.put(saved.getUuid(), saved);
+        folderByScopeAndKey.put(generateKey(saved), saved);
+        folderByScope.get(saved.getScope().orElse(DEFAULT_SCOPE)).add(saved);
+
+        return saved;
+    }
+
+    private FolderSpec modifyModifyDate(FolderSpec data) {
         OffsetDateTime now = OffsetDateTime.now();
-
-        FolderSpec saved = ImmutableFolderSpec
+        return ImmutableFolderSpec
                 .copyOf(data)
                 .withCreated(now)
                 .withModified(now);
+    }
 
-        folders.put(saved.getUuid(), saved);
-
-        String scopeAndKey = data.getScope().orElse("./") + "::" + data.getKey();
-        folderByScopeAndKey.put(scopeAndKey, saved);
-
-        if (!folderByScope.containsKey(saved.getScope().orElse("./."))) {
-            folderByScope.put(saved.getScope().orElse("./."), new HashSet<>());
+    private void checkDoubleUUID(FolderSpec data) throws DataAlreadyExistsException {
+        if (folders.containsKey(data.getUuid())) {
+            throw new DataAlreadyExistsException(folders.get(data.getUuid()).getIdentity());
         }
-        folderByScope.get(saved.getScope().orElse("./.")).add(saved);
+    }
 
-        return saved;
+    private void checkDoubleScopeAndKey(FolderSpec data) throws DataAlreadyExistsException {
+        if (folderByScopeAndKey.containsKey(generateKey(data))) {
+            throw new DataAlreadyExistsException(
+                    folderByScopeAndKey.get(generateKey(data)).getIdentity());
+        }
+    }
+
+    private void ensureScopeExistsInStorage(FolderSpec saved) {
+        if (!folderByScope.containsKey(saved.getScope().orElse(DEFAULT_SCOPE))) {
+            folderByScope.put(saved.getScope().orElse(DEFAULT_SCOPE), new HashSet<>());
+        }
+    }
+
+    private String generateKey(FolderSpec data) {
+        return data.getScope().orElse(DEFAULT_SCOPE) + "::" + data.getKey();
     }
 
     @Override
@@ -110,8 +126,8 @@ public class InMemoryFolderStoreAdapter implements FolderStoreAdapter {
         if (folders.containsKey(id)) {
             FolderSpec data = folders.remove(id);
 
-            folderByScope.get(data.getScope().orElse("./.")).remove(data);
-            folderByScopeAndKey.remove(data.getScope() + "::" + data.getKey());
+            folderByScope.get(data.getScope().orElse(DEFAULT_SCOPE)).remove(data);
+            folderByScopeAndKey.remove(generateKey(data));
 
             data = ImmutableFolderSpec.copyOf(data).withClosed(OffsetDateTime.now()).withModified(OffsetDateTime.now());
             folders.put(id, data);
@@ -119,8 +135,9 @@ public class InMemoryFolderStoreAdapter implements FolderStoreAdapter {
     }
 
     public long count() {
-        LOGGER.debug("Getting count: count={}", folders.size());
+        int count = folders.size();
+        LOGGER.trace("Getting count: {}", count);
 
-        return folders.size();
+        return count;
     }
 }

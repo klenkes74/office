@@ -14,15 +14,17 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 public class InMemoryFolderStoreAdapterTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryFolderStoreAdapterTest.class);
 
     private static final UUID ID = UUID.randomUUID();
     private static final String SCOPE = "kes";
     private static final String KEY = "I'19-0001";
-    private static final String NAME = "Adoption Lichti ./. Hellwig";
-    private static final String SHORTNAME = "Lichti ./. Hellwig";
-    private static final String DESCRIPTION = "Adoptionsverfahren Alexandra Maria Lichti";
+    private static final String NAME = "Testakte Softwaretest";
+    private static final String SHORTNAME = "Softwaretest";
+    private static final String DESCRIPTION = "Eine einfache Akte für Softwaretests";
     private static final OffsetDateTime CREATED = OffsetDateTime.of(2019, 12, 11, 12, 0, 0, 0, ZoneOffset.ofHours(1));
     private static final OffsetDateTime MODIFIED = CREATED;
     private static final FolderSpec FOLDER = ImmutableFolderSpec.builder()
@@ -44,6 +46,14 @@ public class InMemoryFolderStoreAdapterTest {
 
         LOGGER.info("Setup for test: service={}, folder={}", service, FOLDER);
         service.save(FOLDER);
+    }
+
+    @Test
+    public void shouldReturnACountAbove1() {
+        long result = service.count();
+        LOGGER.trace("result: {}", result);
+
+        assert result >= 1;
     }
 
     @Test
@@ -112,5 +122,30 @@ public class InMemoryFolderStoreAdapterTest {
 
         assert result.isPresent();
         assert result.get().getClosed().isPresent();
+    }
+
+    @Test
+    public void shouldRejectDoubleUUID() {
+        try {
+            service.save(FOLDER);
+
+            fail("An exception of type '" + DataAlreadyExistsException.class.getSimpleName()
+                    + "' should have been thrown due to doublette UUID.");
+        } catch (DataAlreadyExistsException e) {
+            assert e.getIdentifier().getUuid().equals(ID);
+        }
+    }
+
+
+    @Test
+    public void shouldRejectDoubleScopeAndKey() {
+        try {
+            service.save(ImmutableFolderSpec.copyOf(FOLDER).withUuid(UUID.randomUUID()));
+
+            fail("An exception of type '" + DataAlreadyExistsException.class.getSimpleName()
+                    + "' should have been thrown due to doublette UUID.");
+        } catch (DataAlreadyExistsException e) {
+            assert e.getIdentifier().getUuid().equals(ID);
+        }
     }
 }

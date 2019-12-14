@@ -44,7 +44,7 @@ public interface ObjectIdentifier extends Serializable {
      */
     @Value.Default
     default String getVersion() {
-        return "1.0.0-SNAPSHOT";
+        return BaseAPI.VERSION;
     }
 
     /**

@@ -23,25 +23,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.base.api.spec.Spec;
 import org.immutables.value.Value;
 
-import java.util.Optional;
-
 @Value.Immutable
 @JsonSerialize(as = ImmutableOkStatus.class)
 @JsonDeserialize(builder = ImmutableOkStatus.Builder.class)
-public interface OkStatus<T extends Spec<T>> extends Status<T> {
+public interface OkStatus<T extends Spec> extends Status<T> {
+    String TYPE = "OK";
+
     @Override
     @Value.Default
     default String getType() {
-        return "ok";
+        return TYPE;
     }
-
-    @Override
-    @Value.Default
-    default Optional<String> getValue() {
-        return Optional.of("200");
-    }
-
-    @Override
-    @Value.Default
-    default Optional<String> getMessage() { return Optional.of("Developer too lazy to do a message"); }
 }

@@ -29,6 +29,6 @@ import org.immutables.value.Value;
 @JsonSerialize(as = ImmutableFolderCreated.class)
 @JsonDeserialize(builder = ImmutableFolderCreated.Builder.class)
 public interface FolderCreated extends FolderResult<FolderCommand>, SingleResult<FolderSpec> {
-    @Value.Default
-    default String getKind() { return "FolderCreated"; }
+    String FOLDER_CREATED_KIND = Folder.KIND;
+    String FOLDER_CREATED_VERSION = Folder.VERSION;
 }

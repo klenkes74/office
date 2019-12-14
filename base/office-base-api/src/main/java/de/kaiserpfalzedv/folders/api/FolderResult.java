@@ -19,7 +19,20 @@
 package de.kaiserpfalzedv.folders.api;
 
 import de.kaiserpfalzedv.base.actions.Result;
+import de.kaiserpfalzedv.folders.Folder;
 import de.kaiserpfalzedv.folders.FolderSpec;
 
 public interface FolderResult<T extends FolderCommand> extends Result<FolderSpec> {
+    String FOLDER_RESULT_KIND = Folder.KIND;
+    String FOLDER_RESULT_VERSION = Folder.VERSION;
+
+    @Override
+    default String getKind() {
+        return FOLDER_RESULT_KIND;
+    }
+
+    @Override
+    default String getVersion() {
+        return FOLDER_RESULT_VERSION;
+    }
 }

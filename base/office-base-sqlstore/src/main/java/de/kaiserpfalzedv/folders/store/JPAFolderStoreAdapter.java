@@ -3,6 +3,7 @@ package de.kaiserpfalzedv.folders.store;
 import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.folders.FolderSpec;
 import de.kaiserpfalzedv.folders.ImmutableFolderSpec;
+import de.kaiserpfalzedv.folders.store.jpa.Folder;
 import io.quarkus.arc.DefaultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +26,10 @@ public class JPAFolderStoreAdapter implements FolderStoreAdapter {
             return Optional.empty();
         }
 
-        return Optional.of(convert(data));
+        return Optional.of(convertToSpec(data));
     }
 
-    private FolderSpec convert(Folder data) {
+    private FolderSpec convertToSpec(Folder data) {
         return ImmutableFolderSpec.builder()
                 .uuid(data.uuid)
                 .scope(Optional.ofNullable(data.scope))
@@ -50,7 +51,7 @@ public class JPAFolderStoreAdapter implements FolderStoreAdapter {
             return Optional.empty();
         }
 
-        return Optional.of(convert(data));
+        return Optional.of(convertToSpec(data));
     }
 
     @Override
@@ -58,7 +59,7 @@ public class JPAFolderStoreAdapter implements FolderStoreAdapter {
         List<Folder> data = Folder.list("scope", scope);
         ArrayList<FolderSpec> result = new ArrayList<>(data.size());
 
-        data.forEach(e -> result.add(convert(e)));
+        data.forEach(e -> result.add(convertToSpec(e)));
 
         return result;
     }
@@ -69,18 +70,23 @@ public class JPAFolderStoreAdapter implements FolderStoreAdapter {
         LOGGER.info("Saving folder: spec={}", data);
 
         if (Folder.find("uuid", data.getUuid()).count() != 0) {
-            throw new DataAlreadyExistsException(data.getIdentity());
+            throw new DataAlreadyExistsException(convertToSpec(Folder.find("uuid", data.getUuid()).firstResult()).getIdentity());
         }
 
+        if (Folder.find("scope = ?1 and key = ?2", data.getScope().orElse("./."), data.getKey()).count() != 0) {
+            throw new DataAlreadyExistsException(
+                    convertToSpec(Folder.find("scope = ?1 and key = ?2", data.getScope().orElse("./."), data.getKey())
+                            .firstResult()).getIdentity());
+        }
 
-        Folder save = convert(data);
+        Folder save = convertToJPA(data);
         save.persistAndFlush();
         LOGGER.trace("data: {}", save);
 
-        return convert(save);
+        return convertToSpec(save);
     }
 
-    private Folder convert(FolderSpec data) {
+    private Folder convertToJPA(FolderSpec data) {
         Folder result = new Folder();
 
         if (data != null) {

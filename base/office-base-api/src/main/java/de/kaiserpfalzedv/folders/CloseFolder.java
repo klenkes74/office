@@ -32,11 +32,19 @@ import org.immutables.value.Value;
 @JsonSerialize(as = ImmutableCloseFolder.class)
 @JsonDeserialize(builder = ImmutableCloseFolder.Builder.class)
 public interface CloseFolder extends FolderCommand {
-    String KIND = "de.kaiserpfalzedv.folders.CloseFolder";
+    String KIND = Folder.KIND;
+    String VERSION = Folder.VERSION;
 
+    @Override
     @Value.Default
     default String getKind() {
         return KIND;
+    }
+
+    @Override
+    @Value.Default
+    default String getVersion() {
+        return VERSION;
     }
 
     @Value.Default

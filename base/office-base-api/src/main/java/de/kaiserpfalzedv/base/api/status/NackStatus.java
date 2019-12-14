@@ -28,14 +28,19 @@ import java.util.Optional;
 @Value.Immutable
 @JsonSerialize(as = ImmutableNackStatus.class)
 @JsonDeserialize(builder = ImmutableNackStatus.Builder.class)
-public interface NackStatus<T extends Spec<T>> extends Status<T> {
+public interface NackStatus<T extends Spec> extends Status<T> {
+    String TYPE = "NACK";
+    String DEFAULT_VALUE = "500";
+
     @Override
     @Value.Default
     default String getType() {
-        return "nack";
+        return TYPE;
     }
 
     @Override
     @Value.Default
-    default Optional<String> getMessage() { return Optional.of("Developer too lazy to do a message"); }
+    default Optional<String> getValue() {
+        return Optional.of(DEFAULT_VALUE);
+    }
 }

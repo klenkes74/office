@@ -20,8 +20,21 @@ package de.kaiserpfalzedv.folders.api;
 
 import de.kaiserpfalzedv.base.actions.Command;
 import de.kaiserpfalzedv.base.api.SingleObject;
+import de.kaiserpfalzedv.folders.Folder;
 import de.kaiserpfalzedv.folders.FolderSpec;
 
 
 public interface FolderCommand extends Command<FolderSpec>, SingleObject<FolderSpec> {
+    String FOLDER_COMMAND_KIND = Folder.KIND;
+    String FOLDER_COMMAND_VERSION = Folder.VERSION;
+
+    @Override
+    default String getKind() {
+        return FOLDER_COMMAND_KIND;
+    }
+
+    @Override
+    default String getVersion() {
+        return FOLDER_COMMAND_VERSION;
+    }
 }

@@ -18,13 +18,24 @@
 
 package de.kaiserpfalzedv.base.api.status;
 
+import org.immutables.value.Value;
+
 import java.io.Serializable;
 import java.util.Optional;
 
 public interface Status<T extends Serializable> extends Serializable {
+    String DEFAULT_VALUE = "200";
+    String DEFAULT_MESSAGE = "Developer too lazy to do a message";
+
     String getType();
 
-    Optional<String> getValue();
+    @Value.Default
+    default Optional<String> getValue() {
+        return Optional.of(DEFAULT_VALUE);
+    }
 
-    Optional<String> getMessage();
+    @Value.Default
+    default Optional<String> getMessage() {
+        return Optional.of(DEFAULT_MESSAGE);
+    }
 }

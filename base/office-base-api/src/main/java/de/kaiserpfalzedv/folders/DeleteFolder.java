@@ -29,12 +29,8 @@ import org.immutables.value.Value;
 @JsonSerialize(as = ImmutableCloseFolder.class)
 @JsonDeserialize(builder = ImmutableCloseFolder.Builder.class)
 public interface DeleteFolder extends FolderCommand {
-    String KIND = "de.kaiserpfalzedv.folders.CloseFolder";
-
-    @Value.Default
-    default String getKind() {
-        return KIND;
-    }
+    String DELETE_FOLDER_KIND = Folder.KIND;
+    String DELETE_FOLDER_VERSION = Folder.VERSION;
 
     @Value.Default
     default FolderClosed execute(FolderCommandService service) {
