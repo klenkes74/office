@@ -25,14 +25,14 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name = "FOLDERS_CHANGES")
+@Table(schema = "FOLDERS", name = "FOLDERS_CHANGES")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "_ACTION", length = 256)
 public class FolderChange extends PanacheEntity {
     @Column(name = "_ACTIVE", length = 256, insertable = false, updatable = false, nullable = false)
     public String kind;
 
-    @Column(name = "_UUID")
+    @Column(name = "_UUID", columnDefinition = "CHAR(36)", nullable = false, unique = true, updatable = false)
     public UUID uuid;
 
     @Column(name = "_SCOPE")

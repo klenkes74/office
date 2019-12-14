@@ -28,6 +28,7 @@ public class ServiceTest {
         given()
                 .when()
                 .header("content-type", MediaType.APPLICATION_JSON)
+                .auth().basic("scott", "jb0ss")
                 .body(body)
                 .put("/folders")
                 .then()

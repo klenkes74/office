@@ -21,15 +21,17 @@ package de.kaiserpfalzedv.folders.store.jpa;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "FOLDERS")
+@Table(schema = "FOLDERS", name = "FOLDERS")
 public class Folder extends PanacheEntity {
-    @Column(name = "_UUID")
+    @Column(name = "_UUID", columnDefinition = "CHAR(36)", nullable = false, unique = true, updatable = false)
+    @Convert(converter = UuidConverter.class)
     public UUID uuid;
 
     @Column(name = "_SCOPE")

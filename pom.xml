@@ -19,6 +19,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <h2.version>1.4.197</h2.version>
+        <db.username>h2</db.username>
+        <db.password>h2</db.password>
+
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
         <quarkus-plugin.version>1.0.1.Final</quarkus-plugin.version>
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
@@ -58,6 +62,17 @@
                 <version>${quarkus.platform.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-java8</artifactId>
+                <version>5.4.9.Final</version>
             </dependency>
 
             <dependency>
@@ -136,6 +151,14 @@
                 <configuration>
                     <excludedGroups>integration</excludedGroups>
                     <systemProperties>
+                        <quarkus.datasource.url>jdbc:h2:tcp://localhost:${h2.test.tcp.port}/quarkus;MODE=PostgreSQL
+                        </quarkus.datasource.url>
+                        <quarkus.datasource.username>${db.username}</quarkus.datasource.username>
+                        <quarkus.datasource.password>${db.password}</quarkus.datasource.password>
+                        <quarkus.datasource.driver>org.h2.Driver</quarkus.datasource.driver>
+                        <quarkus.hibernate-orm.dialect>org.hibernate.dialect.PostgreSQL91Dialect
+                        </quarkus.hibernate-orm.dialect>
+                        <quarkus.hibernate-orm.database.generation>none</quarkus.hibernate-orm.database.generation>
                         <jacoco-agent.destfile>${project.build.directory}/jacoco-ut.exec</jacoco-agent.destfile>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                     </systemProperties>
@@ -151,6 +174,17 @@
                             <excludedGroups>!integration</excludedGroups>
                             <groups>integration</groups>
                             <systemProperties>
+                                <quarkus.datasource.url>
+                                    jdbc:h2:tcp://localhost:${h2.test.tcp.port}/quarkus;MODE=PostgreSQL
+                                </quarkus.datasource.url>
+                                <quarkus.datasource.username>${db.username}</quarkus.datasource.username>
+                                <quarkus.datasource.password>${db.password}</quarkus.datasource.password>
+                                <quarkus.datasource.driver>org.h2.Driver</quarkus.datasource.driver>
+                                <quarkus.hibernate-orm.dialect>org.hibernate.dialect.PostgreSQL91Dialect
+                                </quarkus.hibernate-orm.dialect>
+                                <quarkus.hibernate-orm.database.generation>none
+                                </quarkus.hibernate-orm.database.generation>
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                 <jacoco-agent.destfile>${project.build.directory}/jacoco-it.exec</jacoco-agent.destfile>
                             </systemProperties>
                         </configuration>
@@ -259,6 +293,67 @@
                                 </rule>
                             </rules>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Reserve randomly available network ports -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.12</version>
+                <executions>
+                    <execution>
+                        <id>reserve-network-port</id>
+                        <goals>
+                            <goal>reserve-network-port</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <randomPort>true</randomPort>
+                            <minPortNumber>20000</minPortNumber>
+                            <maxPortNumber>21000</maxPortNumber>
+                            <portNames>
+                                <portName>h2.test.tcp.port</portName>
+                            </portNames>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Start H2 before integration tests, accepting tcp connections on the randomly selected port -->
+            <plugin>
+                <groupId>com.edugility</groupId>
+                <artifactId>h2-maven-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <baseDirectory>${project.build.directory}/db</baseDirectory>
+                    <forceShutdown>false</forceShutdown>
+                    <trace>true</trace>
+                    <allowOthers>true</allowOthers>
+                    <shutdownPassword>${db.password}</shutdownPassword>
+                    <port>${h2.test.tcp.port}</port>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>${h2.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>Spawn a new H2 TCP server</id>
+                        <goals>
+                            <goal>spawn</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                    </execution>
+                    <execution>
+                        <id>Stop a spawned H2 TCP server</id>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
                     </execution>
                 </executions>
             </plugin>
