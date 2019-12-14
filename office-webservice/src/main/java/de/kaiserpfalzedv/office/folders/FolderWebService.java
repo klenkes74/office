@@ -21,6 +21,8 @@ import java.util.*;
 
 @ApplicationScoped
 @Path("/folders")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class FolderWebService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderWebService.class);
 
@@ -34,7 +36,6 @@ public class FolderWebService {
     @GET
     @Path("/{scope}")
     @RolesAllowed({"user", "admin"})
-    @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.listAll")
     @Counted(name = "folders.listAll.count")
     @ConcurrentGauge(name = "folders.listAll.concurrent")
@@ -94,7 +95,6 @@ public class FolderWebService {
     @GET
     @Path("/{uuid}")
     @RolesAllowed({"user", "admin"})
-    @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.loadByUuid")
     @Counted(name = "folders.loadByUuid.count")
     @ConcurrentGauge(name = "folders.loadByUuid.concurrent")
@@ -118,7 +118,6 @@ public class FolderWebService {
     @GET
     @Path("/{scope}/{key}")
     @RolesAllowed({"user", "admin"})
-    @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.loadByKey")
     @Counted(name = "folders.loadByKey.count")
     @ConcurrentGauge(name = "folders.loadByKey.concurrent")
@@ -143,8 +142,6 @@ public class FolderWebService {
 
     @PUT
     @RolesAllowed("admin")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.createFolder")
     @Counted(name = "folders.createFolder.count")
     @ConcurrentGauge(name = "folders.createFolder.concurrent")
@@ -162,8 +159,6 @@ public class FolderWebService {
 
     @POST
     @RolesAllowed("admin")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.closeFolder")
     @Counted(name = "folders.closeFolder.count")
     @ConcurrentGauge(name = "folders.closeFolder.concurrent")
@@ -176,7 +171,6 @@ public class FolderWebService {
     @DELETE
     @Path("/{uuid}")
     @RolesAllowed("admin")
-    @Produces(MediaType.APPLICATION_JSON)
     @Metered(name = "folders.closeFolder")
     @Counted(name = "folders.closeFolder.count")
     @ConcurrentGauge(name = "folders.closeFolder.concurrent")

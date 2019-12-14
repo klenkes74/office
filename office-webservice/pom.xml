@@ -69,6 +69,11 @@
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-openapi</artifactId>
+      <version>1.0.1.Final</version>
+    </dependency>
   </dependencies>
   <build>
     <resources>
