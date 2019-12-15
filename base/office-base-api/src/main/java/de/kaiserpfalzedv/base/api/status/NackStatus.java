@@ -23,12 +23,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.base.api.spec.Spec;
 import org.immutables.value.Value;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 @Value.Immutable
 @JsonSerialize(as = ImmutableNackStatus.class)
 @JsonDeserialize(builder = ImmutableNackStatus.Builder.class)
-public interface NackStatus<T extends Spec> extends Status<T> {
+public interface NackStatus<T extends Spec<? extends Serializable>> extends Status<T> {
     String TYPE = "NACK";
     String DEFAULT_VALUE = "500";
 

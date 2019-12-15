@@ -19,13 +19,14 @@
 package de.kaiserpfalzedv.folders.store;
 
 import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
-import de.kaiserpfalzedv.folders.FolderSpec;
-import de.kaiserpfalzedv.folders.ImmutableFolderSpec;
+import de.kaiserpfalzedv.folders.*;
 import io.quarkus.arc.DefaultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Optional;
@@ -44,6 +45,12 @@ public class InMemoryFolderStoreAdapter implements FolderStoreAdapter, FolderRea
     private final ConcurrentHashMap<UUID, FolderSpec> folders = new ConcurrentHashMap<>(INITIAL_SIZE);
     private final ConcurrentHashMap<String, Set<FolderSpec>> folderByScope = new ConcurrentHashMap<>(INITIAL_SIZE);
     private final ConcurrentHashMap<String, FolderSpec> folderByScopeAndKey = new ConcurrentHashMap<>(INITIAL_SIZE);
+
+    @Inject
+    Event<FolderCreated> createEvent;
+    @Inject
+    Event<FolderClosed> closeEvent;
+
 
     @Override
     public Optional<FolderSpec> loadById(final UUID uuid) {
@@ -85,6 +92,11 @@ public class InMemoryFolderStoreAdapter implements FolderStoreAdapter, FolderRea
         folderByScopeAndKey.put(generateKey(saved), saved);
         folderByScope.get(saved.getScope().orElse(DEFAULT_SCOPE)).add(saved);
 
+        createEvent.fire(ImmutableFolderCreated.builder()
+                .metadata(saved.getMetadata())
+                .spec(saved)
+                .build()
+        );
         return saved;
     }
 

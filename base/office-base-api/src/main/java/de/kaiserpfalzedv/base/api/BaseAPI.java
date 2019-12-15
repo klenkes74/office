@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.base.api;
 
 
-import de.kaiserpfalzedv.base.api.spec.EmptySpec;
+import de.kaiserpfalzedv.base.api.spec.Spec;
 import de.kaiserpfalzedv.base.api.status.Status;
 
 import java.io.Serializable;
@@ -65,5 +65,5 @@ public interface BaseAPI<T extends Serializable> extends Serializable {
      *
      * @return a list of status changes or status messages.
      */
-    List<Status<EmptySpec<Serializable>>> getStatus();
+    List<Status<Spec<Serializable>>> getStatus();
 }

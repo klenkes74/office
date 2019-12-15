@@ -1,6 +1,7 @@
 package de.kaiserpfalzedv.folders.store;
 
 import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
+import de.kaiserpfalzedv.folders.FolderCreated;
 import de.kaiserpfalzedv.folders.FolderSpec;
 import de.kaiserpfalzedv.folders.ImmutableFolderSpec;
 import de.kaiserpfalzedv.folders.store.jpa.Folder;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
 import java.util.Optional;
@@ -18,6 +21,10 @@ import java.util.UUID;
 @ApplicationScoped
 public class JPAFolderStoreAdapter implements FolderStoreAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(JPAFolderStoreAdapter.class);
+
+    @Inject
+    Event<FolderCreated> createdEvent;
+
 
     private FolderSpec convertToSpec(Folder data) {
         return ImmutableFolderSpec.builder()

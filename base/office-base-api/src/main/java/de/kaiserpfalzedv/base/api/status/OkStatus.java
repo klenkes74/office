@@ -23,10 +23,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.base.api.spec.Spec;
 import org.immutables.value.Value;
 
+import java.io.Serializable;
+
 @Value.Immutable
 @JsonSerialize(as = ImmutableOkStatus.class)
 @JsonDeserialize(builder = ImmutableOkStatus.Builder.class)
-public interface OkStatus<T extends Spec> extends Status<T> {
+public interface OkStatus<T extends Spec<? extends Serializable>> extends Status<T> {
     String TYPE = "OK";
 
     @Override
