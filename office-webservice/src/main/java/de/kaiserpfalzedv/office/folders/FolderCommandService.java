@@ -25,6 +25,7 @@ import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
 import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.folders.*;
+import de.kaiserpfalzedv.folders.store.FolderReadAdapter;
 import de.kaiserpfalzedv.folders.store.FolderStoreAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,11 +45,18 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
     @Inject
     FolderStoreAdapter storeAdapter;
 
+    @Inject
+    FolderReadAdapter readAdapter;
+
     public FolderCommandService() {
     }
 
-    public FolderCommandService(final FolderStoreAdapter adapter) {
-        this.storeAdapter = adapter;
+    public FolderCommandService(
+            final FolderStoreAdapter storeAdapter,
+            final FolderReadAdapter readAdapter
+    ) {
+        this.storeAdapter = storeAdapter;
+        this.readAdapter = readAdapter;
     }
 
     @Override
@@ -109,10 +117,11 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
     public Optional<Folder> load(final String scope, final String key) {
         LOGGER.debug("Loading folder: scope={}, key={}", scope, key);
 
-        return processLoadedFolder(storeAdapter.loadByName(scope, key));
+        return processLoadedFolder(readAdapter.loadByName(scope, key));
     }
 
-    private Optional<Folder> processLoadedFolder(Optional<FolderSpec> data) {
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private Optional<Folder> processLoadedFolder(final Optional<FolderSpec> data) {
         if (data.isPresent()) {
             FolderSpec spec = data.get();
 
@@ -140,7 +149,7 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
     public Optional<Folder> load(final UUID uuid) {
         LOGGER.debug("Loading folder: uuid={}", uuid);
 
-        return processLoadedFolder(storeAdapter.loadById(uuid));
+        return processLoadedFolder(readAdapter.loadById(uuid));
     }
 
     public Collection<FolderSpec> load(final String scope, final Long start, final Long size) {
@@ -150,6 +159,6 @@ public class FolderCommandService implements CommandService<FolderSpec>, Seriali
                 size != null ? size : "undefined");
 
 
-        return storeAdapter.loadByScope(scope);
+        return readAdapter.loadByScope(scope);
     }
 }

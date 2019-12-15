@@ -55,9 +55,9 @@ public class FolderCommandServiceTest {
                     .uuid(ID)
                     .scope("kes")
                     .key("I'19-0001")
-                    .name("Adoptionsverfahren Lichti ./. Hellwig")
-                    .shortName("Lichti ./. Hellwig")
-                    .description("Adoptionsverfahren Alexandra Maria Lichti")
+                    .name("Akte Softwaretest")
+                    .shortName("Softwaretest")
+                    .description("Testakte für Softwaretests")
                     .created(OffsetDateTime.now())
                     .modified(OffsetDateTime.now())
                     .build()
@@ -68,7 +68,8 @@ public class FolderCommandServiceTest {
 
     @BeforeEach
     void setUpFolderCommandService() throws DataAlreadyExistsException {
-        service = new FolderCommandService(new InMemoryFolderStoreAdapter());
+        InMemoryFolderStoreAdapter store = new InMemoryFolderStoreAdapter();
+        service = new FolderCommandService(store, store);
         service.write(CREATE_FOLDER);
     }
 

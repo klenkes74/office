@@ -16,14 +16,10 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store;
+package de.kaiserpfalzedv.folders.store;
 
-import de.kaiserpfalzedv.base.api.spec.Spec;
+import de.kaiserpfalzedv.base.store.DataReadAdapter;
+import de.kaiserpfalzedv.folders.FolderSpec;
 
-import java.util.UUID;
-
-public interface DataStoreAdapter<T extends Spec<T>> {
-    T save(final T data) throws DataAlreadyExistsException;
-
-    void close(final UUID id);
+public interface FolderReadAdapter extends DataReadAdapter<FolderSpec> {
 }

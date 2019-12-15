@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @DefaultBean
 @ApplicationScoped
-public class InMemoryFolderStoreAdapter implements FolderStoreAdapter {
+public class InMemoryFolderStoreAdapter implements FolderStoreAdapter, FolderReadAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryFolderStoreAdapter.class);
 
     private static final int INITIAL_SIZE = 20;

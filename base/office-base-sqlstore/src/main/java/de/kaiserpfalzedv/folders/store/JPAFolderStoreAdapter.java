@@ -11,23 +11,13 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.Optional;
+import java.util.UUID;
 
 @DefaultBean
 @ApplicationScoped
 public class JPAFolderStoreAdapter implements FolderStoreAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(JPAFolderStoreAdapter.class);
-
-    @Override
-    public Optional<FolderSpec> loadById(UUID id) {
-        Folder data = Folder.find("uuid", id).firstResult();
-
-        if (data == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(convertToSpec(data));
-    }
 
     private FolderSpec convertToSpec(Folder data) {
         return ImmutableFolderSpec.builder()
@@ -41,27 +31,6 @@ public class JPAFolderStoreAdapter implements FolderStoreAdapter {
                 .created(data.created)
                 .modified(data.modified)
                 .build();
-    }
-
-    @Override
-    public Optional<FolderSpec> loadByName(String scope, String name) {
-        Folder data = Folder.find("scope = ?1 and key = ?2", scope, name).firstResult();
-
-        if (data == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(convertToSpec(data));
-    }
-
-    @Override
-    public Collection<FolderSpec> loadByScope(String scope) {
-        List<Folder> data = Folder.list("scope", scope);
-        ArrayList<FolderSpec> result = new ArrayList<>(data.size());
-
-        data.forEach(e -> result.add(convertToSpec(e)));
-
-        return result;
     }
 
     @Override
@@ -112,10 +81,5 @@ public class JPAFolderStoreAdapter implements FolderStoreAdapter {
             data.closed = OffsetDateTime.now();
             data.persistAndFlush();
         }
-    }
-
-    @Override
-    public long count() {
-        return Folder.count();
     }
 }

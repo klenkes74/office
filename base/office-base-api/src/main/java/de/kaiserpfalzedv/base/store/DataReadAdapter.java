@@ -20,10 +20,16 @@ package de.kaiserpfalzedv.base.store;
 
 import de.kaiserpfalzedv.base.api.spec.Spec;
 
+import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface DataStoreAdapter<T extends Spec<T>> {
-    T save(final T data) throws DataAlreadyExistsException;
+public interface DataReadAdapter<T extends Spec<T>> {
+    Optional<T> loadById(final UUID id);
 
-    void close(final UUID id);
+    Optional<T> loadByName(final String scope, final String name);
+
+    Collection<T> loadByScope(final String scope);
+
+    long count();
 }

@@ -1,6 +1,6 @@
 package de.kaiserpfalzedv.office.folders;
 
-import de.kaiserpfalzedv.folders.store.FolderStoreAdapter;
+import de.kaiserpfalzedv.folders.store.FolderReadAdapter;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
@@ -26,7 +26,7 @@ public class Application {
     String tz;
 
     @Inject
-    FolderStoreAdapter store;
+    FolderReadAdapter store;
 
     void onStart(@Observes StartupEvent event) {
         LOGGER.info("Started: {} (v{})", name, version);
