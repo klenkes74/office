@@ -103,7 +103,7 @@ If employees of a company contribute code, in **addition** to the individual agr
 agreement submitted. This is mainly for the protection of the contributing employees.
 
 A company representative authorized to do so needs to download, fill, and print the
-[Corporate Contributor License Agreement](/KES Corporate Contributor License Agreement (2019-12-31).pdf)
+[Corporate Contributor License Agreement](https://github.com/klenkes74/office/blob/master/KES%20Corporate%20Contributor%20License%20Agreement%20(2019-12-31).pdf)
 form. Then either:
 
 - Scan it and e-mail it to [support@kaiserpfalz-edv.de](mailto:support@kaiserpfalz-edv.de)
