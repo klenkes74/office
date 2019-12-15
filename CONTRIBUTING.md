@@ -102,9 +102,9 @@ notify you if there is any change to the CLA in the meantime.
 If employees of a company contribute code, in **addition** to the individual agreement above, there needs to be one company 
 agreement submitted. This is mainly for the protection of the contributing employees.
 
-A company representative authorized to do so needs to download, fill, and print
-the [Corporate Contributor License Agreement](/KES Corporate Contributor License Agreement (2019-12-31).pdf) form. Then 
-either:
+A company representative authorized to do so needs to download, fill, and print the
+[Corporate Contributor License Agreement](/KES Corporate Contributor License Agreement (2019-12-31).pdf)
+form. Then either:
 
 - Scan it and e-mail it to [support@kaiserpfalz-edv.de](mailto:support@kaiserpfalz-edv.de)
 - Send it by traditional letter to: *Kaiserpfalz EDV-Service, Roland T. Lichti, Darmstädter Str. 12, 64625 Bensheim, 
