@@ -1,0 +1,151 @@
+/*
+ * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+ *
+ *  This file is part of Kaiserpfalz EDV-Service Office.
+ *
+ *  This is free software: you can redistribute it and/or modify it under the terms of
+ *  the GNU Lesser General Public License as published by the Free Software
+ *  Foundation, either version 3 of the License.
+ *
+ *  This file is distributed in the hope that it will be useful, but WITHOUT ANY
+ *  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ *  License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License along
+ *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ */
+
+package de.kaiserpfalzedv.office.folders.store.inmemory;
+
+import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.store.NoModifiableDataFoundException;
+import de.kaiserpfalzedv.office.folders.FolderSpec;
+import org.infinispan.Cache;
+import org.infinispan.configuration.cache.ConfigurationBuilder;
+import org.infinispan.manager.DefaultCacheManager;
+import org.infinispan.manager.EmbeddedCacheManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.enterprise.context.ApplicationScoped;
+import java.util.*;
+
+/*
+ *
+ *
+ * @author rlichti
+ * @since 2019-12-15 19:26
+ */
+@ApplicationScoped
+public class InMemoryFolderStore {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryFolderStore.class);
+
+    public static final String DEFAULT_SCOPE = "./.";
+
+    EmbeddedCacheManager cacheManager;
+
+    private Cache<UUID, FolderSpec> folders;
+    private Cache<String, HashMap<String, FolderSpec>> scopeAndKey;
+
+    public InMemoryFolderStore(final EmbeddedCacheManager cacheManager) {
+        if (cacheManager == null) {
+            LOGGER.warn("CacheManager has not been injected. Creating DefaultCacheManager().");
+
+            this.cacheManager = new DefaultCacheManager();
+        } else {
+            LOGGER.debug("Using injected CacheManager: {}", cacheManager);
+
+            this.cacheManager = cacheManager;
+        }
+
+        if (!this.cacheManager.cacheExists("folders")) {
+            folders = this.cacheManager.createCache("folders", new ConfigurationBuilder().memory().build());
+        }
+
+        if (!this.cacheManager.cacheExists(("scopeAndKey"))) {
+            scopeAndKey = this.cacheManager.createCache("scopeAndKey", new ConfigurationBuilder().memory().build());
+        }
+
+        LOGGER.debug("Caches for FolderStore prepared: {} and {}", folders, scopeAndKey);
+    }
+
+
+    public Optional<FolderSpec> loadByUuid(final UUID uuid) {
+        try {
+            return Optional.ofNullable(folders.get(uuid));
+        } catch (NullPointerException e) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<FolderSpec> loadByScopeAndKey(final String scope, final String key) {
+        try {
+            return Optional.ofNullable(scopeAndKey.get(scope).get(key));
+        } catch (NullPointerException e) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<FolderSpec> loadByKey(final String key) {
+        return Optional.ofNullable(scopeAndKey.get(DEFAULT_SCOPE).get(key));
+    }
+
+    public ArrayList<FolderSpec> loadByScope(final String scope) {
+        if (scopeAndKey.containsKey(scope)) {
+            return new ArrayList<>(scopeAndKey.get(scope).values());
+        } else {
+            return new ArrayList<>(0);
+        }
+    }
+
+    public ArrayList<FolderSpec> loadEntriesWithoutScope() {
+        return loadByScope(DEFAULT_SCOPE);
+    }
+
+    public void store(final FolderSpec folder) {
+        ObjectIdentifier identity = folder.getIdentity();
+        LOGGER.trace("Storing JPAFolderSpec: {}", identity);
+
+        folders.put(identity.getUuid(), folder);
+
+        if (identity.getName().isPresent()) {
+            scopeAndKey.putIfAbsent(identity.getScope().orElse(DEFAULT_SCOPE), new HashMap<>(5));
+            scopeAndKey.get(identity.getScope().orElse(DEFAULT_SCOPE)).put(identity.getName().get(), folder);
+        }
+    }
+
+    public void replace(final FolderSpec folder) throws NoModifiableDataFoundException {
+        LOGGER.trace("Replacing data for JPAFolderSpec: {}", folder.getIdentity());
+
+        try {
+            folders.replace(folder.getIdentity().getUuid(), folder);
+        } catch (NullPointerException e) {
+            throw new NoModifiableDataFoundException(folder.getIdentity());
+        }
+    }
+
+    public void remove(final FolderSpec folder) {
+        ObjectIdentifier identity = folder.getIdentity();
+        LOGGER.trace("Deleting JPAFolderSpec: {}", identity);
+
+        if (identity.getName().isPresent()
+                && scopeAndKey.containsKey(identity.getScope().orElse(DEFAULT_SCOPE))) {
+            scopeAndKey.get(identity.getScope().orElse(DEFAULT_SCOPE)).remove(identity.getName().get());
+        }
+
+        folders.remove(identity.getUuid());
+    }
+
+    public long getObjectCount() {
+        return folders.size();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", InMemoryFolderStore.class.getSimpleName() + "[", "]")
+                .add("identity=" + System.identityHashCode(this))
+                .add("cacheManager=" + cacheManager)
+                .toString();
+    }
+}

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+  ~
+  ~  This file is part of Kaiserpfalz EDV-Service Office.
+  ~
+  ~  This is free software: you can redistribute it and/or modify it under the terms of
+  ~  the GNU Lesser General Public License as published by the Free Software
+  ~  Foundation, either version 3 of the License.
+  ~
+  ~  This file is distributed in the hope that it will be useful, but WITHOUT ANY
+  ~  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+  ~  License for more details.
+  ~
+  ~  You should have received a copy of the GNU Lesser General Public License along
+  ~  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  -->
+
+<logging xmlns="urn:jboss:domain:logging:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="urn:jboss:domain:logging:1.2 http://www.jboss.org/schema/jbossas/jboss-as-logging_1_2.xsd">
+
+    <periodic-rotating-file-handler
+            file-name="./target/server.log"
+            name="FILE"
+            autoflush="true"
+            append="true"
+            suffix=".yyyy-MM-dd">  <!-- To roll over at the top of each hour, use ".yyyy-MM-dd-HH" instead -->
+
+        <error-manager>
+            <only-once/>
+        </error-manager>
+
+        <formatter>
+            <!-- To revert back to simple stack traces without JAR versions, change "%E" to "%e" below. -->
+            <!-- Uncomment this to get the class name in the log as well as the category
+            <pattern-formatter pattern="%d %-5p [%c] %C{1} (%t) %s%E%n"/>
+            -->
+            <!-- Uncomment this to log without the class name in the log -->
+            <pattern-formatter pattern="%d %-5p [%c] (%t) %s%E%n"/>
+        </formatter>
+    </periodic-rotating-file-handler>
+
+    <!-- A size based file rolling appender
+ 
+    <size-rotating-file-handler
+          file-name="./target/server.log"
+          name="FILE"
+          autoflush="true"
+          append="true"
+          rotate-size="500k"
+          max-backup-index="5">
+ 
+       <error-manager>
+          <only-once/>
+       </error-manager>
+ 
+       <formatter>
+          <pattern-formatter pattern="%d %-5p [%c] (%t) %m%n"/>
+       </formatter>
+    </size-rotating-file-handler>
+    -->
+
+    <!-- ============================== -->
+    <!-- Append messages to the console -->
+    <!-- ============================== -->
+
+    <console-handler name="CONSOLE" autoflush="true" target="System.out">
+        <error-manager>
+            <only-once/>
+        </error-manager>
+
+        <level name="DEBUG"/>
+
+        <formatter>
+            <pattern-formatter pattern="%d{HH:mm:ss,SSS} %-5p [%c] %s%E%n"/>
+        </formatter>
+    </console-handler>
+
+    <!-- ====================== -->
+    <!-- More Appender examples -->
+    <!-- ====================== -->
+
+    <!-- Buffer events and log them asynchronously
+ 
+    <async-handler name="ASYNC">
+       <error-manager>
+          <only-once/>
+       </error-manager>
+ 
+       <sub-handlers>
+          <handler-ref name="FILE"/>
+          <handler-ref name="CONSOLE"/>
+          <handler-ref name="SMTP"/>
+       </sub-handlers>
+    </async-handler>
+    -->
+
+    <!-- EMail events to an administrator
+ 
+    <log4j-appender name="SMTP" class="org.apache.log4j.net.SMTPAppender">
+       <error-manager>
+          <only-once/>
+       </error-manager>
+ 
+       <level name="ERROR"/>
+ 
+       <properties>
+          <property name="to">admin@myhost.domain.com</property>
+          <property name="from">nobody@myhost.domain.com</property>
+          <property name="subject">JBoss Sever Errors</property>
+          <property name="SMTPHost">localhost</property>
+          <property name="bufferSize">10</property>
+       </properties>
+ 
+       <formatter>
+          <pattern-formatter pattern="%d %-5p [%c] (%t) %m%n"/>
+       </formatter>
+    </log4j-appender>
+    -->
+
+    <!-- Syslog events
+ 
+    <log4j-appender name="SYSLOG" class="org.apache.log4j.net.SyslogAppender">
+       <error-manager>
+          <only-once/>
+       </error-manager>
+ 
+       <properties>
+          <property name="facility">LOCAL7</property>
+          <property name="facilityPrinting">true</property>
+          <property name="syslogHost">localhost</property>
+       </properties>
+ 
+       <formatter>
+          <pattern-formatter pattern="[%d,%c{1}] %m%n"/>
+       </formatter>
+    </log4j-appender>
+    -->
+
+    <!-- Log events to JMS (requires a topic to be created)
+ 
+    <log4j-appender name="JMS" class="org.apache.log4j.net.JMSAppender">
+       <error-manager>
+          <only-once/>
+       </error-manager>
+ 
+       <level name="ERROR"/>
+ 
+       <properties>
+          <property name="topicConnectionFactoryBindingName">
+             --><!-- Use injection so that an implicit dependency is formed - TODO: get the correct property name --><!--
+            <b:inject bean="myTopicBiding" property="name"/>
+         </property>
+         <property name="topicBindingName">topic/MyErrorsTopic</property>
+      </properties>
+   </log4j-appender>
+   -->
+
+    <!-- Log events through SNMP
+ 
+    <log4j-appender name="TRAP_LOG" class="org.apache.log4j.ext.SNMPTrapAppender">
+       <error-manager>
+          <only-once/>
+       </error-manager>
+ 
+       <level name="DEBUG"/>
+ 
+       <properties>
+          <property name="implementationClassName">org.apache.log4j.ext.JoeSNMPTrapSender</property>
+          <property name="managementHost">127.0.0.1</property>
+          <property name="managementHostTrapListenPort">162</property>
+          <property name="enterpriseOID">1.3.6.1.4.1.24.0</property>
+          <property name="localIPAddress">127.0.0.1</property>
+          <property name="localTrapSendPort">161</property>
+          <property name="genericTrapType">6</property>
+          <property name="specificTrapType">12345678</property>
+          <property name="communityString">public</property>
+          <property name="forwardStackTraceWithTrap">true</property>
+          <property name="applicationTrapOID">1.3.6.1.4.1.24.12.10.22.64</property>
+       </properties>
+       <formatter>
+          <pattern-formatter pattern="%d,%p,[%t],[%c],%m%n"/>
+       </formatter>
+    </log4j-appender>
+    -->
+
+    <!-- Security AUDIT Appender
+ 
+    <periodic-rotating-file-handler
+          name="AUDIT"
+          autoflush="true"
+          file-name="./target/audit.log"
+          suffix=".yyyy-MM-dd"
+          append="true">
+ 
+       <error-manager>
+          <only-once/>
+       </error-manager>
+ 
+       <formatter>
+          <pattern-formatter pattern="%d %-5p [%c] (%t:%x) %m%n"/>
+       </formatter>
+    </periodic-rotating-file-handler>
+    -->
+
+    <logger category="de.kaiserpfalzedv">
+        <level name="DEBUG"/>
+        <handlers>
+            <handler-ref name="CONSOLE"/>
+            <handler-ref name="FILE"/>
+        </handlers>
+    </logger>
+
+    <!-- ======================= -->
+    <!-- Setup the Root category -->
+    <!-- ======================= -->
+
+    <root-logger>
+        <level name="INFO"/>
+        <handlers>
+            <handler-ref name="CONSOLE"/>
+            <handler-ref name="FILE"/>
+        </handlers>
+    </root-logger>
+</logging>

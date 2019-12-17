@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "identity": {
+      "kind": "de.kaiserpfalzedv.office.folders.CreateFolder",
+      "uuid": "b88f0e4e-0000-4daf-812b-c798014e991b",
+      "scope": "kaiserpfalz-edv.de",
+      "name": "I'19-0001"
+    },
+    "created": "2019-12-11T12:00:00-01:00"
+  },
+  "spec": {
+    "identity": {
+      "kind": "de.kaiserpfalzedv.office.folders.Folder",
+      "uuid": "b88f0e4e-74ea-4daf-812b-c798014e991b",
+      "scope": "kaiserpfalz-edv.de",
+      "name": "I'19-0001"
+    },
+    "name": "Softwaretest Akte",
+    "shortName": "Softwaretest",
+    "description": "Einfach eine Akte für einen Softwaretest",
+    "created": "2019-12-11T12:00:00-01:00",
+    "modified": "2019-12-11T12:00:00-01:00"
+  }
+}
