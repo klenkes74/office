@@ -25,8 +25,8 @@ import de.kaiserpfalzedv.office.folders.FolderSpec;
 import de.kaiserpfalzedv.office.folders.ImmutableFolderSpec;
 import de.kaiserpfalzedv.office.folders.api.FolderCommand;
 import de.kaiserpfalzedv.office.folders.api.FolderResultWithSpec;
+import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderChangeWithSpec;
 import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderSpec;
-import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAFolderChangeWithSpec;
 import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAIdentity;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +38,7 @@ import java.util.Optional;
  * @author rlichti
  * @since 2019-12-17 10:22
  */
-public abstract class ConverterForResultsWithFolderSpec<A extends FolderResultWithSpec<FolderCommand>, D extends JPAFolderChangeWithSpec> extends ConverterForResultsWithoutFolderSpec<A, D> implements DataConverter<A, D> {
+public abstract class ConverterForResultsWithFolderSpec<A extends FolderResultWithSpec<? extends FolderCommand>, D extends JPAFolderChangeWithSpec> extends ConverterForResultsWithoutFolderSpec<A, D> implements DataConverter<A, D> {
     protected void convert(
             @NotNull final A data,
             @NotNull final D result

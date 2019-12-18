@@ -20,7 +20,6 @@ package de.kaiserpfalzedv.office.folders;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.office.folders.api.FolderCommand;
 import de.kaiserpfalzedv.office.folders.api.FolderResultWithSpec;
 import org.immutables.value.Value;
 
@@ -33,7 +32,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @JsonSerialize(as = ImmutableFolderCreated.class)
 @JsonDeserialize(builder = ImmutableFolderCreated.Builder.class)
-public interface FolderCreated extends FolderResultWithSpec<FolderCommand> {
+public interface FolderCreated extends FolderResultWithSpec<CreateFolder> {
     String KIND = "de.kaiserpfalzedv.office.folders.FolderCreated";
     String VERSION = "1.0.0";
 

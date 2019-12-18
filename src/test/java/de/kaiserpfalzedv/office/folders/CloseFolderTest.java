@@ -18,15 +18,10 @@
 
 package de.kaiserpfalzedv.office.folders;
 
-import de.kaiserpfalzedv.base.actions.commands.CreateCommand;
-import de.kaiserpfalzedv.base.actions.commands.DeleteCommand;
-import de.kaiserpfalzedv.base.actions.commands.ModifyCommand;
-import de.kaiserpfalzedv.base.actions.commands.ModifyCommandException;
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
 import de.kaiserpfalzedv.base.api.Metadata;
 import de.kaiserpfalzedv.base.api.ObjectIdentifier;
-import de.kaiserpfalzedv.office.folders.api.FolderCommandService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -121,27 +116,7 @@ public class CloseFolderTest {
                     )
                     .build();
         }
-
-        @Override
-        public FolderSpec getSpec() {
-            return FOLDER;
-        }
     };
-
-    private static final FolderCommandService FOLDER_COMMAND_SERVICE = new FolderCommandService() {
-        @Override
-        public void execute(CreateCommand<FolderSpec> command) {
-        }
-
-        @Override
-        public void execute(ModifyCommand<FolderSpec> command) {
-        }
-
-        @Override
-        public void execute(DeleteCommand<FolderSpec> command) {
-        }
-    };
-
 
     @Test
     public void shouldReturnCorrectKindOfFolder() {
@@ -151,11 +126,6 @@ public class CloseFolderTest {
     @Test
     public void shouldReturnCorrectVersionOfFolder() {
         assert CloseFolder.VERSION.equals(SERVICE.getVersion());
-    }
-
-    @Test
-    public void shouldExecuteTheCommandCorrectly() throws ModifyCommandException {
-        SERVICE.execute(FOLDER_COMMAND_SERVICE);
     }
 
     @Test

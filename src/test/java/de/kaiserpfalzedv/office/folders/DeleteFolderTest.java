@@ -18,13 +18,8 @@
 
 package de.kaiserpfalzedv.office.folders;
 
-import de.kaiserpfalzedv.base.actions.commands.CreateCommand;
-import de.kaiserpfalzedv.base.actions.commands.DeleteCommand;
-import de.kaiserpfalzedv.base.actions.commands.DeleteCommandException;
-import de.kaiserpfalzedv.base.actions.commands.ModifyCommand;
 import de.kaiserpfalzedv.base.api.Metadata;
 import de.kaiserpfalzedv.base.api.ObjectIdentifier;
-import de.kaiserpfalzedv.office.folders.api.FolderCommandService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -51,26 +46,8 @@ public class DeleteFolderTest {
         public Metadata getMetadata() {
             return null;
         }
-
-        @Override
-        public FolderSpec getSpec() {
-            return null;
-        }
     };
 
-    private static final FolderCommandService FOLDER_COMMAND_SERVICE = new FolderCommandService() {
-        @Override
-        public void execute(CreateCommand<FolderSpec> command) {
-        }
-
-        @Override
-        public void execute(ModifyCommand<FolderSpec> command) {
-        }
-
-        @Override
-        public void execute(DeleteCommand<FolderSpec> command) {
-        }
-    };
 
     private static final FolderSpec FOLDER = new FolderSpec() {
         @Override
@@ -117,11 +94,6 @@ public class DeleteFolderTest {
     @Test
     public void shouldReturnCorrectVersionOfFolder() {
         assert DeleteFolder.VERSION.equals(SERVICE.getVersion());
-    }
-
-    @Test
-    public void shouldExecuteTheCommandCorrectly() throws DeleteCommandException {
-        SERVICE.execute(FOLDER_COMMAND_SERVICE);
     }
 
     @Test

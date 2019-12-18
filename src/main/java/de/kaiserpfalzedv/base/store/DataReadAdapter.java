@@ -18,11 +18,12 @@
 
 package de.kaiserpfalzedv.base.store;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface DataReadAdapter<T> {
+public interface DataReadAdapter<T extends Serializable> {
     Optional<T> loadById(final UUID id);
 
     Optional<T> loadByScopeAndKey(final String scope, final String key);

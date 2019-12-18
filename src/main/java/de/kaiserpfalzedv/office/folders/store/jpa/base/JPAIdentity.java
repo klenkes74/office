@@ -19,7 +19,9 @@
 package de.kaiserpfalzedv.office.folders.store.jpa.base;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 import java.util.UUID;
 
 /*
@@ -29,8 +31,9 @@ import java.util.UUID;
  * @since 2019-12-17 09:22
  */
 @Embeddable
-public class JPAIdentity {
+public class JPAIdentity implements Serializable {
     @Column(name = "_UUID", columnDefinition = "CHAR(36)", updatable = false, unique = true)
+    @Convert(converter = UuidConverter.class)
     public UUID uuid;
     @Column(name = "_SCOPE", updatable = false)
     public String scope;

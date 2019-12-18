@@ -16,9 +16,7 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.folders.store.jpa.base;
-
-import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderSpec;
+package de.kaiserpfalzedv.office.folders.store.jpa;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;

@@ -21,7 +21,7 @@ package de.kaiserpfalzedv.office.folders.store.jpa.converters.base;
 import de.kaiserpfalzedv.base.api.*;
 import de.kaiserpfalzedv.base.store.DataConverter;
 import de.kaiserpfalzedv.office.folders.api.FolderResult;
-import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAFolderChange;
+import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderChange;
 import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAIdentity;
 import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAWorkflowData;
 import org.jetbrains.annotations.NotNull;

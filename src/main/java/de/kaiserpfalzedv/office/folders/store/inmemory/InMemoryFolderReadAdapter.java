@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.office.folders.store.inmemory;
 
 import de.kaiserpfalzedv.base.cdi.Mock;
-import de.kaiserpfalzedv.office.folders.FolderSpec;
+import de.kaiserpfalzedv.office.folders.Folder;
 import de.kaiserpfalzedv.office.folders.store.FolderReadAdapter;
 
 import javax.enterprise.context.Dependent;
@@ -44,23 +44,23 @@ public class InMemoryFolderReadAdapter implements FolderReadAdapter {
     }
 
     @Override
-    public Optional<FolderSpec> loadById(UUID id) {
+    public Optional<Folder> loadById(UUID id) {
         return store.loadByUuid(id);
     }
 
     @Override
-    public Optional<FolderSpec> loadByScopeAndKey(String scope, String key) {
+    public Optional<Folder> loadByScopeAndKey(String scope, String key) {
         return store.loadByScopeAndKey(scope, key);
     }
 
     @Override
-    public ArrayList<FolderSpec> loadByScope(String scope) {
+    public ArrayList<Folder> loadByScope(String scope) {
         return store.loadByScope(scope);
     }
 
     @Override
-    public ArrayList<FolderSpec> loadByScope(String scope, int index, int size) {
-        ArrayList<FolderSpec> data = store.loadByScope(scope);
+    public ArrayList<Folder> loadByScope(String scope, int index, int size) {
+        ArrayList<Folder> data = store.loadByScope(scope);
 
         if (index >= data.size()) {
             return new ArrayList<>(0);

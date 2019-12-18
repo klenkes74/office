@@ -20,14 +20,11 @@ package de.kaiserpfalzedv.office.folders.store.jpa;
 
 import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.base.store.CreationFailedException;
-import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
-import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
-import de.kaiserpfalzedv.office.folders.CreateFolder;
-import de.kaiserpfalzedv.office.folders.FolderCreated;
-import de.kaiserpfalzedv.office.folders.FolderSpec;
+import de.kaiserpfalzedv.office.folders.DeleteFolder;
+import de.kaiserpfalzedv.office.folders.FolderDeleted;
 import de.kaiserpfalzedv.office.folders.api.FolderCommandService;
-import de.kaiserpfalzedv.office.folders.store.jpa.converters.CreateFolderConverter;
-import de.kaiserpfalzedv.office.folders.store.jpa.converters.FolderCreatedConverter;
+import de.kaiserpfalzedv.office.folders.store.jpa.converters.DeleteFolderConverter;
+import de.kaiserpfalzedv.office.folders.store.jpa.converters.FolderDeletedConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,32 +36,21 @@ import javax.transaction.Transactional;
 
 @JPA
 @Dependent
-public class JPAFolderCreateService implements FolderCommandService<CreateFolder> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JPAFolderCreateService.class);
+public class JPAFolderDeleteService implements FolderCommandService<DeleteFolder> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JPAFolderDeleteService.class);
 
     @Inject
-    CreateFolderConverter commandConverter;
+    DeleteFolderConverter folderConverter;
     @Inject
-    FolderCreatedConverter eventConverter;
+    FolderDeletedConverter eventConverter;
     @Inject
-    Event<FolderCreated> eventSource;
+    Event<FolderDeleted> eventSource;
 
 
     @Transactional
-    public void observe(@Observes final CreateFolder command) {
-        FolderSpec spec = command.getSpec();
-
-        if (JPAFolder.find("uuid", spec.getIdentity().getUuid()).count() != 0) {
-            throw new IllegalArgumentException(new UuidAlreadyExistsException(spec.getIdentity()));
-        }
-
-        if (JPAFolder.find("scope = ?1 and key = ?2", spec.getIdentity().getScope().orElse("./."), spec.getIdentity().getName()).count() != 0) {
-            throw new IllegalArgumentException(new KeyAlreadyExistsException(spec.getIdentity()));
-        }
-
-
+    public void observe(@Observes final DeleteFolder command) {
         try {
-            JPAFolderCreate jpa = commandConverter.convertFromAPI(command);
+            JPAFolderDelete jpa = folderConverter.convertFromAPI(command);
             jpa.persist();
 
             eventSource.fire(eventConverter.convertToAPI(jpa));

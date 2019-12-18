@@ -276,15 +276,15 @@
                 <version>${surefire-plugin.version}</version>
                 <configuration>
                     <excludedGroups>integration</excludedGroups>
+                    <environmentVariables>
+                        <QUARKUS_PROFILE>test</QUARKUS_PROFILE>
+                    </environmentVariables>
                     <systemProperties>
-                        <quarkus.datasource.url>jdbc:h2:tcp://localhost:${h2.test.tcp.port}/quarkus;MODE=PostgreSQL
+                        <quarkus.profile>test</quarkus.profile>
+                        <quarkus.datasource.url>jdbc:h2:tcp://localhost:${h2.test.tcp.port}/quarkus
                         </quarkus.datasource.url>
                         <quarkus.datasource.username>${db.username}</quarkus.datasource.username>
                         <quarkus.datasource.password>${db.password}</quarkus.datasource.password>
-                        <quarkus.datasource.driver>org.h2.Driver</quarkus.datasource.driver>
-                        <quarkus.hibernate-orm.dialect>org.hibernate.dialect.PostgreSQL91Dialect
-                        </quarkus.hibernate-orm.dialect>
-                        <quarkus.hibernate-orm.database.generation>none</quarkus.hibernate-orm.database.generation>
                         <jacoco-agent.destfile>${project.build.directory}/jacoco-ut.exec</jacoco-agent.destfile>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                     </systemProperties>

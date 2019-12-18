@@ -19,15 +19,11 @@
 package de.kaiserpfalzedv.office.folders.store.jpa;
 
 import de.kaiserpfalzedv.office.folders.ModifyFolder;
-import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAFolderChangeWithSpec;
 
 import javax.persistence.DiscriminatorValue;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue(ModifyFolder.KIND)
 public class JPAFolderModify extends JPAFolderChangeWithSpec {
-    @Embedded
-    public JPAFolderSpec spec;
 }

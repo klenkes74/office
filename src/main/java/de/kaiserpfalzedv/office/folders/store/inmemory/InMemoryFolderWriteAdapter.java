@@ -24,7 +24,7 @@ import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
 import de.kaiserpfalzedv.base.store.ModificationFailedException;
 import de.kaiserpfalzedv.base.store.NoModifiableDataFoundException;
 import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
-import de.kaiserpfalzedv.office.folders.FolderSpec;
+import de.kaiserpfalzedv.office.folders.Folder;
 import de.kaiserpfalzedv.office.folders.store.FolderWriteAdapter;
 
 import javax.enterprise.context.Dependent;
@@ -48,30 +48,30 @@ public class InMemoryFolderWriteAdapter implements FolderWriteAdapter {
     }
 
     @Override
-    public void create(FolderSpec spec) throws UuidAlreadyExistsException, KeyAlreadyExistsException {
-        if (store.loadByUuid(spec.getIdentity().getUuid()).isPresent()) {
-            throw new UuidAlreadyExistsException(spec.getIdentity());
+    public void create(Folder spec) throws UuidAlreadyExistsException, KeyAlreadyExistsException {
+        if (store.loadByUuid(spec.getSpec().getIdentity().getUuid()).isPresent()) {
+            throw new UuidAlreadyExistsException(spec.getSpec().getIdentity());
         }
 
         if (store.loadByScopeAndKey(
-                spec.getIdentity().getScope().orElse(InMemoryFolderStore.DEFAULT_SCOPE),
-                spec.getIdentity().getName().orElse(null)
+                spec.getSpec().getIdentity().getScope().orElse(InMemoryFolderStore.DEFAULT_SCOPE),
+                spec.getSpec().getIdentity().getName().orElse(null)
         )
                 .isPresent()) {
-            throw new KeyAlreadyExistsException(spec.getIdentity());
+            throw new KeyAlreadyExistsException(spec.getSpec().getIdentity());
         }
 
         store.store(spec);
     }
 
     @Override
-    public void modify(FolderSpec spec) throws ModificationFailedException {
+    public void modify(Folder spec) throws ModificationFailedException {
         store.replace(spec);
     }
 
     @Override
     public void close(UUID id) throws ModificationFailedException {
-        Optional<FolderSpec> spec = store.loadByUuid(id);
+        Optional<Folder> spec = store.loadByUuid(id);
 
         if (!spec.isPresent()) {
             throw new NoModifiableDataFoundException(ImmutableObjectIdentifier.builder()
@@ -85,7 +85,7 @@ public class InMemoryFolderWriteAdapter implements FolderWriteAdapter {
 
     @Override
     public void delete(UUID id) {
-        store.loadByUuid(id).ifPresent(folderSpec -> store.remove(folderSpec));
+        store.loadByUuid(id).ifPresent(folder -> store.remove(folder));
     }
 
     @Override

@@ -18,11 +18,9 @@
 
 package de.kaiserpfalzedv.office.folders.api;
 
-import de.kaiserpfalzedv.base.SingleObject;
-import de.kaiserpfalzedv.base.actions.commands.Command;
 import de.kaiserpfalzedv.base.actions.commands.CommandWithSpec;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 
 
-public interface FolderCommandWithSpec extends FolderCommand, Command<FolderSpec>, CommandWithSpec<FolderSpec>, SingleObject<FolderSpec> {
+public interface FolderCommandWithSpec extends FolderCommand, CommandWithSpec<FolderSpec> {
 }

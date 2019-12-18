@@ -20,7 +20,7 @@ package de.kaiserpfalzedv.office.folders.store.inmemory;
 
 import de.kaiserpfalzedv.base.api.ObjectIdentifier;
 import de.kaiserpfalzedv.base.store.NoModifiableDataFoundException;
-import de.kaiserpfalzedv.office.folders.FolderSpec;
+import de.kaiserpfalzedv.office.folders.Folder;
 import org.infinispan.Cache;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.manager.DefaultCacheManager;
@@ -45,8 +45,8 @@ public class InMemoryFolderStore {
 
     EmbeddedCacheManager cacheManager;
 
-    private Cache<UUID, FolderSpec> folders;
-    private Cache<String, HashMap<String, FolderSpec>> scopeAndKey;
+    private Cache<UUID, Folder> folders;
+    private Cache<String, HashMap<String, Folder>> scopeAndKey;
 
     public InMemoryFolderStore(final EmbeddedCacheManager cacheManager) {
         if (cacheManager == null) {
@@ -71,7 +71,7 @@ public class InMemoryFolderStore {
     }
 
 
-    public Optional<FolderSpec> loadByUuid(final UUID uuid) {
+    public Optional<Folder> loadByUuid(final UUID uuid) {
         try {
             return Optional.ofNullable(folders.get(uuid));
         } catch (NullPointerException e) {
@@ -79,7 +79,7 @@ public class InMemoryFolderStore {
         }
     }
 
-    public Optional<FolderSpec> loadByScopeAndKey(final String scope, final String key) {
+    public Optional<Folder> loadByScopeAndKey(final String scope, final String key) {
         try {
             return Optional.ofNullable(scopeAndKey.get(scope).get(key));
         } catch (NullPointerException e) {
@@ -87,11 +87,11 @@ public class InMemoryFolderStore {
         }
     }
 
-    public Optional<FolderSpec> loadByKey(final String key) {
+    public Optional<Folder> loadByKey(final String key) {
         return Optional.ofNullable(scopeAndKey.get(DEFAULT_SCOPE).get(key));
     }
 
-    public ArrayList<FolderSpec> loadByScope(final String scope) {
+    public ArrayList<Folder> loadByScope(final String scope) {
         if (scopeAndKey.containsKey(scope)) {
             return new ArrayList<>(scopeAndKey.get(scope).values());
         } else {
@@ -99,13 +99,13 @@ public class InMemoryFolderStore {
         }
     }
 
-    public ArrayList<FolderSpec> loadEntriesWithoutScope() {
+    public ArrayList<Folder> loadEntriesWithoutScope() {
         return loadByScope(DEFAULT_SCOPE);
     }
 
-    public void store(final FolderSpec folder) {
-        ObjectIdentifier identity = folder.getIdentity();
-        LOGGER.trace("Storing JPAFolderSpec: {}", identity);
+    public void store(final Folder folder) {
+        ObjectIdentifier identity = folder.getSpec().getIdentity();
+        LOGGER.trace("Storing Folder: {}", identity);
 
         folders.put(identity.getUuid(), folder);
 
@@ -115,19 +115,19 @@ public class InMemoryFolderStore {
         }
     }
 
-    public void replace(final FolderSpec folder) throws NoModifiableDataFoundException {
-        LOGGER.trace("Replacing data for JPAFolderSpec: {}", folder.getIdentity());
+    public void replace(final Folder folder) throws NoModifiableDataFoundException {
+        LOGGER.trace("Replacing data for Folder: {}", folder.getSpec().getIdentity());
 
         try {
-            folders.replace(folder.getIdentity().getUuid(), folder);
+            folders.replace(folder.getSpec().getIdentity().getUuid(), folder);
         } catch (NullPointerException e) {
-            throw new NoModifiableDataFoundException(folder.getIdentity());
+            throw new NoModifiableDataFoundException(folder.getSpec().getIdentity());
         }
     }
 
-    public void remove(final FolderSpec folder) {
-        ObjectIdentifier identity = folder.getIdentity();
-        LOGGER.trace("Deleting JPAFolderSpec: {}", identity);
+    public void remove(final Folder folder) {
+        ObjectIdentifier identity = folder.getSpec().getIdentity();
+        LOGGER.trace("Deleting Folder: {}", identity);
 
         if (identity.getName().isPresent()
                 && scopeAndKey.containsKey(identity.getScope().orElse(DEFAULT_SCOPE))) {

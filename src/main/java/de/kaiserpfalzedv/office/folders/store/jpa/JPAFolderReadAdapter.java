@@ -19,9 +19,9 @@
 package de.kaiserpfalzedv.office.folders.store.jpa;
 
 import de.kaiserpfalzedv.base.cdi.JPA;
-import de.kaiserpfalzedv.office.folders.FolderSpec;
+import de.kaiserpfalzedv.office.folders.Folder;
 import de.kaiserpfalzedv.office.folders.store.FolderReadAdapter;
-import de.kaiserpfalzedv.office.folders.store.jpa.converters.FolderSpecConverter;
+import de.kaiserpfalzedv.office.folders.store.jpa.converters.FolderConverter;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -40,11 +40,11 @@ import java.util.UUID;
 @Dependent
 public class JPAFolderReadAdapter implements FolderReadAdapter {
     @Inject
-    FolderSpecConverter converter;
+    FolderConverter converter;
 
     @Override
-    public Optional<FolderSpec> loadById(UUID id) {
-        JPAFolderSpec data = JPAFolderSpec.find("uuid", id).firstResult();
+    public Optional<Folder> loadById(UUID id) {
+        JPAFolder data = JPAFolder.find("identity.uuid", id).firstResult();
 
         if (data == null) {
             return Optional.empty();
@@ -54,8 +54,8 @@ public class JPAFolderReadAdapter implements FolderReadAdapter {
     }
 
     @Override
-    public Optional<FolderSpec> loadByScopeAndKey(String scope, String key) {
-        JPAFolderSpec data = JPAFolderSpec.find("scope = ?1 and key = ?2", scope, key).firstResult();
+    public Optional<Folder> loadByScopeAndKey(String scope, String key) {
+        JPAFolder data = JPAFolder.find("identity.scope=?1 and identity.key=?2", scope, key).firstResult();
 
         if (data == null) {
             return Optional.empty();
@@ -65,20 +65,20 @@ public class JPAFolderReadAdapter implements FolderReadAdapter {
     }
 
     @Override
-    public ArrayList<FolderSpec> loadByScope(String scope) {
-        List<JPAFolderSpec> data = JPAFolderSpec.list("scope", scope);
-        ArrayList<FolderSpec> result = new ArrayList<>(data.size());
+    public ArrayList<Folder> loadByScope(String scope) {
+        List<JPAFolder> data = JPAFolder.find("identity.scope", scope).list();
 
+        ArrayList<Folder> result = new ArrayList<>(data.size());
         data.forEach(d -> result.add(converter.convertToAPI(d)));
 
         return result;
     }
 
     @Override
-    public ArrayList<FolderSpec> loadByScope(final String scope, final int index, final int size) {
-        List<JPAFolderSpec> data = JPAFolderSpec.find("scope", scope).page(index, size).list();
+    public ArrayList<Folder> loadByScope(final String scope, final int index, final int size) {
+        List<JPAFolder> data = JPAFolder.find("identity.scope", scope).page(index, size).list();
 
-        ArrayList<FolderSpec> result = new ArrayList<>(data.size());
+        ArrayList<Folder> result = new ArrayList<>(data.size());
         data.forEach(d -> result.add(converter.convertToAPI(d)));
 
         return result;
@@ -86,6 +86,6 @@ public class JPAFolderReadAdapter implements FolderReadAdapter {
 
     @Override
     public long count() {
-        return JPAFolderSpec.count();
+        return JPAFolder.count();
     }
 }

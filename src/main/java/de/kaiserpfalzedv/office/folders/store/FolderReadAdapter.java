@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.office.folders.store;
 
 import de.kaiserpfalzedv.base.store.DataReadAdapter;
-import de.kaiserpfalzedv.office.folders.FolderSpec;
+import de.kaiserpfalzedv.office.folders.Folder;
 
-public interface FolderReadAdapter extends DataReadAdapter<FolderSpec> {
+public interface FolderReadAdapter extends DataReadAdapter<Folder> {
 }

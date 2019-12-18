@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.office.folders.store.jpa;
 
+import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAIdentity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Embedded;
@@ -33,6 +34,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "FOLDERS", schema = "FOLDERS")
 public class JPAFolder extends PanacheEntity {
+    @Embedded
+    public JPAIdentity identity;
+
     @Embedded
     public JPAFolderSpec spec;
 }

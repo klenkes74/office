@@ -16,8 +16,10 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.folders.store.jpa.base;
+package de.kaiserpfalzedv.office.folders.store.jpa;
 
+import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAIdentity;
+import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAWorkflowData;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.*;
@@ -37,20 +39,15 @@ public abstract class JPAFolderChange extends PanacheEntity {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "uuid",
-                    column = @Column(name = "_COMMAND_UUID")),
-            @AttributeOverride(name = "scope",
-                    column = @Column(name = "_COMMAND_SCOPE")),
-            @AttributeOverride(name = "key",
-                    column = @Column(name = "_COMMAND_KEY"))
+            @AttributeOverride(name = "uuid", column = @Column(name = "_COMMAND_UUID")),
+            @AttributeOverride(name = "scope", column = @Column(name = "_COMMAND_SCOPE")),
+            @AttributeOverride(name = "key", column = @Column(name = "_COMMAND_KEY"))
     })
     public JPAIdentity command;
 
     @Embedded
     public JPAWorkflowData workflow;
 
-    @Column(name = "_CREATED")
+    @Column(name = "_COMMAND_CREATED", nullable = false, updatable = false)
     public OffsetDateTime created;
-    @Column(name = "_MODIFIED")
-    public OffsetDateTime modified;
 }

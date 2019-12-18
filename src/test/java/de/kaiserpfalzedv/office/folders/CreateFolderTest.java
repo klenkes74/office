@@ -18,12 +18,10 @@
 
 package de.kaiserpfalzedv.office.folders;
 
-import de.kaiserpfalzedv.base.actions.commands.*;
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
 import de.kaiserpfalzedv.base.api.Metadata;
 import de.kaiserpfalzedv.base.api.ObjectIdentifier;
-import de.kaiserpfalzedv.office.folders.api.FolderCommandService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -125,20 +123,6 @@ public class CreateFolderTest {
         }
     };
 
-    private static final FolderCommandService FOLDER_COMMAND_SERVICE = new FolderCommandService() {
-        @Override
-        public void execute(CreateCommand<FolderSpec> command) throws CreateCommandException {
-        }
-
-        @Override
-        public void execute(ModifyCommand<FolderSpec> command) throws ModifyCommandException {
-        }
-
-        @Override
-        public void execute(DeleteCommand<FolderSpec> command) throws DeleteCommandException {
-        }
-    };
-
 
     @Test
     public void shouldReturnCorrectKindOfFolder() {
@@ -148,11 +132,6 @@ public class CreateFolderTest {
     @Test
     public void shouldReturnCorrectVersionOfFolder() {
         assert CreateFolder.VERSION.equals(SERVICE.getVersion());
-    }
-
-    @Test
-    public void shouldExecuteTheCommandCorrectly() throws CreateCommandException {
-        SERVICE.execute(FOLDER_COMMAND_SERVICE);
     }
 
     @Test

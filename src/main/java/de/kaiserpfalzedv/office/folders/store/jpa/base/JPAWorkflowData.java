@@ -19,6 +19,7 @@
 package de.kaiserpfalzedv.office.folders.store.jpa.base;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 /*
@@ -28,7 +29,7 @@ import java.util.UUID;
  * @since 2019-12-17 09:22
  */
 @Embeddable
-public class JPAWorkflowData {
+public class JPAWorkflowData implements Serializable {
     @Column(name = "_WORKFLOW_KIND", nullable = false, updatable = false)
     public String kind;
     @Column(name = "_WORKFLOW_VERSION", nullable = false, updatable = false)
@@ -43,12 +44,9 @@ public class JPAWorkflowData {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "uuid",
-                    column = @Column(name = "_WORKFLOW_DEFINITION_UUID")),
-            @AttributeOverride(name = "scope",
-                    column = @Column(name = "_WORKFLOW_DEFINITION_SCOPE")),
-            @AttributeOverride(name = "key",
-                    column = @Column(name = "_WORKFLOW_DEFINITION_KEY"))
+            @AttributeOverride(name = "uuid", column = @Column(name = "_WORKFLOW_DEFINITION_UUID")),
+            @AttributeOverride(name = "scope", column = @Column(name = "_WORKFLOW_DEFINITION_SCOPE")),
+            @AttributeOverride(name = "key", column = @Column(name = "_WORKFLOW_DEFINITION_KEY"))
     })
     public JPAIdentity workflow;
 }

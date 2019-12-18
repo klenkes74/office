@@ -19,7 +19,6 @@
 package de.kaiserpfalzedv.office.folders.store.jpa;
 
 import de.kaiserpfalzedv.office.folders.CloseFolder;
-import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAFolderChange;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

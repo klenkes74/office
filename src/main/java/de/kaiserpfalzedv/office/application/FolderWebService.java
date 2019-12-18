@@ -20,7 +20,10 @@ package de.kaiserpfalzedv.office.application;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.cdi.JPA;
-import de.kaiserpfalzedv.office.folders.*;
+import de.kaiserpfalzedv.office.folders.Folder;
+import de.kaiserpfalzedv.office.folders.FolderCreated;
+import de.kaiserpfalzedv.office.folders.ImmutableCreateFolder;
+import de.kaiserpfalzedv.office.folders.ImmutableFolderCreated;
 import de.kaiserpfalzedv.office.folders.store.FolderReadAdapter;
 import io.quarkus.security.identity.SecurityIdentity;
 import org.eclipse.microprofile.metrics.annotation.ConcurrentGauge;
@@ -31,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -51,9 +53,6 @@ public class FolderWebService {
     FolderReadAdapter reader;
 
     @Inject
-    Event<CreateFolder> createFolderEvent;
-
-    @Inject
     SecurityIdentity securityIdentity;
 
     @GET
@@ -65,16 +64,10 @@ public class FolderWebService {
     public Folder getByUuid(
             @PathParam("uuid") final UUID uuid
     ) {
-        Optional<FolderSpec> result = reader.loadById(uuid);
+        Optional<Folder> result = reader.loadById(uuid);
 
         if (result.isPresent()) {
-            return ImmutableFolder.builder()
-                    .metadata(ImmutableMetadata.builder()
-                            .identity(result.get().getIdentity())
-                            .build()
-                    )
-                    .spec(result.get())
-                    .build();
+            return result.get();
         } else {
             LOGGER.info("JPAFolderSpec not found: uuid={}", uuid);
 
@@ -93,16 +86,10 @@ public class FolderWebService {
             @PathParam("scope") final String scope,
             @PathParam("key") final String key
     ) {
-        Optional<FolderSpec> result = reader.loadByScopeAndKey(scope, key);
+        Optional<Folder> result = reader.loadByScopeAndKey(scope, key);
 
         if (result.isPresent()) {
-            return ImmutableFolder.builder()
-                    .metadata(ImmutableMetadata.builder()
-                            .identity(result.get().getIdentity())
-                            .build()
-                    )
-                    .spec(result.get())
-                    .build();
+            return result.get();
         } else {
             LOGGER.info("JPAFolderSpec not found: scope={}, key={}", scope, key);
 
@@ -118,17 +105,15 @@ public class FolderWebService {
     @Counted(name = "folders.createFolder.count")
     @ConcurrentGauge(name = "folders.createFolder.concurrent")
     public FolderCreated createFolder(final ImmutableCreateFolder command) {
-        createFolderEvent.fire(command);
-
-        Optional<FolderSpec> result = reader.loadById(command.getSpec().getIdentity().getUuid());
+        Optional<Folder> result = reader.loadById(command.getSpec().getIdentity().getUuid());
 
         if (result.isPresent()) {
             return ImmutableFolderCreated.builder()
                     .metadata(ImmutableMetadata.builder()
-                            .identity(result.get().getIdentity())
+                            .identity(result.get().getSpec().getIdentity())
                             .build()
                     )
-                    .spec(result.get())
+                    .spec(result.get().getSpec())
                     .build();
         } else {
             LOGGER.warn("Can't create new folder: uuid={}", command.getSpec().getIdentity().getUuid());

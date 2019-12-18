@@ -50,11 +50,11 @@ public class JPAFolderModifyService implements FolderCommandService<ModifyFolder
     public void observe(@Observes final ModifyFolder command) {
         FolderSpec spec = command.getSpec();
 
-        if (JPAFolderSpec.find("uuid", spec.getIdentity().getUuid()).count() != 0) {
+        if (JPAFolder.find("uuid", spec.getIdentity().getUuid()).count() != 0) {
             throw new IllegalArgumentException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
-        if (JPAFolderSpec.find("scope = ?1 and key = ?2", spec.getIdentity().getScope().orElse("./."), spec.getIdentity().getName()).count() != 0) {
+        if (JPAFolder.find("scope = ?1 and key = ?2", spec.getIdentity().getScope().orElse("./."), spec.getIdentity().getName()).count() != 0) {
             throw new IllegalArgumentException(new KeyAlreadyExistsException(spec.getIdentity()));
         }
 
