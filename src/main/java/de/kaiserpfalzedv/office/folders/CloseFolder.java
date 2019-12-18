@@ -55,8 +55,8 @@ public interface CloseFolder extends FolderCommand {
     @Value.Default
     default FolderSpec apply(final FolderSpec orig) {
         return ImmutableFolderSpec.copyOf(orig)
-                .withClosed(getMetadata().getWorkflowData().isPresent()
-                        ? getMetadata().getWorkflowData().get().getTimestamp()
+                .withClosed(getMetadata().getWorkflowdata().isPresent()
+                        ? getMetadata().getWorkflowdata().get().getTimestamp()
                         : OffsetDateTime.now()
                 )
                 .withModified(OffsetDateTime.now());

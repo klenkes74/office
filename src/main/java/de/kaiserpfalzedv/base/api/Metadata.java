@@ -31,11 +31,11 @@ import java.util.Optional;
 public interface Metadata extends Serializable {
     /**
      * This is the identity of the object, not the request. To identify the request, please use
-     * {@link #getWorkflowData()}.
+     * {@link #getWorkflowdata()}.
      *
      * @return the identity of the object maintained.
      */
     ObjectIdentifier getIdentity();
 
-    Optional<WorkflowData> getWorkflowData();
+    Optional<WorkflowData> getWorkflowdata();
 }

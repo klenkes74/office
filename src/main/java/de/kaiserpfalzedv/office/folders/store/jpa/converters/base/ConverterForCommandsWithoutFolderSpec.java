@@ -45,16 +45,16 @@ public abstract class ConverterForCommandsWithoutFolderSpec<A extends FolderComm
     }
 
     private void convertWorkflow(A data, D result) {
-        if (data.getMetadata().getWorkflowData().isPresent()) {
-            WorkflowData workflow = data.getMetadata().getWorkflowData().get();
+        if (data.getMetadata().getWorkflowdata().isPresent()) {
+            WorkflowData workflow = data.getMetadata().getWorkflowdata().get();
 
             result.workflow = new JPAWorkflowData();
             result.workflow.workflow = new JPAIdentity();
-            result.workflow.kind = workflow.getWorkflowDefinition().getKind();
-            result.workflow.version = workflow.getWorkflowDefinition().getVersion();
-            result.workflow.workflow.uuid = workflow.getWorkflowDefinition().getUuid();
-            result.workflow.workflow.scope = workflow.getWorkflowDefinition().getScope().orElse(null);
-            result.workflow.workflow.key = workflow.getWorkflowDefinition().getName().orElse(null);
+            result.workflow.kind = workflow.getDefinition().getKind();
+            result.workflow.version = workflow.getDefinition().getVersion();
+            result.workflow.workflow.uuid = workflow.getDefinition().getUuid();
+            result.workflow.workflow.scope = workflow.getDefinition().getScope().orElse(null);
+            result.workflow.workflow.key = workflow.getDefinition().getName().orElse(null);
 
             result.workflow.correlation = workflow.getCorrelation();
             result.workflow.request = workflow.getRequest();
@@ -88,8 +88,8 @@ public abstract class ConverterForCommandsWithoutFolderSpec<A extends FolderComm
 
     private void convertWorkflow(D data, ImmutableMetadata.Builder result) {
         if (data.workflow.correlation != null) {
-            result.workflowData(ImmutableWorkflowData.builder()
-                    .workflowDefinition(ImmutableObjectIdentifier.builder()
+            result.workflowdata(ImmutableWorkflowData.builder()
+                    .definition(ImmutableObjectIdentifier.builder()
                             .kind(data.workflow.kind)
                             .version(data.workflow.version)
 

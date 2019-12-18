@@ -16,7 +16,7 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.folders;
+package de.kaiserpfalzedv.application;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Tag;
@@ -38,7 +38,17 @@ public class ServiceTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceTest.class);
 
     @Test
-    public void shouldGetHTTP200WithAValidRequest() throws IOException {
+    public void shouldReturnCorrectFolderWhenGivenTheUuid() {
+        given()
+                .when()
+                .auth().preemptive().basic("scott", "jb0ss")
+                .get("/folders/3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    public void shouldCreateANewFolderWithValidData() throws IOException {
         Path path = Paths.get("target/test-classes/json/create_folder.json");
         String body = new String(Files.readAllBytes(path));
         assert !body.isEmpty();
@@ -46,7 +56,7 @@ public class ServiceTest {
         given()
                 .when()
                 .header("content-type", MediaType.APPLICATION_JSON)
-                .auth().basic("scott", "jb0ss")
+                .auth().preemptive().basic("scott", "jb0ss")
                 .body(body)
                 .put("/folders")
                 .then()

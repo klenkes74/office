@@ -34,7 +34,7 @@ import org.immutables.value.Value;
 @JsonSerialize(as = ImmutableFolder.class)
 @JsonDeserialize(builder = ImmutableFolder.Builder.class)
 public interface Folder extends SingleObject<FolderSpec>, BaseObject<FolderSpec> {
-    String KIND = "de.kaiserpfalzedv.office.folders.JPAFolderSpec";
+    String KIND = "de.kaiserpfalzedv.office.folders.Folder";
     String VERSION = "1.0.0";
 
     @Value.Default

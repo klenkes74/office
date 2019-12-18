@@ -20,8 +20,6 @@ package de.kaiserpfalzedv.office.folders.store;
 
 
 import de.kaiserpfalzedv.base.cdi.JPA;
-import de.kaiserpfalzedv.base.store.CreationFailedException;
-import de.kaiserpfalzedv.base.store.DataAlreadyExistsException;
 import de.kaiserpfalzedv.office.folders.Folder;
 import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderReadAdapter;
 import io.quarkus.test.junit.QuarkusTest;
@@ -118,12 +116,13 @@ public class JPAFolderReadAdapterTest {
 
     @Test
     @Transactional
-    public void shouldRetrieveALotOfFoldersWhenTheyExist() throws DataAlreadyExistsException, CreationFailedException {
+    public void shouldRetrieveALotOfFoldersWhenTheyExist() {
         ArrayList<Folder> result = readAdapter.loadByScope(SCOPE);
 
         long count = readAdapter.count();
-        LOGGER.info("Loaded {} entries: {}", count, result);
+        LOGGER.info("Loaded ({}/{}) entries: {}", result.size(), count, result);
 
-        assert result.size() == count;
+        assert result.size() >= 1;
+        assert result.size() <= count;
     }
 }

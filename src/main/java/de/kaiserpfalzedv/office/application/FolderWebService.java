@@ -42,7 +42,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @ApplicationScoped
-@Path("/folders")
+@Path("/folders/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FolderWebService {
@@ -56,7 +56,7 @@ public class FolderWebService {
     SecurityIdentity securityIdentity;
 
     @GET
-    @Path("/{uuid}")
+    @Path("{uuid}")
     @RolesAllowed({"user", "admin"})
     @Metered(name = "folders.loadByUuid")
     @Counted(name = "folders.loadByUuid.count")
@@ -77,7 +77,7 @@ public class FolderWebService {
     }
 
     @GET
-    @Path("/{scope}/{key}")
+    @Path("{scope}/{key}")
     @RolesAllowed({"user", "admin"})
     @Metered(name = "folders.loadByKey")
     @Counted(name = "folders.loadByKey.count")

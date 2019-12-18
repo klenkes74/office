@@ -62,6 +62,8 @@ public class FolderConverter implements DataConverter<Folder, JPAFolder> {
                 )
 
                 .spec(ImmutableFolderSpec.builder()
+                        .identity(identity)
+
                         .name(data.spec.name)
                         .shortName(Optional.ofNullable(data.spec.shortName))
                         .description(Optional.ofNullable(data.spec.description))
