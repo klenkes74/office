@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for f in $(ps fax|grep org.h2.tools.Server|grep -v grep|awk -e '{print $1;}') ; do 
+	kill $f 
+done
