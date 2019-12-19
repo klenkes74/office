@@ -94,11 +94,25 @@ public abstract class ConverterForResultsWithoutFolderSpec<A extends FolderResul
 
                             .build()
                     )
+
+                    .correlation(data.workflow.correlation)
+                    .request(data.workflow.request)
+                    .sequence(Optional.ofNullable(data.workflow.sequence))
+
+                    .timestamp(data.created)
+
                     .build()
             );
         }
 
         return result.build();
+    }
+
+
+    protected Metadata createMetadata(ObjectIdentifier identity) {
+        return ImmutableMetadata.builder()
+                .identity(identity)
+                .build();
     }
 
     protected ObjectIdentifier createSpecIdentity(

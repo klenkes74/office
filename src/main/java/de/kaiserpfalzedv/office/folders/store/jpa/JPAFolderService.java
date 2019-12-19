@@ -23,17 +23,14 @@ import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.base.store.CreationFailedException;
 import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
 import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
-import de.kaiserpfalzedv.office.folders.CreateFolder;
 import de.kaiserpfalzedv.office.folders.FolderCreated;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
-import de.kaiserpfalzedv.office.folders.api.FolderCommandService;
-import de.kaiserpfalzedv.office.folders.store.jpa.converters.CreateFolderConverter;
-import de.kaiserpfalzedv.office.folders.store.jpa.converters.FolderCreatedConverter;
+import de.kaiserpfalzedv.office.folders.api.FolderResultService;
+import de.kaiserpfalzedv.office.folders.store.jpa.converters.FolderCreatedFolderConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -41,19 +38,15 @@ import javax.transaction.Transactional;
 @JPA
 @EventLogged
 @Dependent
-public class JPAFolderCreateService implements FolderCommandService<CreateFolder> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JPAFolderCreateService.class);
+public class JPAFolderService implements FolderResultService<FolderCreated> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JPAFolderService.class);
 
     @Inject
-    CreateFolderConverter commandConverter;
-    @Inject
-    FolderCreatedConverter eventConverter;
-    @Inject
-    Event<FolderCreated> eventSource;
-
+    FolderCreatedFolderConverter commandConverter;
 
     @Transactional
-    public void observe(@Observes final CreateFolder command) {
+    public void observe(@Observes final FolderCreated command) {
+        LOGGER.debug("Received: {}", command);
         FolderSpec spec = command.getSpec();
 
         if (JPAFolder.find("identity.uuid", spec.getIdentity().getUuid()).count() != 0) {
@@ -68,10 +61,10 @@ public class JPAFolderCreateService implements FolderCommandService<CreateFolder
 
 
         try {
-            JPAFolderCreate jpa = commandConverter.convertFromAPI(command);
+            JPAFolder jpa = commandConverter.convertFromAPI(command);
             jpa.persist();
 
-            eventSource.fire(eventConverter.convertToAPI(jpa));
+            LOGGER.info("Saved folder: {}", jpa);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(new CreationFailedException(command.getMetadata().getIdentity(), e));
         }

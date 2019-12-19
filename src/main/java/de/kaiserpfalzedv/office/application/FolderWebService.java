@@ -20,11 +20,9 @@ package de.kaiserpfalzedv.office.application;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.cdi.JPA;
-import de.kaiserpfalzedv.office.folders.Folder;
-import de.kaiserpfalzedv.office.folders.FolderCreated;
-import de.kaiserpfalzedv.office.folders.ImmutableCreateFolder;
-import de.kaiserpfalzedv.office.folders.ImmutableFolderCreated;
+import de.kaiserpfalzedv.office.folders.*;
 import de.kaiserpfalzedv.office.folders.store.FolderReadAdapter;
+import de.kaiserpfalzedv.office.folders.store.jpa.converters.FolderCreatedConverter;
 import io.quarkus.security.identity.SecurityIdentity;
 import org.eclipse.microprofile.metrics.annotation.ConcurrentGauge;
 import org.eclipse.microprofile.metrics.annotation.Counted;
@@ -34,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -51,6 +50,12 @@ public class FolderWebService {
     @Inject
     @JPA
     FolderReadAdapter reader;
+
+    @Inject
+    Event<CreateFolder> createEvent;
+
+    @Inject
+    FolderCreatedConverter createdFolderConverter;
 
     @Inject
     SecurityIdentity securityIdentity;
@@ -105,6 +110,16 @@ public class FolderWebService {
     @Counted(name = "folders.createFolder.count")
     @ConcurrentGauge(name = "folders.createFolder.concurrent")
     public FolderCreated createFolder(final ImmutableCreateFolder command) {
+        try {
+            createEvent.fire(command);
+        } catch (IllegalArgumentException e) {
+            throw new WebApplicationException(
+                    e.getCause() != null ? e.getCause().getMessage() : "Can't create new folder.",
+                    Response.Status.CONFLICT
+            );
+        }
+
+
         Optional<Folder> result = reader.loadById(command.getSpec().getIdentity().getUuid());
 
         if (result.isPresent()) {

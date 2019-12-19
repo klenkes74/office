@@ -36,8 +36,10 @@ public class JPAWorkflowData implements Serializable {
     public String version;
 
     @Column(name = "_WORKFLOW_REQUEST", columnDefinition = "CHAR(36)", updatable = false, unique = true)
+    @Convert(converter = UuidConverter.class)
     public UUID request;
     @Column(name = "_WORKFLOW_CORRELATION", columnDefinition = "CHAR(36)", updatable = false, unique = true)
+    @Convert(converter = UuidConverter.class)
     public UUID correlation;
     @Column(name = "_WORKFLOW_SEQUENCE", updatable = false)
     public Long sequence;

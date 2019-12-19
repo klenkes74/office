@@ -21,8 +21,7 @@
         "scope": "lichti.de",
         "name": "CreateNewCustomer"
       }
-    },
-    "created": "2019-12-11T12:00:00-01:00"
+    }
   },
   "spec": {
     "identity": {

@@ -44,12 +44,14 @@ public class RequestMonitoringFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext context) throws IOException {
+        if (!LOGGER.isDebugEnabled()) return;
+
         ArrayList<String> headers = new ArrayList<>();
         context.getHeaders().forEach((k, v) -> headers.add("{'" + k + "': '" + v + "'}"));
         ArrayList<String> queryParameters = new ArrayList<>();
         info.getQueryParameters().forEach((k, v) -> queryParameters.add("{'" + k + "': '" + v + "'}"));
 
-        LOGGER.info("{'method': '{}', 'path': '{}', 'principal': '{}', 'roles': {}, 'headers': '{}', 'query': '{}'}",
+        LOGGER.debug("{'method': '{}', 'path': '{}', 'principal': '{}', 'roles': {}, 'headers': '{}', 'query': '{}'}",
                 context.getMethod(), info.getPath(),
                 securityIdentity.getPrincipal().getName(), securityIdentity.getRoles(),
                 headers, queryParameters);

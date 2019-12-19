@@ -25,30 +25,30 @@
     <groupId>de.kaiserpfalzedv.office</groupId>
     <artifactId>office-base-services</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-
     <name>KP Office :: Base Services</name>
 
     <properties>
+        <activemq.basedir>/opt/servers/apache-artemis-${activemq.version}</activemq.basedir>
+        <activemq.version>2.10.1</activemq.version>
+        <amqp.username>office-base</amqp.username>
+        <amqp.password>kaevae1IePeePoo5</amqp.password>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
+        <db.password>h2</db.password>
+        <db.username>h2</db.username>
+        <h2.version>1.4.197</h2.version>
+        <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <h2.version>1.4.197</h2.version>
-        <db.username>h2</db.username>
-        <db.password>h2</db.password>
-
-        <surefire-plugin.version>2.22.1</surefire-plugin.version>
         <quarkus-plugin.version>1.0.1.Final</quarkus-plugin.version>
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.platform.version>1.0.1.Final</quarkus.platform.version>
-        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
-        <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+        <surefire-plugin.version>2.22.1</surefire-plugin.version>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -66,8 +66,6 @@
                 <artifactId>office-webservice</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
-
-
             <dependency>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>${quarkus.platform.artifact-id}</artifactId>
@@ -75,7 +73,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
@@ -86,7 +83,11 @@
                 <artifactId>hibernate-java8</artifactId>
                 <version>5.4.9.Final</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>artemis-jms-client</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.immutables</groupId>
                 <artifactId>value</artifactId>
@@ -97,7 +98,6 @@
                 <artifactId>encode</artifactId>
                 <version>2.6.0</version>
             </dependency>
-
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
@@ -119,20 +119,17 @@
             <dependency>
                 <groupId>org.jacoco</groupId>
                 <artifactId>org.jacoco.agent</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
                 <classifier>runtime</classifier>
                 <scope>test</scope>
-                <version>${jacoco-maven-plugin.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jackson</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-infinispan-embedded</artifactId>
@@ -157,12 +154,10 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jdbc-postgresql</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-java8</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.immutables</groupId>
             <artifactId>value</artifactId>
@@ -171,13 +166,10 @@
             <groupId>org.immutables</groupId>
             <artifactId>encode</artifactId>
         </dependency>
-
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
         </dependency>
-
-
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
@@ -203,8 +195,6 @@
             <artifactId>org.jacoco.agent</artifactId>
             <classifier>runtime</classifier>
         </dependency>
-
-
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy</artifactId>
@@ -239,11 +229,11 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-elytron-security-properties-file</artifactId>
+            <artifactId>quarkus-vault</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-vault</artifactId>
+            <artifactId>quarkus-smallrye-reactive-messaging-amqp</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -271,28 +261,87 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-
-
     <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/*.docx</exclude>
+                    <exclude>**/*.xlsx</exclude>
+                    <exclude>**/*.zip</exclude>
+                    <exclude>**/*.tgz</exclude>
+                    <exclude>**/*.png</exclude>
+                    <exclude>**/*.jpg</exclude>
+                    <exclude>**/*.gpg</exclude>
+                    <exclude>**/*.license</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.docx</include>
+                    <include>**/*.xlsx</include>
+                    <include>**/*.zip</include>
+                    <include>**/*.tgz</include>
+                    <include>**/*.png</include>
+                    <include>**/*.jpg</include>
+                    <include>**/*.gpg</include>
+                    <include>**/*.license</include>
+                </includes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <filtering>true</filtering>
+                <directory>src/test/resources</directory>
+                <excludes>
+                    <exclude>**/*.docx</exclude>
+                    <exclude>**/*.xlsx</exclude>
+                    <exclude>**/*.zip</exclude>
+                    <exclude>**/*.tgz</exclude>
+                    <exclude>**/*.png</exclude>
+                    <exclude>**/*.jpg</exclude>
+                    <exclude>**/*.gpg</exclude>
+                    <exclude>**/*.license</exclude>
+                </excludes>
+            </testResource>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*.docx</include>
+                    <include>**/*.xlsx</include>
+                    <include>**/*.zip</include>
+                    <include>**/*.tgz</include>
+                    <include>**/*.png</include>
+                    <include>**/*.jpg</include>
+                    <include>**/*.gpg</include>
+                    <include>**/*.license</include>
+                </includes>
+            </testResource>
+        </testResources>
         <plugins>
+            <plugin>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-maven-plugin</artifactId>
+                <version>${quarkus-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler-plugin.version}</version>
+            </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire-plugin.version}</version>
-                <configuration>
-                    <excludedGroups>integration</excludedGroups>
-                    <environmentVariables>
-                        <QUARKUS_PROFILE>test</QUARKUS_PROFILE>
-                    </environmentVariables>
-                    <systemProperties>
-                        <quarkus.profile>test</quarkus.profile>
-                        <quarkus.datasource.url>jdbc:h2:tcp://localhost:${h2.test.tcp.port}/quarkus
-                        </quarkus.datasource.url>
-                        <quarkus.datasource.username>${db.username}</quarkus.datasource.username>
-                        <quarkus.datasource.password>${db.password}</quarkus.datasource.password>
-                        <jacoco-agent.destfile>${project.build.directory}/jacoco-ut.exec</jacoco-agent.destfile>
-                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                    </systemProperties>
-                </configuration>
                 <executions>
                     <execution>
                         <id>integration-tests</id>
@@ -320,6 +369,21 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludedGroups>integration</excludedGroups>
+                    <environmentVariables>
+                        <QUARKUS_PROFILE>test</QUARKUS_PROFILE>
+                    </environmentVariables>
+                    <systemProperties>
+                        <quarkus.profile>test</quarkus.profile>
+                        <quarkus.datasource.url>jdbc:h2:tcp://localhost:${h2.test.tcp.port}/quarkus
+                        </quarkus.datasource.url>
+                        <quarkus.datasource.username>${db.username}</quarkus.datasource.username>
+                        <quarkus.datasource.password>${db.password}</quarkus.datasource.password>
+                        <jacoco-agent.destfile>${project.build.directory}/jacoco-ut.exec</jacoco-agent.destfile>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                    </systemProperties>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -332,7 +396,6 @@
                     </archive>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -426,7 +489,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Reserve randomly available network ports -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -434,27 +496,53 @@
                 <executions>
                     <execution>
                         <id>reserve-network-port</id>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>reserve-network-port</goal>
                         </goals>
-                        <phase>process-resources</phase>
                         <configuration>
                             <randomPort>true</randomPort>
                             <minPortNumber>20000</minPortNumber>
                             <maxPortNumber>21000</maxPortNumber>
                             <portNames>
                                 <portName>h2.test.tcp.port</portName>
+                                <portName>amqp.test.artemis.tcp.port</portName>
+                                <portName>amqp.test.amqp.tcp.port</portName>
+                                <portName>amqp.test.stomp.tcp.port</portName>
+                                <portName>amqp.test.hornetq.tcp.port</portName>
+                                <portName>amqp.test.mqtt.tcp.port</portName>
                             </portNames>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- Start H2 before integration tests, accepting tcp connections on the randomly selected port -->
             <plugin>
                 <groupId>com.edugility</groupId>
                 <artifactId>h2-maven-plugin</artifactId>
                 <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>Spawn a new H2 TCP server</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>spawn</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>Stop a spawned H2 TCP server</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>${h2.version}</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <baseDirectory>${project.build.directory}/db</baseDirectory>
                     <forceShutdown>false</forceShutdown>
@@ -463,30 +551,75 @@
                     <shutdownPassword>${db.password}</shutdownPassword>
                     <port>${h2.test.tcp.port}</port>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.h2database</groupId>
-                        <artifactId>h2</artifactId>
-                        <version>${h2.version}</version>
-                    </dependency>
-                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>artemis-maven-plugin</artifactId>
+                <version>2.10.1</version>
                 <executions>
                     <execution>
-                        <id>Spawn a new H2 TCP server</id>
+                        <id>create</id>
+                        <phase>process-test-resources</phase>
                         <goals>
-                            <goal>spawn</goal>
+                            <goal>create</goal>
                         </goals>
-                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <configuration>${basedir}/target/test-classes/artemis-overwrite</configuration>
+                        </configuration>
                     </execution>
                     <execution>
-                        <id>Stop a spawned H2 TCP server</id>
+                        <id>start</id>
+                        <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>stop</goal>
+                            <goal>cli</goal>
                         </goals>
-                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <configuration>${basedir}/target/test-classes/artemis-overwrite</configuration>
+                            <spawn>true</spawn>
+                            <testURI>tcp://localhost:${amqp.test.artemis.tcp.port}</testURI>
+                            <args>
+                                <param>run</param>
+                            </args>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>native</id>
+            <activation>
+                <property>
+                    <name>native</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${surefire-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <systemProperties>
+                                        <native.image.path>
+                                            ${project.build.directory}/${project.build.finalName}-runner
+                                        </native.image.path>
+                                    </systemProperties>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <quarkus.package.type>native</quarkus.package.type>
+            </properties>
+        </profile>
+    </profiles>
 </project>

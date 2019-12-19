@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.office.folders.store.jpa;
 
+import de.kaiserpfalzedv.base.cdi.EventLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.base.store.CreationFailedException;
 import de.kaiserpfalzedv.office.folders.DeleteFolder;
@@ -35,6 +36,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 @JPA
+@EventLogged
 @Dependent
 public class JPAFolderDeleteService implements FolderCommandService<DeleteFolder> {
     private static final Logger LOGGER = LoggerFactory.getLogger(JPAFolderDeleteService.class);

@@ -88,7 +88,9 @@ CREATE TABLE FOLDERS.FOLDERS_CHANGES
     _NAME                      VARCHAR(100),
     _SHORTNAME                 VARCHAR(100),
     _DESCRIPTION               VARCHAR(2048),
+    _CLOSED                    TIMESTAMP,
 
-    _CREATED                   TIMESTAMP    NOT NULL
+    _CREATED                   TIMESTAMP    NOT NULL,
+    _MODIFIED                  TIMESTAMP    NOT NULL
     -- No _MODIFIED since these entries are never modified. It's an audit log ...
 )

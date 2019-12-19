@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.office.folders.store.jpa;
 
+import de.kaiserpfalzedv.base.cdi.EventLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.base.store.CreationFailedException;
 import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
@@ -36,6 +37,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 @JPA
+@EventLogged
 @Dependent
 public class JPAFolderModifyService implements FolderCommandService<ModifyFolder> {
     @Inject
