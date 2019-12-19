@@ -98,16 +98,16 @@ public class DeleteFolderTest {
 
     @Test
     public void shouldApplyTheCommandCorrectly() {
-        assert FOLDER.getShortName().equals(SERVICE.apply(FOLDER).getShortName());
+        assert FOLDER.equals(SERVICE.apply(FOLDER));
     }
 
     @BeforeAll
     public static void logStart() {
-        LOGGER.trace("Started tests for: {}", SERVICE.getClass().getCanonicalName());
+        LOGGER.trace("Started tests for: {}", DeleteFolder.class.getCanonicalName());
     }
 
     @AfterAll
     public static void logEnd() {
-        LOGGER.trace("Ended tests for: {}", SERVICE.getClass().getCanonicalName());
+        LOGGER.trace("Ended tests for: {}", DeleteFolder.class.getCanonicalName());
     }
 }

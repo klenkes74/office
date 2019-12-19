@@ -38,7 +38,7 @@ import java.util.Optional;
 @JsonSerialize(as = ImmutableFolderSpec.class)
 @JsonDeserialize(builder = ImmutableFolderSpec.Builder.class)
 public interface FolderSpec extends Spec<Serializable>, Serializable {
-    String KIND = "de.kaiserpfalzedv.office.folders.JPAFolderSpec";
+    String KIND = "de.kaiserpfalzedv.office.folders.FolderSpec";
     String VERSION = "1.0.0";
 
 

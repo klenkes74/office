@@ -94,16 +94,6 @@ public class CreateFolderTest {
 
     private static final CreateFolder SERVICE = new CreateFolder() {
         @Override
-        public String getKind() {
-            return KIND;
-        }
-
-        @Override
-        public String getVersion() {
-            return VERSION;
-        }
-
-        @Override
         public Metadata getMetadata() {
             return ImmutableMetadata.builder()
                     .identity(ImmutableObjectIdentifier.builder()
@@ -141,11 +131,11 @@ public class CreateFolderTest {
 
     @BeforeAll
     public static void logStart() {
-        LOGGER.trace("Started tests for: {}", SERVICE.getClass().getCanonicalName());
+        LOGGER.trace("Started tests for: {}", CreateFolder.class.getCanonicalName());
     }
 
     @AfterAll
     public static void logEnd() {
-        LOGGER.trace("Ended tests for: {}", SERVICE.getClass().getCanonicalName());
+        LOGGER.trace("Ended tests for: {}", CreateFolder.class.getCanonicalName());
     }
 }

@@ -16,7 +16,7 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.application;
+package de.kaiserpfalzedv.office.application;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Tag;
@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
 @Tag("integration")
@@ -60,7 +61,7 @@ public class ServiceTest {
                 .body(body)
                 .put("/folders")
                 .then()
-                .statusCode(200);
+                .statusCode(allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
 
 }

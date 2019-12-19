@@ -82,7 +82,50 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-java8</artifactId>
                 <version>5.4.9.Final</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>javax.activation-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.persistence</groupId>
+                        <artifactId>javax.persistence-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>jakarta.xml.bind</groupId>
+                        <artifactId>jakarta.xml.bind-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jboss.spec.javax.transaction</groupId>
+                        <artifactId>jboss-transaction-api_1.2_spec</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
+            <dependency>
+                <groupId>org.jboss.spex.javax.xml.bind</groupId>
+                <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
+                <version>2.0.0.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.activation</groupId>
+                <artifactId>jakarta.activation-api</artifactId>
+                <version>1.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>2.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.transaction</groupId>
+                <artifactId>jakarta.transaction-api</artifactId>
+                <version>1.3.3</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>artemis-jms-client</artifactId>
@@ -133,7 +176,20 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-infinispan-embedded</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jboss.slf4j</groupId>
+                    <artifactId>slf4j-jboss-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <!--
+                <dependency>
+                    <groupId>org.jboss.slf4j</groupId>
+                    <artifactId>slf4j-jboss-logging</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+        -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-orm-panache</artifactId>
@@ -155,10 +211,6 @@
             <artifactId>quarkus-jdbc-postgresql</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-java8</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.immutables</groupId>
             <artifactId>value</artifactId>
         </dependency>
@@ -169,26 +221,6 @@
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-junit5</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jacoco</groupId>
@@ -239,11 +271,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-openapi</artifactId>
@@ -259,6 +287,42 @@
             <artifactId>annotations</artifactId>
             <version>15.0</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -366,6 +430,11 @@
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                 <jacoco-agent.destfile>${project.build.directory}/jacoco-it.exec</jacoco-agent.destfile>
                             </systemProperties>
+
+                            <classpathDependencyExcludes>
+                                <classpathDependencyExclude>org.jboss.slf4j:slf4j-jboss-logging
+                                </classpathDependencyExclude>
+                            </classpathDependencyExcludes>
                         </configuration>
                     </execution>
                 </executions>
@@ -449,18 +518,68 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>jacoco-check</id>
+                        <id>jacoco-check-ut</id>
                         <goals>
                             <goal>check</goal>
                         </goals>
                         <configuration>
+                            <dataFile>${project.build.directory}/jacoco-ut.exec</dataFile>
                             <rules>
                                 <rule>
                                     <element>CLASS</element>
+                                    <includes>
+                                        <include>de.kaiserpfalzedv.office.**</include>
+                                        <include>de.kaiserpfalzedv.office.folders.store.jpa.converters.**</include>
+                                        <include>de.kaiserpfalzedv.office.folders.store.jpa.base.UuidConverter</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**.Immutable*</exclude>
                                         <exclude>de.kaiserpfalzedv.office.folders.store.jpa.*</exclude>
+                                        <exclude>de.kaiserpfalzedv.base.cdi.**</exclude>
+                                        <exclude>de.kaiserpfalzedv.office.application.**</exclude>
                                     </excludes>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>1.00</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>CLASS</counter>
+                                            <value>MISSEDCOUNT</value>
+                                            <maximum>0</maximum>
+                                        </limit>
+                                        <limit>
+                                            <counter>METHOD</counter>
+                                            <value>MISSEDCOUNT</value>
+                                            <maximum>0</maximum>
+                                        </limit>
+                                        <limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>TOTALCOUNT</value>
+                                            <maximum>50</maximum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>jacoco-check-it</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/jacoco-it.exec</dataFile>
+                            <rules>
+                                <rule>
+                                    <element>CLASS</element>
+                                    <includes>
+                                        <include>de.kaiserpfalzedv.base.cdi.**</include>
+                                        <include>de.kaiserpfalzedv.office.folders.store.jpa.converters.**</include>
+                                        <include>de.kaiserpfalzedv.office.folders.store.jpa.base.UuidConverter</include>
+                                        <include>de.kaiserpfalzedv.office.application.**</include>
+                                    </includes>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
@@ -574,7 +693,6 @@
                             <goal>cli</goal>
                         </goals>
                         <configuration>
-                            <configuration>${basedir}/target/test-classes/artemis-overwrite</configuration>
                             <spawn>true</spawn>
                             <testURI>tcp://localhost:${amqp.test.artemis.tcp.port}</testURI>
                             <args>
@@ -586,6 +704,8 @@
             </plugin>
         </plugins>
     </build>
+
+
     <profiles>
         <profile>
             <id>native</id>

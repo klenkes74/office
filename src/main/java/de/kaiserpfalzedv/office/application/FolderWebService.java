@@ -18,9 +18,10 @@
 
 package de.kaiserpfalzedv.office.application;
 
-import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.cdi.JPA;
-import de.kaiserpfalzedv.office.folders.*;
+import de.kaiserpfalzedv.office.folders.CreateFolder;
+import de.kaiserpfalzedv.office.folders.Folder;
+import de.kaiserpfalzedv.office.folders.ImmutableCreateFolder;
 import de.kaiserpfalzedv.office.folders.store.FolderReadAdapter;
 import de.kaiserpfalzedv.office.folders.store.jpa.converters.FolderCreatedConverter;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -109,7 +110,7 @@ public class FolderWebService {
     @Metered(name = "folders.createFolder")
     @Counted(name = "folders.createFolder.count")
     @ConcurrentGauge(name = "folders.createFolder.concurrent")
-    public FolderCreated createFolder(final ImmutableCreateFolder command) {
+    public void createFolder(final ImmutableCreateFolder command) {
         try {
             createEvent.fire(command);
         } catch (IllegalArgumentException e) {
@@ -117,23 +118,6 @@ public class FolderWebService {
                     e.getCause() != null ? e.getCause().getMessage() : "Can't create new folder.",
                     Response.Status.CONFLICT
             );
-        }
-
-
-        Optional<Folder> result = reader.loadById(command.getSpec().getIdentity().getUuid());
-
-        if (result.isPresent()) {
-            return ImmutableFolderCreated.builder()
-                    .metadata(ImmutableMetadata.builder()
-                            .identity(result.get().getSpec().getIdentity())
-                            .build()
-                    )
-                    .spec(result.get().getSpec())
-                    .build();
-        } else {
-            LOGGER.warn("Can't create new folder: uuid={}", command.getSpec().getIdentity().getUuid());
-
-            throw new WebApplicationException("Cant create new folder.", Response.Status.EXPECTATION_FAILED);
         }
     }
 }

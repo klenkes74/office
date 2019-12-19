@@ -25,9 +25,12 @@ import de.kaiserpfalzedv.base.store.ModificationFailedException;
 import de.kaiserpfalzedv.base.store.NoModifiableDataFoundException;
 import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
 import de.kaiserpfalzedv.office.folders.Folder;
+import de.kaiserpfalzedv.office.folders.ImmutableFolder;
+import de.kaiserpfalzedv.office.folders.ImmutableFolderSpec;
 import de.kaiserpfalzedv.office.folders.store.FolderWriteAdapter;
 
 import javax.enterprise.context.Dependent;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -75,12 +78,24 @@ public class InMemoryFolderWriteAdapter implements FolderWriteAdapter {
 
         if (!spec.isPresent()) {
             throw new NoModifiableDataFoundException(ImmutableObjectIdentifier.builder()
+                    .kind(Folder.KIND)
+                    .version(Folder.VERSION)
                     .uuid(id)
                     .build()
             );
         }
 
-        store.remove(spec.get());
+        store.replace(ImmutableFolder.builder()
+                .from(spec.get())
+                .spec(ImmutableFolderSpec.builder()
+                        .from(spec.get().getSpec())
+                        .closed(OffsetDateTime.now())
+
+                        .build()
+                )
+
+                .build()
+        );
     }
 
     @Override

@@ -18,7 +18,10 @@
 
 package de.kaiserpfalzedv.office.folders;
 
-import de.kaiserpfalzedv.base.api.*;
+import de.kaiserpfalzedv.base.api.ImmutableMetadata;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
+import de.kaiserpfalzedv.base.api.Metadata;
+import de.kaiserpfalzedv.base.api.ObjectIdentifier;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -26,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,16 +38,15 @@ import java.util.UUID;
  * @author rlichti
  * @since 2019-12-14 10:42
  */
-public class CloseFolderTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CloseFolderTest.class);
+public class ModifyFolderTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModifyFolderTest.class);
 
-    private static final UUID ID = UUID.randomUUID();
+    static private final UUID ID = UUID.randomUUID();
     private static final String SCOPE = "scope";
     private static final String KEY = "key";
     private static final String NAME = "name";
     private static final OffsetDateTime CREATED = OffsetDateTime.now();
     private static final OffsetDateTime MODIFIED = CREATED;
-
 
     private static final FolderSpec FOLDER = new FolderSpec() {
         @Override
@@ -90,7 +91,8 @@ public class CloseFolderTest {
         }
     };
 
-    private static final CloseFolder SERVICE = new CloseFolder() {
+
+    private static final ModifyFolder SERVICE = new ModifyFolder() {
         @Override
         public Metadata getMetadata() {
             return ImmutableMetadata.builder()
@@ -104,64 +106,51 @@ public class CloseFolderTest {
                     )
                     .build();
         }
+
+        @Override
+        public FolderSpec getSpec() {
+            return FOLDER;
+        }
     };
+
 
     @Test
     public void shouldReturnCorrectKindOfFolder() {
-        assert CloseFolder.KIND.equals(SERVICE.getKind());
+        assert ModifyFolder.KIND.equals(SERVICE.getKind());
     }
 
     @Test
     public void shouldReturnCorrectVersionOfFolder() {
-        assert CloseFolder.VERSION.equals(SERVICE.getVersion());
+        assert ModifyFolder.VERSION.equals(SERVICE.getVersion());
     }
 
     @Test
-    public void shouldApplyTheCommandCorrectlyWhenNoWorkflowDataIsGiven() {
-        FolderSpec result = SERVICE.apply(FOLDER);
-        LOGGER.trace("result: {}", result);
-
-    }
-
-    @Test
-    public void shouldApplyTheCommandCorrectlyWhenWorkflowDataIsGiven() {
-        OffsetDateTime modificationTime = OffsetDateTime.of(2019, 12, 18, 0, 0, 0, 0, ZoneOffset.UTC);
-        CloseFolder service = ImmutableCloseFolder.builder()
-                .from(SERVICE)
-                .metadata(ImmutableMetadata.builder()
-                        .from(SERVICE.getMetadata())
-                        .workflowdata(ImmutableWorkflowData.builder()
-                                .definition(ImmutableObjectIdentifier.builder()
-                                        .kind("de.kaiserpfalzedv.wf.office.folders.close")
-                                        .version("1.0.0")
-                                        .uuid(UUID.randomUUID())
-                                        .scope("test")
-                                        .name("close-folder")
-                                        .build()
-                                )
-                                .correlation(UUID.randomUUID())
-                                .request(UUID.randomUUID())
-                                .sequence(1L)
-                                .timestamp(modificationTime)
-                                .build()
-                        )
-                        .build()
-                )
+    public void shouldApplyTheCommandCorrectly() {
+        FolderSpec newSpec = ImmutableFolderSpec.builder()
+                .from(FOLDER)
+                .name("old name")
+                .shortName("old shortname")
                 .build();
 
-        FolderSpec result = service.apply(FOLDER);
-        LOGGER.trace("result: {}", result);
+        LOGGER.trace("input: {}", SERVICE);
+        FolderSpec result = SERVICE.apply(newSpec);
+        LOGGER.debug("result: {}", result);
 
-        assert result.getClosed().orElse(OffsetDateTime.now()).isEqual(modificationTime);
+        assert SERVICE.getSpec().getIdentity().getUuid().equals(result.getIdentity().getUuid());
+        assert SERVICE.getSpec().getIdentity().getScope().orElse(null).equals(result.getIdentity().getScope().orElse(null));
+        assert "name".equals(result.getIdentity().getName().orElse(null));
+        assert SERVICE.getSpec().getName().equals(result.getName());
+        assert SERVICE.getSpec().getDescription().equals(result.getDescription());
+        assert SERVICE.getSpec().getModified().equals(result.getModified());
     }
 
     @BeforeAll
     public static void logStart() {
-        LOGGER.trace("Started tests for: {}", CloseFolder.class.getCanonicalName());
+        LOGGER.trace("Started tests for: {}", ModifyFolder.class.getCanonicalName());
     }
 
     @AfterAll
     public static void logEnd() {
-        LOGGER.trace("Ended tests for: {}", CloseFolder.class.getCanonicalName());
+        LOGGER.trace("Ended tests for: {}", ModifyFolder.class.getCanonicalName());
     }
 }

@@ -16,7 +16,7 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.application;
+package de.kaiserpfalzedv.office.application;
 
 import io.quarkus.test.junit.NativeImageTest;
 

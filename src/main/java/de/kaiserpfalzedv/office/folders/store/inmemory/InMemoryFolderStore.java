@@ -28,7 +28,9 @@ import org.infinispan.manager.EmbeddedCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.*;
 
 /*
@@ -48,17 +50,20 @@ public class InMemoryFolderStore {
     private Cache<UUID, Folder> folders;
     private Cache<String, HashMap<String, Folder>> scopeAndKey;
 
+
+    public InMemoryFolderStore() {
+        this.cacheManager = new DefaultCacheManager();
+    }
+
+    @Inject
     public InMemoryFolderStore(final EmbeddedCacheManager cacheManager) {
-        if (cacheManager == null) {
-            LOGGER.warn("CacheManager has not been injected. Creating DefaultCacheManager().");
+        LOGGER.debug("Using injected CacheManager: {}", cacheManager);
 
-            this.cacheManager = new DefaultCacheManager();
-        } else {
-            LOGGER.debug("Using injected CacheManager: {}", cacheManager);
+        this.cacheManager = cacheManager;
+    }
 
-            this.cacheManager = cacheManager;
-        }
-
+    @PostConstruct
+    public void createCaches() {
         if (!this.cacheManager.cacheExists("folders")) {
             folders = this.cacheManager.createCache("folders", new ConfigurationBuilder().memory().build());
         }
@@ -72,11 +77,7 @@ public class InMemoryFolderStore {
 
 
     public Optional<Folder> loadByUuid(final UUID uuid) {
-        try {
-            return Optional.ofNullable(folders.get(uuid));
-        } catch (NullPointerException e) {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(folders.get(uuid));
     }
 
     public Optional<Folder> loadByScopeAndKey(final String scope, final String key) {
@@ -88,7 +89,7 @@ public class InMemoryFolderStore {
     }
 
     public Optional<Folder> loadByKey(final String key) {
-        return Optional.ofNullable(scopeAndKey.get(DEFAULT_SCOPE).get(key));
+        return loadByScopeAndKey(DEFAULT_SCOPE, key);
     }
 
     public ArrayList<Folder> loadByScope(final String scope) {
@@ -118,11 +119,11 @@ public class InMemoryFolderStore {
     public void replace(final Folder folder) throws NoModifiableDataFoundException {
         LOGGER.trace("Replacing data for Folder: {}", folder.getSpec().getIdentity());
 
-        try {
-            folders.replace(folder.getSpec().getIdentity().getUuid(), folder);
-        } catch (NullPointerException e) {
+        if (!folders.containsKey(folder.getSpec().getIdentity().getUuid())) {
             throw new NoModifiableDataFoundException(folder.getSpec().getIdentity());
         }
+
+        folders.replace(folder.getSpec().getIdentity().getUuid(), folder);
     }
 
     public void remove(final Folder folder) {

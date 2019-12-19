@@ -62,7 +62,7 @@ public class JPAFolderService implements FolderResultService<FolderCreated> {
 
         try {
             JPAFolder jpa = commandConverter.convertFromAPI(command);
-            jpa.persist();
+            jpa.persistAndFlush();
 
             LOGGER.info("Saved folder: {}", jpa);
         } catch (IllegalArgumentException e) {

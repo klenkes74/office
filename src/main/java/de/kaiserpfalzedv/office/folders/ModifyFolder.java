@@ -21,6 +21,7 @@ package de.kaiserpfalzedv.office.folders;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.base.actions.commands.ModifyCommand;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
 import de.kaiserpfalzedv.office.folders.api.FolderCommandWithSpec;
 import org.immutables.value.Value;
 
@@ -54,6 +55,15 @@ public interface ModifyFolder extends FolderCommandWithSpec, ModifyCommand<Folde
     @Value.Default
     default FolderSpec apply(final FolderSpec orig) {
         return ImmutableFolderSpec.copyOf(orig)
-                .withClosed(getSpec().getClosed());
+                .withIdentity(ImmutableObjectIdentifier.builder()
+                        .from(getSpec().getIdentity())
+                        .name(getSpec().getName())
+                        .build()
+                )
+                .withName(getSpec().getName())
+                .withShortName(getSpec().getShortName())
+                .withDescription(getSpec().getDescription())
+                .withClosed(getSpec().getClosed())
+                .withModified(getSpec().getModified());
     }
 }

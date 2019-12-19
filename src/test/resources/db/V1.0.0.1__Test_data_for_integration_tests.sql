@@ -1,23 +1,6 @@
 -- Hibernate Internal Objects
-CREATE SEQUENCE PUBLIC.HIBERNATE_SEQUENCE START 1;
-
--- JPAFolderSpec Data Table
-CREATE TABLE FOLDERS.FOLDERS
-(
-    id           INTEGER PRIMARY KEY,
-
-    _UUID        CHAR(36)     NOT NULL UNIQUE,
-    _SCOPE       VARCHAR(256) NOT NULL DEFAULT './.',
-    _KEY         VARCHAR(50)  NOT NULL,
-
-    _NAME        VARCHAR(100) NOT NULL,
-    _SHORTNAME   VARCHAR(100),
-    _DESCRIPTION VARCHAR(2048),
-    _CLOSED      TIMESTAMP,
-
-    _CREATED     TIMESTAMP    NOT NULL,
-    _MODIFIED    TIMESTAMP    NOT NULL
-);
+DROP SEQUENCE PUBLIC.HIBERNATE_SEQUENCE;
+CREATE SEQUENCE PUBLIC.HIBERNATE_SEQUENCE START 11;
 
 INSERT INTO FOLDERS.FOLDERS (id, _UUID, _SCOPE, _KEY, _NAME, _SHORTNAME, _DESCRIPTION, _CLOSED, _CREATED, _MODIFIED)
 VALUES (1, '3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8', 'de.kaiserpfalz-edv', 'I-19-0001', 'Softwaretest Akte 1',
@@ -60,37 +43,3 @@ INSERT INTO FOLDERS.FOLDERS (id, _UUID, _SCOPE, _KEY, _NAME, _SHORTNAME, _DESCRI
 VALUES (9, '5446dbbe-44ec-44b9-b021-d22040848f22', 'de.lichti', 'KD-2019-M-135', 'Softwaretest Akte 10', 'SW Test 10',
         null, null, parsedatetime('2019-01-10 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
         parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'));
-
-CREATE TABLE FOLDERS.FOLDERS_CHANGES
-(
-    id                         INTEGER PRIMARY KEY,
-    _ACTION                    VARCHAR(256) NOT NULL,
-
-    _COMMAND_UUID              char(36)     NOT NULL UNIQUE,
-    _COMMAND_SCOPE             VARCHAR(256) NOT NULL DEFAULT './.',
-    _COMMAND_KEY               VARCHAR(50),
-    _COMMAND_CREATED           TIMESTAMP    NOT NULL,
-
-    _WORKFLOW_KIND             VARCHAR(256) NOT NULL DEFAULT 'UNDEFINED',
-    _WORKFLOW_VERSION          VARCHAR(20)  NOT NULL DEFAULT '1.0.0',
-    _WORKFLOW_REQUEST          char(36),
-    _WORKFLOW_CORRELATION      char(36),
-    _WORKFLOW_SEQUENCE         INTEGER,
-    _WORKFLOW_DEFINITION_UUID  char(36),
-    _WORKFLOW_DEFINITION_SCOPE VARCHAR(256) NOT NULL DEFAULT './,',
-    _WORKFLOW_DEFINITION_KEY   VARCHAR(50),
-
-    _UUID                      CHAR(36)     NOT NULL UNIQUE,
-    _SCOPE                     VARCHAR(256) NOT NULL DEFAULT './.',
-    _KEY                       VARCHAR(50)  NOT NULL,
-
-    -- JPAFolderCreate
-    _NAME                      VARCHAR(100),
-    _SHORTNAME                 VARCHAR(100),
-    _DESCRIPTION               VARCHAR(2048),
-    _CLOSED                    TIMESTAMP,
-
-    _CREATED                   TIMESTAMP    NOT NULL,
-    _MODIFIED                  TIMESTAMP    NOT NULL
-    -- No _MODIFIED since these entries are never modified. It's an audit log ...
-)
