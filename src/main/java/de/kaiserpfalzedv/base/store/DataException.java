@@ -48,8 +48,8 @@ public abstract class DataException extends Exception {
 
     static String formatObjectIdentifier(ObjectIdentifier identifier) {
         return " (Object: uuid=" + identifier.getUuid()
-                + (identifier.getScope().isPresent() ? ", scope='" + identifier.getScope().get() : "")
-                + (identifier.getName().isPresent() ? ", key='" + identifier.getName().get() : "")
+                + (identifier.getScope().isPresent() ? ", scope='" + identifier.getScope().get() + "'" : "")
+                + (identifier.getName().isPresent() ? ", key='" + identifier.getName().get() + "'" : "")
                 + ")";
     }
 }

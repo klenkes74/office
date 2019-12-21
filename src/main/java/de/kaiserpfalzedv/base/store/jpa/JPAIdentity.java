@@ -16,7 +16,9 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.folders.store.jpa.base;
+package de.kaiserpfalzedv.base.store.jpa;
+
+import de.kaiserpfalzedv.base.store.UuidConverter;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;

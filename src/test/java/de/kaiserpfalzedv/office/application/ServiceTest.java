@@ -49,6 +49,40 @@ public class ServiceTest {
     }
 
     @Test
+    public void shouldReturnNotFoundWhenGivenTheWrongUuid() {
+        given()
+                .when()
+                .auth().preemptive().basic("scott", "jb0ss")
+                .get("/folders/00000000-0000-0000-0000-000000000000")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void shouldReturnNotFoundWhenGivenAnUnknownScopeAndKey() {
+        given()
+                .pathParam("scope", "no-scope")
+                .pathParam("key", "not-there")
+                .when()
+                .auth().preemptive().basic("scott", "jb0ss")
+                .get("/folders/{scope}/{key}")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void shouldReturnCorrectFolderWhenGivenTheCorrectScopeAndKey() {
+        given()
+                .pathParam("scope", "de.kaiserpfalz-edv")
+                .pathParam("key", "I-19-0001")
+                .when()
+                .auth().preemptive().basic("scott", "jb0ss")
+                .get("/folders/{scope}/{key}")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
     public void shouldCreateANewFolderWithValidData() throws IOException {
         Path path = Paths.get("target/test-classes/json/create_folder.json");
         String body = new String(Files.readAllBytes(path));
@@ -64,4 +98,39 @@ public class ServiceTest {
                 .statusCode(allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
 
+    @Test
+    public void shouldReturnFailureWhenCreatingADoublette() throws IOException {
+        Path path = Paths.get("target/test-classes/json/create_doublette.json");
+        String body = new String(Files.readAllBytes(path));
+        assert !body.isEmpty();
+
+        given()
+                .when()
+                .header("content-type", MediaType.APPLICATION_JSON)
+                .auth().preemptive().basic("scott", "jb0ss")
+                .body(body)
+                .put("/folders")
+                .then()
+                .statusCode(409);
+    }
+
+    @Test
+    public void shouldReturnHealthWhenCallingReady() {
+        given()
+                .when()
+                .auth().preemptive().basic("scott", "jb0ss")
+                .get("/health/ready")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    public void shouldReturnHealthWhenCallingLive() {
+        given()
+                .when()
+                .auth().preemptive().basic("scott", "jb0ss")
+                .get("/health/live")
+                .then()
+                .statusCode(200);
+    }
 }

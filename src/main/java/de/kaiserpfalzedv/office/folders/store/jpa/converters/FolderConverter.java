@@ -22,12 +22,12 @@ import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
 import de.kaiserpfalzedv.base.api.ObjectIdentifier;
 import de.kaiserpfalzedv.base.store.DataConverter;
+import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
 import de.kaiserpfalzedv.office.folders.Folder;
 import de.kaiserpfalzedv.office.folders.ImmutableFolder;
 import de.kaiserpfalzedv.office.folders.ImmutableFolderSpec;
 import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolder;
 import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderSpec;
-import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAIdentity;
 
 import javax.enterprise.context.Dependent;
 import java.util.Optional;

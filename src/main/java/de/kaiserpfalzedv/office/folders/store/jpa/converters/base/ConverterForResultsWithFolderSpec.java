@@ -21,13 +21,13 @@ package de.kaiserpfalzedv.office.folders.store.jpa.converters.base;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
 import de.kaiserpfalzedv.base.api.ObjectIdentifier;
 import de.kaiserpfalzedv.base.store.DataConverter;
+import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 import de.kaiserpfalzedv.office.folders.ImmutableFolderSpec;
 import de.kaiserpfalzedv.office.folders.api.FolderCommand;
 import de.kaiserpfalzedv.office.folders.api.FolderResultWithSpec;
 import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderChangeWithSpec;
 import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderSpec;
-import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAIdentity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;

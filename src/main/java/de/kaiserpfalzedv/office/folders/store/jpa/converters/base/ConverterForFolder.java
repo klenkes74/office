@@ -23,6 +23,7 @@ import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
 import de.kaiserpfalzedv.base.api.Metadata;
 import de.kaiserpfalzedv.base.api.ObjectIdentifier;
 import de.kaiserpfalzedv.base.store.DataConverter;
+import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
 import de.kaiserpfalzedv.office.folders.Folder;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
 import de.kaiserpfalzedv.office.folders.ImmutableFolder;
@@ -31,7 +32,6 @@ import de.kaiserpfalzedv.office.folders.api.FolderResult;
 import de.kaiserpfalzedv.office.folders.api.FolderResultWithSpec;
 import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolder;
 import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderSpec;
-import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAIdentity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;

@@ -31,7 +31,7 @@ public abstract class DataAlreadyExistsException extends DataException {
     }
 
     public DataAlreadyExistsException(final ObjectIdentifier identifier) {
-        super(identifier, "Object with matchinf identifier already exists");
+        super(identifier, "Object with matching identifier already exists");
 
         this.identifier = identifier;
     }

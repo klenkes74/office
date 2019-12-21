@@ -16,7 +16,7 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.application;
+package de.kaiserpfalzedv.base.http;
 
 import io.quarkus.security.identity.SecurityIdentity;
 import org.slf4j.Logger;

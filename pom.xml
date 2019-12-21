@@ -528,14 +528,13 @@
                                 <rule>
                                     <element>CLASS</element>
                                     <includes>
+                                        <include>de.kaiserpfalzedv.base.store.UuidConverter</include>
                                         <include>de.kaiserpfalzedv.office.**</include>
-                                        <include>de.kaiserpfalzedv.office.folders.store.jpa.converters.**</include>
-                                        <include>de.kaiserpfalzedv.office.folders.store.jpa.base.UuidConverter</include>
                                     </includes>
                                     <excludes>
                                         <exclude>**.Immutable*</exclude>
-                                        <exclude>de.kaiserpfalzedv.office.folders.store.jpa.*</exclude>
                                         <exclude>de.kaiserpfalzedv.base.cdi.**</exclude>
+                                        <exclude>de.kaiserpfalzedv.office.folders.store.jpa.*</exclude>
                                         <exclude>de.kaiserpfalzedv.office.application.**</exclude>
                                     </excludes>
                                     <limits>
@@ -576,10 +575,12 @@
                                     <element>CLASS</element>
                                     <includes>
                                         <include>de.kaiserpfalzedv.base.cdi.**</include>
-                                        <include>de.kaiserpfalzedv.office.folders.store.jpa.converters.**</include>
-                                        <include>de.kaiserpfalzedv.office.folders.store.jpa.base.UuidConverter</include>
                                         <include>de.kaiserpfalzedv.office.application.**</include>
                                     </includes>
+                                    <excludes>
+                                        <!-- FIXME 2019-12-21 rlichti the RequestMonitoringFilter is called during integration tests but jacoco ignores that. Don't know why. -->
+                                        <exclude>de.kaiserpfalzedv.base.http.RequestMonitoringFilter</exclude>
+                                    </excludes>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>

@@ -16,27 +16,41 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.folders.store.jpa;
+package de.kaiserpfalzedv.base.store;
 
-import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.UUID;
 
 /*
  *
  *
  * @author rlichti
- * @since 2019-12-17 09:47
+ * @since 2019-12-21 02:29
  */
-@Entity
-@Table(name = "FOLDERS", schema = "FOLDERS")
-public class JPAFolder extends PanacheEntity {
-    @Embedded
-    public JPAIdentity identity;
+public class UuidConverterTest {
+    private static final UUID ID = UUID.randomUUID();
+    private static final String STRING = ID.toString();
 
-    @Embedded
-    public JPAFolderSpec spec;
+    private UuidConverter service;
+
+    @BeforeEach
+    public void setUpService() {
+        service = new UuidConverter();
+    }
+
+    @Test
+    public void shouldConvertToStringWhenGivenAnUuid() {
+        String result = service.convertToDatabaseColumn(ID);
+
+        assert STRING.equals(result);
+    }
+
+    @Test
+    public void shouldConvertToUuidWhenGivenAnString() {
+        UUID result = service.convertToEntityAttribute(STRING);
+
+        assert ID.equals(result);
+    }
 }

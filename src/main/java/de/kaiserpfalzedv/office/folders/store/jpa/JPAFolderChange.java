@@ -18,8 +18,8 @@
 
 package de.kaiserpfalzedv.office.folders.store.jpa;
 
-import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAIdentity;
-import de.kaiserpfalzedv.office.folders.store.jpa.base.JPAWorkflowData;
+import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
+import de.kaiserpfalzedv.base.store.jpa.JPAWorkflowData;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.*;
