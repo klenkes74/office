@@ -37,14 +37,14 @@ public class UuidConverter implements AttributeConverter<UUID, String> {
     @Override
     public String convertToDatabaseColumn(final UUID entityValue) {
         return Optional.ofNullable(entityValue)
-                .map(entityUuid -> entityUuid.toString())
+                .map(UUID::toString)
                 .orElse(null);
     }
 
     @Override
     public UUID convertToEntityAttribute(final String databaseValue) {
         return Optional.ofNullable(databaseValue)
-                .map(databaseUuid -> UUID.fromString(databaseUuid))
+                .map(UUID::fromString)
                 .orElse(null);
     }
 }
