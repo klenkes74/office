@@ -37,6 +37,17 @@ public interface NaturalPersonContactSpec extends ContactSpec {
     String KIND = "de.kaiserpfalzedv.office.contacts.NaturalPersonContactSpec";
     String VERSION = "1.0.0";
 
+    @Value.Default
+    default String getKind() {
+        return KIND;
+    }
+
+    @Value.Default
+    default String getVersion() {
+        return VERSION;
+    }
+
+
     Optional<String> getGivennamePrefix();
 
     String getGivenname();
