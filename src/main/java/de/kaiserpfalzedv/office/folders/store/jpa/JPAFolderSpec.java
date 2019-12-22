@@ -27,7 +27,7 @@ import java.time.OffsetDateTime;
 public class JPAFolderSpec implements Serializable {
     @Column(name = "_NAME", nullable = false)
     public String name;
-    @Column(name = "_SHORTNAME")
+    @Column(name = "_DISPLAYNAME")
     public String shortName;
 
     @Column(name = "_DESCRIPTION")

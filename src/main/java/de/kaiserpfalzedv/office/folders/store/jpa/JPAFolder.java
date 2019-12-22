@@ -32,7 +32,7 @@ import javax.persistence.Table;
  * @since 2019-12-17 09:47
  */
 @Entity
-@Table(name = "FOLDERS", schema = "FOLDERS")
+@Table(name = "FOLDERS", schema = "BASE")
 public class JPAFolder extends PanacheEntity {
     @Embedded
     public JPAIdentity identity;

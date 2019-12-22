@@ -24,8 +24,6 @@ import de.kaiserpfalzedv.office.folders.CreateFolder;
 import de.kaiserpfalzedv.office.folders.Folder;
 import de.kaiserpfalzedv.office.folders.ImmutableCreateFolder;
 import de.kaiserpfalzedv.office.folders.store.FolderReadAdapter;
-import de.kaiserpfalzedv.office.folders.store.jpa.converters.FolderCreatedConverter;
-import io.quarkus.security.identity.SecurityIdentity;
 import org.eclipse.microprofile.metrics.annotation.ConcurrentGauge;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
@@ -57,11 +55,6 @@ public class FolderWebService {
     @Inject
     Event<CreateFolder> createEvent;
 
-    @Inject
-    FolderCreatedConverter createdFolderConverter;
-
-    @Inject
-    SecurityIdentity securityIdentity;
 
     @GET
     @RolesAllowed({"user", "admin"})

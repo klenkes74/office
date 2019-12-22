@@ -29,7 +29,7 @@ CREATE TABLE BASE.FOLDERS
     _KEY         VARCHAR(50)  NOT NULL,
 
     _NAME        VARCHAR(100) NOT NULL,
-    _SHORTNAME   VARCHAR(100),
+    _DISPLAYNAME VARCHAR(100),
     _DESCRIPTION VARCHAR(2048),
     _CLOSED      TIMESTAMP,
 
@@ -62,17 +62,16 @@ CREATE TABLE BASE.FOLDERS_CHANGES
 
     -- JPAFolderCreate
     _NAME                       VARCHAR(100),
-    _SHORTNAME                  VARCHAR(100),
+    _DISPLAYNAME                VARCHAR(100),
     _DESCRIPTION                VARCHAR(2048),
     _CLOSED                     TIMESTAMP,
 
     _CREATED                    TIMESTAMP    NOT NULL,
     _MODIFIED                   TIMESTAMP    NOT NULL
-    -- No _MODIFIED since these entries are never modified. It's an audit log ...
-)
+);
 
 
--- JPAFolderSpec Data Table
+-- JPAContacts Data Table
 CREATE TABLE BASE.CONTACTS
 (
     id                       INTEGER PRIMARY KEY,
@@ -81,7 +80,7 @@ CREATE TABLE BASE.CONTACTS
     _TENANT                  VARCHAR(256) NOT NULL DEFAULT './.',
     _KEY                     VARCHAR(50)  NOT NULL,
 
-    _SHORTNAME               VARCHAR(100),
+    _DISPLAYNAME             VARCHAR(100),
 
     _GIVENNAME_PREFIX        VARCHAR(100),
     _GIVENNAME               VARCHAR(100) NOT NULL,
@@ -125,23 +124,22 @@ CREATE TABLE BASE.CONTACTS_CHANGES
     _KEY                        VARCHAR(50)  NOT NULL,
 
     -- JPAContactCreate
-    _SHORTNAME                  VARCHAR(100),
+    _SHORTNAME               VARCHAR(100),
 
-    _GIVENNAME_PREFIX           VARCHAR(100),
-    _GIVENNAME                  VARCHAR(100) NOT NULL,
-    _GIVENNAME_POSTFIX          VARCHAR(100),
+    _GIVENNAME_PREFIX        VARCHAR(100),
+    _GIVENNAME               VARCHAR(100) NOT NULL,
+    _GIVENNAME_POSTFIX       VARCHAR(100),
 
-    _SURNAME_PREFIX             VARCHAR(100),
-    _SURNAME                    VARCHAR(100) NOT NULL,
-    _SURNAME_POSTFIX            VARCHAR(100),
+    _SURNAME_PREFIX          VARCHAR(100),
+    _SURNAME                 VARCHAR(100) NOT NULL,
+    _SURNAME_POSTFIX         VARCHAR(100),
 
-    _HONORIFIC_TITLE_PREFIX     VARCHAR(100),
-    _HONORIFIC_TITLE_POSTFIX    VARCHAR(100),
+    _HONORIFIC_TITLE_PREFIX  VARCHAR(100),
+    _HONORIFIC_TITLE_POSTFIX VARCHAR(100),
 
-    _HERALDIC_TITLE_PREFIX      VARCHAR(100),
-    _HERALDIC_TITLE_POSTFIX     VARCHAR(100),
+    _HERALDIC_TITLE_PREFIX   VARCHAR(100),
+    _HERALDIC_TITLE_POSTFIX  VARCHAR(100),
 
-    _CREATED                    TIMESTAMP    NOT NULL,
-    _MODIFIED                   TIMESTAMP    NOT NULL
-    -- No _MODIFIED since these entries are never modified. It's an audit log ...
-)
+    _CREATED                 TIMESTAMP    NOT NULL,
+    _MODIFIED                TIMESTAMP    NOT NULL
+);

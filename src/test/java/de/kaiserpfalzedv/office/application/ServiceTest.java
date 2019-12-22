@@ -86,7 +86,7 @@ public class ServiceTest {
 
     @Test
     public void shouldCreateANewFolderWithValidData() throws IOException {
-        Path path = Paths.get("target/test-classes/json/create_folder.json");
+        Path path = Paths.get("target/test-classes/json/folders/create_folder.json");
         String body = new String(Files.readAllBytes(path));
         assert !body.isEmpty();
 
@@ -103,7 +103,7 @@ public class ServiceTest {
 
     @Test
     public void shouldReturnFailureWhenCreatingADoublette() throws IOException {
-        Path path = Paths.get("target/test-classes/json/create_doublette.json");
+        Path path = Paths.get("target/test-classes/json/folders/create_doublette.json");
         String body = new String(Files.readAllBytes(path));
         assert !body.isEmpty();
 

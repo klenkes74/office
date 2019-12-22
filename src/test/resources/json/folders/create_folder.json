@@ -5,8 +5,8 @@
     "identity": {
       "kind": "de.kaiserpfalzedv.office.folders.CreateFolder",
       "version": "1.0.0",
-      "uuid": "3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8",
-      "scope": "kaiserpfalz-edv.de",
+      "uuid": "cdf466c6-db5c-47eb-bb2f-ff066e1d08c8",
+      "tenant": "kaiserpfalz-edv.de",
       "name": "I'19-5315"
     },
     "workflowdata": {
@@ -18,7 +18,7 @@
         "kind": "de.lichti.wf.CreateNewCustomer",
         "version": "2.5.1",
         "uuid": "99e40891-d8b3-4d18-bcb5-1c83bdc618d3",
-        "scope": "lichti.de",
+        "tenant": "lichti.de",
         "name": "CreateNewCustomer"
       }
     }
@@ -27,12 +27,12 @@
     "identity": {
       "kind": "de.kaiserpfalzedv.office.folders.Folder",
       "version": "1.0.0",
-      "uuid": "3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8",
-      "scope": "kaiserpfalz-edv.de",
-      "name": "I'19-0001"
+      "uuid": "b88f0e4e-74ea-4daf-812b-c798014e991b",
+      "tenant": "kaiserpfalz-edv.de",
+      "name": "I'19-5315"
     },
     "name": "Softwaretest Akte",
-    "shortName": "Softwaretest",
+    "displayname": "Softwaretest",
     "description": "Einfach eine Akte für einen Softwaretest",
     "created": "2019-12-11T12:00:00-01:00",
     "modified": "2019-12-11T12:00:00-01:00"

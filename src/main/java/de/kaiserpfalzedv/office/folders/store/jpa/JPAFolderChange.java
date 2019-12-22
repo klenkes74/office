@@ -27,7 +27,7 @@ import java.time.OffsetDateTime;
 
 
 @Entity
-@Table(schema = "FOLDERS", name = "FOLDERS_CHANGES")
+@Table(schema = "BASE", name = "FOLDERS_CHANGES")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "_ACTION", length = 256)
 public abstract class JPAFolderChange extends PanacheEntity {
