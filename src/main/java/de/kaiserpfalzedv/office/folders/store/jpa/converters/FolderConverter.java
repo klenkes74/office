@@ -47,7 +47,7 @@ public class FolderConverter implements DataConverter<Folder, JPAFolder> {
                 .version(Folder.KIND)
 
                 .uuid(data.identity.uuid)
-                .tenant(Optional.ofNullable(data.identity.scope))
+                .tenant(Optional.ofNullable(data.identity.tenant))
                 .name(Optional.ofNullable(data.identity.key))
 
                 .build();
@@ -83,7 +83,7 @@ public class FolderConverter implements DataConverter<Folder, JPAFolder> {
 
         result.identity = new JPAIdentity();
         result.identity.uuid = folder.getSpec().getIdentity().getUuid();
-        result.identity.scope = folder.getSpec().getIdentity().getTenant().orElse(null);
+        result.identity.tenant = folder.getSpec().getIdentity().getTenant().orElse(null);
         result.identity.key = folder.getSpec().getIdentity().getName().orElse(null);
 
         result.spec.name = folder.getSpec().getName();

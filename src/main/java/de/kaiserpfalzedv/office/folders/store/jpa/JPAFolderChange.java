@@ -40,7 +40,7 @@ public abstract class JPAFolderChange extends PanacheEntity {
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "uuid", column = @Column(name = "_COMMAND_UUID")),
-            @AttributeOverride(name = "scope", column = @Column(name = "_COMMAND_TENANT")),
+            @AttributeOverride(name = "tenant", column = @Column(name = "_COMMAND_TENANT")),
             @AttributeOverride(name = "key", column = @Column(name = "_COMMAND_KEY"))
     })
     public JPAIdentity command;

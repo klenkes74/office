@@ -49,7 +49,7 @@ public class JPAWorkflowData implements Serializable {
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "uuid", column = @Column(name = "_WORKFLOW_DEFINITION_UUID")),
-            @AttributeOverride(name = "scope", column = @Column(name = "_WORKFLOW_DEFINITION_TENANT")),
+            @AttributeOverride(name = "tenant", column = @Column(name = "_WORKFLOW_DEFINITION_TENANT")),
             @AttributeOverride(name = "key", column = @Column(name = "_WORKFLOW_DEFINITION_KEY"))
     })
     public JPAIdentity workflow;

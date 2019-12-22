@@ -53,7 +53,7 @@ public abstract class ConverterForCommandsWithoutFolderSpec<A extends FolderComm
             result.workflow.kind = workflow.getDefinition().getKind();
             result.workflow.version = workflow.getDefinition().getVersion();
             result.workflow.workflow.uuid = workflow.getDefinition().getUuid();
-            result.workflow.workflow.scope = workflow.getDefinition().getTenant().orElse(null);
+            result.workflow.workflow.tenant = workflow.getDefinition().getTenant().orElse(null);
             result.workflow.workflow.key = workflow.getDefinition().getName().orElse(null);
 
             result.workflow.correlation = workflow.getCorrelation();
@@ -65,14 +65,14 @@ public abstract class ConverterForCommandsWithoutFolderSpec<A extends FolderComm
     private void convertCommand(A data, D result) {
         result.command = new JPAIdentity();
         result.command.uuid = data.getMetadata().getIdentity().getUuid();
-        result.command.scope = data.getMetadata().getIdentity().getTenant().orElse(null);
+        result.command.tenant = data.getMetadata().getIdentity().getTenant().orElse(null);
         result.command.key = data.getMetadata().getIdentity().getName().orElse(null);
     }
 
     private void convertIdentity(A data, D result) {
         result.identity = new JPAIdentity();
         result.identity.uuid = data.getMetadata().getIdentity().getUuid();
-        result.identity.scope = data.getMetadata().getIdentity().getTenant().orElse(null);
+        result.identity.tenant = data.getMetadata().getIdentity().getTenant().orElse(null);
         result.identity.key = data.getMetadata().getIdentity().getName().orElse(null);
     }
 
@@ -94,7 +94,7 @@ public abstract class ConverterForCommandsWithoutFolderSpec<A extends FolderComm
                             .version(data.workflow.version)
 
                             .uuid(data.workflow.workflow.uuid)
-                            .tenant(data.workflow.workflow.scope)
+                            .tenant(data.workflow.workflow.tenant)
                             .name(data.workflow.workflow.key)
 
                             .build()
@@ -114,7 +114,7 @@ public abstract class ConverterForCommandsWithoutFolderSpec<A extends FolderComm
                 .version(version)
 
                 .uuid(identity.uuid)
-                .tenant(Optional.ofNullable(identity.scope))
+                .tenant(Optional.ofNullable(identity.tenant))
                 .name(Optional.ofNullable(identity.key))
                 .build();
     }

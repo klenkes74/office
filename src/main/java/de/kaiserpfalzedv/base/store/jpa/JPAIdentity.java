@@ -38,7 +38,9 @@ public class JPAIdentity implements Serializable {
     @Convert(converter = UuidConverter.class)
     public UUID uuid;
     @Column(name = "_TENANT", updatable = false)
-    public String scope;
+    public String tenant;
     @Column(name = "_KEY", updatable = false)
     public String key;
+
+
 }

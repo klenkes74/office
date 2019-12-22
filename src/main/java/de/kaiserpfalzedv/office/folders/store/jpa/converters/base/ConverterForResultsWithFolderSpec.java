@@ -84,7 +84,7 @@ public abstract class ConverterForResultsWithFolderSpec<A extends FolderResultWi
                 .version(version)
 
                 .uuid(identity.uuid)
-                .tenant(Optional.ofNullable(identity.scope))
+                .tenant(Optional.ofNullable(identity.tenant))
                 .name(Optional.ofNullable(identity.key))
                 .build();
     }

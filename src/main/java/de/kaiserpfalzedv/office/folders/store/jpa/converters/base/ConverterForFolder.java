@@ -61,7 +61,7 @@ public abstract class ConverterForFolder<A extends FolderResult, D extends JPAFo
         result.identity = new JPAIdentity();
         result.identity.uuid = data.getMetadata().getIdentity().getUuid();
         result.identity.uuid = data.getMetadata().getIdentity().getUuid();
-        result.identity.scope = data.getMetadata().getIdentity().getTenant().orElse(null);
+        result.identity.tenant = data.getMetadata().getIdentity().getTenant().orElse(null);
         result.identity.key = data.getMetadata().getIdentity().getName().orElse(null);
     }
 
@@ -118,7 +118,7 @@ public abstract class ConverterForFolder<A extends FolderResult, D extends JPAFo
                 .version(version)
 
                 .uuid(identity.uuid)
-                .tenant(Optional.ofNullable(identity.scope))
+                .tenant(Optional.ofNullable(identity.tenant))
                 .name(Optional.ofNullable(identity.key))
                 .build();
     }
