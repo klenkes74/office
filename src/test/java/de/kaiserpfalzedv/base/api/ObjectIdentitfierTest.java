@@ -51,7 +51,7 @@ public class ObjectIdentitfierTest {
         assert KIND.equals(service.getKind());
         assert VERSION.equals(service.getVersion());
         assert ID.equals(service.getUuid());
-        assert !service.getScope().isPresent();
+        assert !service.getTenant().isPresent();
         assert !service.getName().isPresent();
     }
 
@@ -62,7 +62,7 @@ public class ObjectIdentitfierTest {
         assert KIND.equals(service.getKind());
         assert VERSION.equals(service.getVersion());
         assert service.getUuid() != null;
-        assert SCOPE.equals(service.getScope().orElse(null));
+        assert SCOPE.equals(service.getTenant().orElse(null));
         assert KEY.equals(service.getName().orElse(null));
     }
 
@@ -73,7 +73,7 @@ public class ObjectIdentitfierTest {
         assert KIND.equals(service.getKind());
         assert VERSION.equals(service.getVersion());
         assert service.getUuid() != null;
-        assert !service.getScope().isPresent();
+        assert !service.getTenant().isPresent();
         assert KEY.equals(service.getName().orElse(null));
     }
 

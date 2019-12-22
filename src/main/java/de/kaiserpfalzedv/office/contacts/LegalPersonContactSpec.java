@@ -16,29 +16,34 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store.jpa;
+package de.kaiserpfalzedv.office.contacts;
 
-import de.kaiserpfalzedv.base.store.UuidConverter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.immutables.value.Value;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Embeddable;
 import java.io.Serializable;
-import java.util.UUID;
 
 /*
  *
  *
- * @author rlichti
- * @since 2019-12-17 09:22
+ * @author rlichti@kaiserpfalz-edv.de
+ * @since 2019-12-15T10:20Z
  */
-@Embeddable
-public class JPAIdentity implements Serializable {
-    @Column(name = "_UUID", columnDefinition = "CHAR(36)", updatable = false, unique = true)
-    @Convert(converter = UuidConverter.class)
-    public UUID uuid;
-    @Column(name = "_TENANT", updatable = false)
-    public String scope;
-    @Column(name = "_KEY", updatable = false)
-    public String key;
+@Value.Immutable
+@JsonSerialize(as = ImmutableLegalPersonContactSpec.class)
+@JsonDeserialize(builder = ImmutableLegalPersonContactSpec.Builder.class)
+public interface LegalPersonContactSpec extends ContactSpec, Serializable {
+    String KIND = "de.kaiserpfalzedv.office.contacts.LegalPersonContactSpec";
+    String VERSION = "1.0.0";
+
+    @Value.Default
+    default String getKind() {
+        return KIND;
+    }
+
+    @Value.Default
+    default String getVersion() {
+        return VERSION;
+    }
 }

@@ -16,29 +16,36 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store.jpa;
+package de.kaiserpfalzedv.office.contacts;
 
-import de.kaiserpfalzedv.base.store.UuidConverter;
+import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.Spec;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Embeddable;
 import java.io.Serializable;
-import java.util.UUID;
+import java.time.OffsetDateTime;
 
 /*
  *
  *
- * @author rlichti
- * @since 2019-12-17 09:22
+ * @author rlichti@kaiserpfalz-edv.de
+ * @since 2019-12-15T10:20Z
  */
-@Embeddable
-public class JPAIdentity implements Serializable {
-    @Column(name = "_UUID", columnDefinition = "CHAR(36)", updatable = false, unique = true)
-    @Convert(converter = UuidConverter.class)
-    public UUID uuid;
-    @Column(name = "_TENANT", updatable = false)
-    public String scope;
-    @Column(name = "_KEY", updatable = false)
-    public String key;
+public interface ContactSpec extends Spec<Serializable>, Serializable {
+    /**
+     * The object identity of the person dataset.
+     *
+     * @return
+     */
+    ObjectIdentifier getIdentity();
+
+    /**
+     * The name to be displayed in the software.
+     *
+     * @return an optimised string for being displayed (e.g. in headers) for this person.
+     */
+    String getDisplayname();
+
+    OffsetDateTime getCreated();
+
+    OffsetDateTime getModified();
 }

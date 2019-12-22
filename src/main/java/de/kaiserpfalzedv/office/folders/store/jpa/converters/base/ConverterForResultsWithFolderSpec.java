@@ -50,7 +50,7 @@ public abstract class ConverterForResultsWithFolderSpec<A extends FolderResultWi
     private void convertSpec(@NotNull A data, @NotNull D result) {
         result.spec = new JPAFolderSpec();
         result.spec.name = data.getSpec().getName();
-        result.spec.shortName = data.getSpec().getShortName().orElse(null);
+        result.spec.shortName = data.getSpec().getDisplayname().orElse(null);
         result.spec.description = data.getSpec().getDescription().orElse(null);
 
         result.spec.created = data.getSpec().getCreated();
@@ -66,7 +66,7 @@ public abstract class ConverterForResultsWithFolderSpec<A extends FolderResultWi
                 .identity(identity)
 
                 .name(data.spec.name)
-                .shortName(Optional.ofNullable(data.spec.shortName))
+                .displayname(Optional.ofNullable(data.spec.shortName))
                 .description(Optional.ofNullable(data.spec.description))
 
                 .created(data.spec.created)
@@ -84,7 +84,7 @@ public abstract class ConverterForResultsWithFolderSpec<A extends FolderResultWi
                 .version(version)
 
                 .uuid(identity.uuid)
-                .scope(Optional.ofNullable(identity.scope))
+                .tenant(Optional.ofNullable(identity.scope))
                 .name(Optional.ofNullable(identity.key))
                 .build();
     }

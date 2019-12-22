@@ -54,7 +54,7 @@ public class CloseFolderTest {
                     .kind(KIND)
                     .version(VERSION)
                     .uuid(ID)
-                    .scope(SCOPE)
+                    .tenant(SCOPE)
                     .name(KEY)
                     .build();
         }
@@ -65,7 +65,7 @@ public class CloseFolderTest {
         }
 
         @Override
-        public Optional<String> getShortName() {
+        public Optional<String> getDisplayname() {
             return Optional.empty();
         }
 
@@ -98,7 +98,7 @@ public class CloseFolderTest {
                             .kind(KIND)
                             .version(VERSION)
                             .uuid(ID)
-                            .scope(SCOPE)
+                            .tenant(SCOPE)
                             .name(KEY)
                             .build()
                     )
@@ -135,7 +135,7 @@ public class CloseFolderTest {
                                         .kind("de.kaiserpfalzedv.wf.office.folders.close")
                                         .version("1.0.0")
                                         .uuid(UUID.randomUUID())
-                                        .scope("test")
+                                        .tenant("test")
                                         .name("close-folder")
                                         .build()
                                 )

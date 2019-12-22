@@ -56,7 +56,7 @@ class InMemoryFolderReadAdapterTest {
     private InMemoryFolderStore store;
     private UUID validUUID = data.get(0).getMetadata().getIdentity().getUuid();
     private String[] validScopeAndKey = {
-            data.get(0).getMetadata().getIdentity().getScope().orElse(null),
+            data.get(0).getMetadata().getIdentity().getTenant().orElse(null),
             data.get(0).getMetadata().getIdentity().getName().orElse(null)
     };
 
@@ -87,7 +87,7 @@ class InMemoryFolderReadAdapterTest {
 
         assert result.isPresent();
         assert result.get().getMetadata().getIdentity().getUuid().equals(validUUID);
-        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getScope().orElse(null));
+        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getTenant().orElse(null));
         assert validScopeAndKey[1].equals(result.get().getMetadata().getIdentity().getName().orElse(null));
     }
 
@@ -107,7 +107,7 @@ class InMemoryFolderReadAdapterTest {
 
         assert result.isPresent();
         assert result.get().getMetadata().getIdentity().getUuid().equals(validUUID);
-        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getScope().orElse(null));
+        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getTenant().orElse(null));
         assert validScopeAndKey[1].equals(result.get().getMetadata().getIdentity().getName().orElse(null));
     }
 
@@ -230,7 +230,7 @@ class InMemoryFolderReadAdapterTest {
                         .version(Folder.VERSION)
 
                         .uuid(UUID.randomUUID())
-                        .scope(Optional.ofNullable(scope))
+                        .tenant(Optional.ofNullable(scope))
                         .name(key)
 
                         .build();
@@ -243,7 +243,7 @@ class InMemoryFolderReadAdapterTest {
                         .spec(ImmutableFolderSpec.builder()
                                 .identity(identity)
                                 .name("Softwaretest Akte Nr. " + i)
-                                .shortName("Akte Nr. " + i)
+                                .displayname("Akte Nr. " + i)
                                 .created(created)
                                 .modified(modified)
                                 .closed(closed)

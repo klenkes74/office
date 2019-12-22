@@ -63,7 +63,7 @@ public class BaseObjectTest {
                             .kind(KIND)
                             .version(VERSION)
                             .uuid(UUID)
-                            .scope(SCOPE)
+                            .tenant(SCOPE)
                             .name(NAME)
                             .build()
                     )

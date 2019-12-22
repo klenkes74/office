@@ -55,7 +55,7 @@ public class ModifyFolderTest {
                     .kind(KIND)
                     .version(VERSION)
                     .uuid(ID)
-                    .scope(SCOPE)
+                    .tenant(SCOPE)
                     .name(KEY)
                     .build();
         }
@@ -66,7 +66,7 @@ public class ModifyFolderTest {
         }
 
         @Override
-        public Optional<String> getShortName() {
+        public Optional<String> getDisplayname() {
             return Optional.empty();
         }
 
@@ -100,7 +100,7 @@ public class ModifyFolderTest {
                             .kind(KIND)
                             .version(VERSION)
                             .uuid(ID)
-                            .scope(SCOPE)
+                            .tenant(SCOPE)
                             .name(KEY)
                             .build()
                     )
@@ -129,7 +129,7 @@ public class ModifyFolderTest {
         FolderSpec newSpec = ImmutableFolderSpec.builder()
                 .from(FOLDER)
                 .name("old name")
-                .shortName("old shortname")
+                .displayname("old shortname")
                 .build();
 
         LOGGER.trace("input: {}", SERVICE);
@@ -137,7 +137,7 @@ public class ModifyFolderTest {
         LOGGER.debug("result: {}", result);
 
         assert SERVICE.getSpec().getIdentity().getUuid().equals(result.getIdentity().getUuid());
-        assert SERVICE.getSpec().getIdentity().getScope().orElse(null).equals(result.getIdentity().getScope().orElse(null));
+        assert SERVICE.getSpec().getIdentity().getTenant().orElse(null).equals(result.getIdentity().getTenant().orElse(null));
         assert "name".equals(result.getIdentity().getName().orElse(null));
         assert SERVICE.getSpec().getName().equals(result.getName());
         assert SERVICE.getSpec().getDescription().equals(result.getDescription());

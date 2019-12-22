@@ -61,7 +61,7 @@ class InMemoryFolderWriteAdapterTest {
     private Folder validFolder = data.get(0);
     private UUID validUUID = validFolder.getMetadata().getIdentity().getUuid();
     private String[] validScopeAndKey = {
-            validFolder.getMetadata().getIdentity().getScope().orElse(null),
+            validFolder.getMetadata().getIdentity().getTenant().orElse(null),
             validFolder.getMetadata().getIdentity().getName().orElse(null)
     };
 
@@ -115,7 +115,7 @@ class InMemoryFolderWriteAdapterTest {
                 .version(Folder.VERSION)
 
                 .uuid(UUID.randomUUID())
-                .scope(validFolder.getMetadata().getIdentity().getScope())
+                .tenant(validFolder.getMetadata().getIdentity().getTenant())
                 .name(validFolder.getMetadata().getIdentity().getName())
 
                 .build();
@@ -266,7 +266,7 @@ class InMemoryFolderWriteAdapterTest {
                         .version(Folder.VERSION)
 
                         .uuid(UUID.randomUUID())
-                        .scope(Optional.ofNullable(scope))
+                        .tenant(Optional.ofNullable(scope))
                         .name(key)
 
                         .build();
@@ -279,7 +279,7 @@ class InMemoryFolderWriteAdapterTest {
                         .spec(ImmutableFolderSpec.builder()
                                 .identity(identity)
                                 .name("Softwaretest Akte Nr. " + i)
-                                .shortName("Akte Nr. " + i)
+                                .displayname("Akte Nr. " + i)
                                 .created(created)
                                 .modified(modified)
                                 .closed(closed)

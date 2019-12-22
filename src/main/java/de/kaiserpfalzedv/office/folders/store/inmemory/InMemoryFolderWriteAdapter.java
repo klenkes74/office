@@ -57,7 +57,7 @@ public class InMemoryFolderWriteAdapter implements FolderWriteAdapter {
         }
 
         if (store.loadByScopeAndKey(
-                spec.getSpec().getIdentity().getScope().orElse(InMemoryFolderStore.DEFAULT_SCOPE),
+                spec.getSpec().getIdentity().getTenant().orElse(InMemoryFolderStore.DEFAULT_TENANT),
                 spec.getSpec().getIdentity().getName().orElse(null)
         )
                 .isPresent()) {

@@ -48,26 +48,26 @@ public interface ObjectIdentifier extends Serializable {
     }
 
     /**
-     * Creates an ObjectIdentifier with scope and key. The UUID is randomized, so please beware if this is applicable
+     * Creates an ObjectIdentifier with tenant and key. The UUID is randomized, so please beware if this is applicable
      * on your use case!
      *
      * @param kind    The kind of the identifier object.
      * @param version The version of the identified object kind.
-     * @param scope   The scope of the object (may be null).
+     * @param tenant  The tenant of the object (may be null).
      * @param key     The ke of the object (may not be null).
      * @return an immutable ObjectIdentifier
      */
     static ImmutableObjectIdentifier create(
             final String kind,
             final String version,
-            final String scope,
+            final String tenant,
             final String key
     ) {
         return ImmutableObjectIdentifier.builder()
                 .kind(kind)
                 .version(version)
                 .uuid(UUID.randomUUID())
-                .scope(Optional.ofNullable(scope))
+                .tenant(Optional.ofNullable(tenant))
                 .name(Optional.of(key))
                 .build();
     }
@@ -99,7 +99,7 @@ public interface ObjectIdentifier extends Serializable {
      *
      * @return the scope of this object.
      */
-    Optional<String> getScope();
+    Optional<String> getTenant();
 
     /**
      * A unique within scope name for the object. The tuple (Kind, Scope, Name) has to be unique.

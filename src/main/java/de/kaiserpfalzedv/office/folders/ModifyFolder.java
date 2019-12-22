@@ -61,7 +61,7 @@ public interface ModifyFolder extends FolderCommandWithSpec, ModifyCommand<Folde
                         .build()
                 )
                 .withName(getSpec().getName())
-                .withShortName(getSpec().getShortName())
+                .withDisplayname(getSpec().getDisplayname())
                 .withDescription(getSpec().getDescription())
                 .withClosed(getSpec().getClosed())
                 .withModified(getSpec().getModified());

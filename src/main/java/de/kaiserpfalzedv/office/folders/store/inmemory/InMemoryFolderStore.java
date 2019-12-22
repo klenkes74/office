@@ -43,7 +43,7 @@ import java.util.*;
 public class InMemoryFolderStore {
     private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryFolderStore.class);
 
-    public static final String DEFAULT_SCOPE = "./.";
+    public static final String DEFAULT_TENANT = "./.";
 
     EmbeddedCacheManager cacheManager;
 
@@ -89,7 +89,7 @@ public class InMemoryFolderStore {
     }
 
     public Optional<Folder> loadByKey(final String key) {
-        return loadByScopeAndKey(DEFAULT_SCOPE, key);
+        return loadByScopeAndKey(DEFAULT_TENANT, key);
     }
 
     public ArrayList<Folder> loadByScope(final String scope) {
@@ -101,7 +101,7 @@ public class InMemoryFolderStore {
     }
 
     public ArrayList<Folder> loadEntriesWithoutScope() {
-        return loadByScope(DEFAULT_SCOPE);
+        return loadByScope(DEFAULT_TENANT);
     }
 
     public void store(final Folder folder) {
@@ -111,8 +111,8 @@ public class InMemoryFolderStore {
         folders.put(identity.getUuid(), folder);
 
         if (identity.getName().isPresent()) {
-            scopeAndKey.putIfAbsent(identity.getScope().orElse(DEFAULT_SCOPE), new HashMap<>(5));
-            scopeAndKey.get(identity.getScope().orElse(DEFAULT_SCOPE)).put(identity.getName().get(), folder);
+            scopeAndKey.putIfAbsent(identity.getTenant().orElse(DEFAULT_TENANT), new HashMap<>(5));
+            scopeAndKey.get(identity.getTenant().orElse(DEFAULT_TENANT)).put(identity.getName().get(), folder);
         }
     }
 
@@ -131,8 +131,8 @@ public class InMemoryFolderStore {
         LOGGER.trace("Deleting Folder: {}", identity);
 
         if (identity.getName().isPresent()
-                && scopeAndKey.containsKey(identity.getScope().orElse(DEFAULT_SCOPE))) {
-            scopeAndKey.get(identity.getScope().orElse(DEFAULT_SCOPE)).remove(identity.getName().get());
+                && scopeAndKey.containsKey(identity.getTenant().orElse(DEFAULT_TENANT))) {
+            scopeAndKey.get(identity.getTenant().orElse(DEFAULT_TENANT)).remove(identity.getName().get());
         }
 
         folders.remove(identity.getUuid());

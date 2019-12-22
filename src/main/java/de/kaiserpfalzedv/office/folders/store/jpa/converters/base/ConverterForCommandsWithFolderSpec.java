@@ -48,7 +48,7 @@ public abstract class ConverterForCommandsWithFolderSpec<A extends FolderCommand
     private void convertSpec(@NotNull A data, @NotNull D result) {
         result.spec = new JPAFolderSpec();
         result.spec.name = data.getSpec().getName();
-        result.spec.shortName = data.getSpec().getShortName().orElse(null);
+        result.spec.shortName = data.getSpec().getDisplayname().orElse(null);
         result.spec.description = data.getSpec().getDescription().orElse(null);
 
         result.spec.created = data.getSpec().getCreated();
@@ -64,7 +64,7 @@ public abstract class ConverterForCommandsWithFolderSpec<A extends FolderCommand
                 .identity(identity)
 
                 .name(data.spec.name)
-                .shortName(Optional.ofNullable(data.spec.shortName))
+                .displayname(Optional.ofNullable(data.spec.shortName))
                 .description(Optional.ofNullable(data.spec.description))
 
                 .created(data.spec.created)

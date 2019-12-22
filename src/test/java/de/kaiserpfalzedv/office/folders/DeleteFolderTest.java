@@ -61,7 +61,7 @@ public class DeleteFolderTest {
         }
 
         @Override
-        public Optional<String> getShortName() {
+        public Optional<String> getDisplayname() {
             return Optional.empty();
         }
 

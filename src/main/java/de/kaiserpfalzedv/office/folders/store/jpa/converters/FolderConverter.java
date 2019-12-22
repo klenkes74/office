@@ -47,7 +47,7 @@ public class FolderConverter implements DataConverter<Folder, JPAFolder> {
                 .version(Folder.KIND)
 
                 .uuid(data.identity.uuid)
-                .scope(Optional.ofNullable(data.identity.scope))
+                .tenant(Optional.ofNullable(data.identity.scope))
                 .name(Optional.ofNullable(data.identity.key))
 
                 .build();
@@ -65,7 +65,7 @@ public class FolderConverter implements DataConverter<Folder, JPAFolder> {
                         .identity(identity)
 
                         .name(data.spec.name)
-                        .shortName(Optional.ofNullable(data.spec.shortName))
+                        .displayname(Optional.ofNullable(data.spec.shortName))
                         .description(Optional.ofNullable(data.spec.description))
 
                         .created(data.spec.created)
@@ -83,11 +83,11 @@ public class FolderConverter implements DataConverter<Folder, JPAFolder> {
 
         result.identity = new JPAIdentity();
         result.identity.uuid = folder.getSpec().getIdentity().getUuid();
-        result.identity.scope = folder.getSpec().getIdentity().getScope().orElse(null);
+        result.identity.scope = folder.getSpec().getIdentity().getTenant().orElse(null);
         result.identity.key = folder.getSpec().getIdentity().getName().orElse(null);
 
         result.spec.name = folder.getSpec().getName();
-        result.spec.shortName = folder.getSpec().getShortName().orElse(null);
+        result.spec.shortName = folder.getSpec().getDisplayname().orElse(null);
         result.spec.description = folder.getSpec().getDescription().orElse(null);
         result.spec.closed = folder.getSpec().getClosed().orElse(null);
 

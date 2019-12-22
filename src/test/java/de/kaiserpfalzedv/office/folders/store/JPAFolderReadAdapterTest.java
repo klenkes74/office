@@ -74,10 +74,10 @@ public class JPAFolderReadAdapterTest {
         Folder data = result.get();
 
         assert ID.equals(data.getSpec().getIdentity().getUuid());
-        assert SCOPE.equals(data.getSpec().getIdentity().getScope().orElse(""));
+        assert SCOPE.equals(data.getSpec().getIdentity().getTenant().orElse(""));
         assert KEY.equals(data.getSpec().getIdentity().getName().orElse(null));
         assert NAME.equals(data.getSpec().getName());
-        assert SHORTNAME.equals(data.getSpec().getShortName().orElse(null));
+        assert SHORTNAME.equals(data.getSpec().getDisplayname().orElse(null));
         assert DESCRIPTION.equals(data.getSpec().getDescription().orElse(null));
         assert !data.getSpec().getClosed().isPresent();
     }

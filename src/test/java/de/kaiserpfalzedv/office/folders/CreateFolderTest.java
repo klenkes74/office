@@ -55,7 +55,7 @@ public class CreateFolderTest {
                     .kind(KIND)
                     .version(VERSION)
                     .uuid(ID)
-                    .scope(SCOPE)
+                    .tenant(SCOPE)
                     .name(KEY)
                     .build();
         }
@@ -66,7 +66,7 @@ public class CreateFolderTest {
         }
 
         @Override
-        public Optional<String> getShortName() {
+        public Optional<String> getDisplayname() {
             return Optional.empty();
         }
 
@@ -100,7 +100,7 @@ public class CreateFolderTest {
                             .kind(KIND)
                             .version(VERSION)
                             .uuid(ID)
-                            .scope(SCOPE)
+                            .tenant(SCOPE)
                             .name(KEY)
                             .build()
                     )
@@ -126,7 +126,7 @@ public class CreateFolderTest {
 
     @Test
     public void shouldApplyTheCommandCorrectly() {
-        assert FOLDER.getShortName().equals(SERVICE.apply(FOLDER).getShortName());
+        assert FOLDER.getDisplayname().equals(SERVICE.apply(FOLDER).getDisplayname());
     }
 
     @BeforeAll

@@ -16,17 +16,14 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.folders;
+package de.kaiserpfalzedv.office.contacts;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
-import de.kaiserpfalzedv.base.api.Spec;
+import de.kaiserpfalzedv.base.BaseObject;
+import de.kaiserpfalzedv.base.SingleObject;
+import de.kaiserpfalzedv.office.folders.ImmutableFolder;
 import org.immutables.value.Value;
-
-import java.io.Serializable;
-import java.time.OffsetDateTime;
-import java.util.Optional;
 
 /*
  *
@@ -35,24 +32,19 @@ import java.util.Optional;
  * @since 2019-12-15T10:20Z
  */
 @Value.Immutable
-@JsonSerialize(as = ImmutableFolderSpec.class)
-@JsonDeserialize(builder = ImmutableFolderSpec.Builder.class)
-public interface FolderSpec extends Spec<Serializable>, Serializable {
-    String KIND = "de.kaiserpfalzedv.office.folders.FolderSpec";
+@JsonSerialize(as = ImmutableFolder.class)
+@JsonDeserialize(builder = ImmutableFolder.Builder.class)
+public interface Contact extends SingleObject<ContactSpec>, BaseObject<ContactSpec> {
+    String KIND = "de.kaiserpfalzedv.office.contacts.Contact";
     String VERSION = "1.0.0";
 
+    @Value.Default
+    default String getKind() {
+        return KIND;
+    }
 
-    ObjectIdentifier getIdentity();
-
-    String getName();
-
-    Optional<String> getDisplayname();
-
-    Optional<String> getDescription();
-
-    Optional<OffsetDateTime> getClosed();
-
-    OffsetDateTime getCreated();
-
-    OffsetDateTime getModified();
+    @Value.Default
+    default String getVersion() {
+        return VERSION;
+    }
 }

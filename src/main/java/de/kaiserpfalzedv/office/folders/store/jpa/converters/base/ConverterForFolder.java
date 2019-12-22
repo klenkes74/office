@@ -61,14 +61,14 @@ public abstract class ConverterForFolder<A extends FolderResult, D extends JPAFo
         result.identity = new JPAIdentity();
         result.identity.uuid = data.getMetadata().getIdentity().getUuid();
         result.identity.uuid = data.getMetadata().getIdentity().getUuid();
-        result.identity.scope = data.getMetadata().getIdentity().getScope().orElse(null);
+        result.identity.scope = data.getMetadata().getIdentity().getTenant().orElse(null);
         result.identity.key = data.getMetadata().getIdentity().getName().orElse(null);
     }
 
     private void convertSpec(@NotNull FolderSpec data, D result) {
         result.spec = new JPAFolderSpec();
         result.spec.name = data.getName();
-        result.spec.shortName = data.getShortName().orElse(null);
+        result.spec.shortName = data.getDisplayname().orElse(null);
         result.spec.description = data.getDescription().orElse(null);
         result.spec.closed = data.getClosed().orElse(null);
         result.spec.created = data.getCreated();
@@ -82,7 +82,7 @@ public abstract class ConverterForFolder<A extends FolderResult, D extends JPAFo
                 .identity(identity)
 
                 .name(data.spec.name)
-                .shortName(Optional.ofNullable(data.spec.shortName))
+                .displayname(Optional.ofNullable(data.spec.shortName))
                 .description(Optional.ofNullable(data.spec.description))
                 .closed(Optional.ofNullable(data.spec.closed))
 
@@ -118,7 +118,7 @@ public abstract class ConverterForFolder<A extends FolderResult, D extends JPAFo
                 .version(version)
 
                 .uuid(identity.uuid)
-                .scope(Optional.ofNullable(identity.scope))
+                .tenant(Optional.ofNullable(identity.scope))
                 .name(Optional.ofNullable(identity.key))
                 .build();
     }
