@@ -25,7 +25,7 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>TRACE</level>
         </filter>
-        <encoder>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%X{tenant}][%X{correlation}] %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
@@ -33,204 +33,56 @@
     <appender name="DEVELOPMENT" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>./target/development.log</file>
         <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>./target/development.%d.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <totalSizeCap>10GB</totalSizeCap>
             <maxHistory>28</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>128MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
-        <encoder>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%X{test}][%X{id}] %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <appender name="OPERATIONS-TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="BUSINESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>TRACE</level>
         </filter>
-        <file>./target/operations-trace.log</file>
+        <file>./target/business.log</file>
         <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./target/operations-trace.%d.%i.log.gz</fileNamePattern>
-            <maxHistory>56</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>128MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>./target/business.%d.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <totalSizeCap>10GB</totalSizeCap>
+            <maxHistory>28</maxHistory>
         </rollingPolicy>
-        <encoder>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
         </encoder>
     </appender>
-    <appender name="OPERATIONS-DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>debug</level>
-        </filter>
-        <file>./target/operations-debug.log</file>
-        <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./target/operations-debug.%d.%i.log.gz</fileNamePattern>
-            <maxHistory>56</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>128MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="OPERATIONS-INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>info</level>
-        </filter>
-        <file>./target/operations-info.log</file>
-        <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./target/operations-info.%d.%i.log.gz</fileNamePattern>
-            <maxHistory>56</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>128MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="OPERATIONS-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>warn</level>
-        </filter>
-        <file>./target/operations-warn.log</file>
-        <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./target/operations-warn.%d.%i.log.gz</fileNamePattern>
-            <maxHistory>56</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>128MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="OPERATIONS-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>error</level>
-        </filter>
-        <file>./target/operations-error.log</file>
-        <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./target/operations-error.%d.%i.log.gz</fileNamePattern>
-            <maxHistory>56</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>128MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="OPERATIONS-FATAL" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>fatal</level>
-        </filter>
-        <file>./target/operations-fatal.log</file>
-        <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./target/operations-fatal.%d.%i.log.gz</fileNamePattern>
-            <maxHistory>56</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>128MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
-        </encoder>
-    </appender>
-
-    <appender name="BUSINESS-TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="OPERATIONS" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>TRACE</level>
         </filter>
-        <file>./target/business-trace.log</file>
+        <file>./target/operations.log</file>
         <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./target/business-trace.%d.%i.log.gz</fileNamePattern>
-            <maxHistory>84</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>128MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>./target/operations.%d.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <totalSizeCap>10GB</totalSizeCap>
+            <maxHistory>28</maxHistory>
         </rollingPolicy>
-        <encoder>
-            <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="BUSINESS-DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
-        </filter>
-        <file>./target/business-debug.log</file>
-        <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./target/business-debug.%d.%i.log.gz</fileNamePattern>
-            <maxHistory>84</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>128MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="BUSINESS-INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
-        </filter>
-        <file>./target/business-info.log</file>
-        <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./target/business-info.%d.%i.log.gz</fileNamePattern>
-            <maxHistory>84</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>128MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="BUSINESS-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>ERROR</level>
-        </filter>
-        <file>./target/business-error.log</file>
-        <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./target/business-error.%d.%i.log.gz</fileNamePattern>
-            <maxHistory>84</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>128MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-        <encoder>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
         </encoder>
     </appender>
 
     <logger name="business" level="TRACE" additivity="false"><!-- Level filtering is done in Appender -->
-        <appender-ref ref="BUSINESS-TRACE"/>
-        <appender-ref ref="BUSINESS-DEBUG"/>
-        <appender-ref ref="BUSINESS-INFO"/>
-        <appender-ref ref="BUSINESS-ERROR"/>
+        <appender-ref ref="BUSINESS"/>
         <appender-ref ref="STDOUT"/>
     </logger>
     <logger name="operations" level="TRACE" additivity="false"><!-- Level filtering is done in Appender -->
-        <appender-ref ref="OPERATIONS-TRACE"/>
-        <appender-ref ref="OPERATIONS-DEBUG"/>
-        <appender-ref ref="OPERATIONS-INFO"/>
-        <appender-ref ref="OPERATIONS-WARN"/>
-        <appender-ref ref="OPERATIONS-ERROR"/>
-        <appender-ref ref="OPERATIONS-FATAL"/>
+        <appender-ref ref="OPERATIONS"/>
         <appender-ref ref="STDOUT"/>
     </logger>
 
