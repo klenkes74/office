@@ -18,10 +18,13 @@
 
 package de.kaiserpfalzedv.office.contacts.api;
 
+import de.kaiserpfalzedv.base.actions.commands.Command;
+import de.kaiserpfalzedv.office.contacts.NaturalPersonSpec;
+
 
 /**
  * @author rlichti
  * @since 22.12.2019 11:06
  */
-public interface NaturalPersonContactCommandService extends ContactCommandService<NaturalPersonContactCommand> {
+public interface NaturalPersonCommand extends Command<NaturalPersonSpec> {
 }

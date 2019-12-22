@@ -47,7 +47,7 @@ public class CreateNaturalPersonTest {
     private static final OffsetDateTime CREATED = OffsetDateTime.now();
     private static final OffsetDateTime MODIFIED = CREATED;
 
-    private static final NaturalPersonContactSpec CONTACT_SPEC = new NaturalPersonContactSpec() {
+    private static final NaturalPersonSpec CONTACT_SPEC = new NaturalPersonSpec() {
         @Override
         public Optional<String> getGivennamePrefix() {
             return Optional.empty();
@@ -142,7 +142,7 @@ public class CreateNaturalPersonTest {
         }
 
         @Override
-        public NaturalPersonContactSpec getSpec() {
+        public NaturalPersonSpec getSpec() {
             return CONTACT_SPEC;
         }
     };

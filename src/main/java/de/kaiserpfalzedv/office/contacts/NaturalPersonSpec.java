@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.immutables.value.Value;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /*
@@ -33,8 +34,8 @@ import java.util.Optional;
 @Value.Immutable
 @JsonSerialize(as = ImmutableNaturalPersonContactSpec.class)
 @JsonDeserialize(builder = ImmutableNaturalPersonContactSpec.Builder.class)
-public interface NaturalPersonContactSpec extends ContactSpec {
-    String KIND = "de.kaiserpfalzedv.office.contacts.NaturalPersonContactSpec";
+public interface NaturalPersonSpec extends ContactSpec<NaturalPersonSpec>, Serializable {
+    String KIND = "de.kaiserpfalzedv.office.contacts.NaturalPersonSpec";
     String VERSION = "1.0.0";
 
     @Value.Default

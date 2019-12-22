@@ -18,14 +18,13 @@
 
 package de.kaiserpfalzedv.office.contacts.api;
 
-import de.kaiserpfalzedv.base.actions.results.ResultWithSpec;
-import de.kaiserpfalzedv.office.contacts.ContactSpec;
+import de.kaiserpfalzedv.base.actions.commands.Command;
+import de.kaiserpfalzedv.office.contacts.LegalPersonContactSpec;
 
 
 /**
- * @param <T> The contact command type this is the result for.
  * @author rlichti
- * @since 2019-12-22 11:36
+ * @since 22.12.2019 10:32
  */
-public interface ContactResultWithSpec<T extends ContactCommand<? extends ContactSpec>> extends ContactResult<T>, ResultWithSpec<ContactSpec> {
+public interface LegalPersonCommand extends Command<LegalPersonContactSpec> {
 }

@@ -36,8 +36,8 @@ import java.util.UUID;
  * @author rlichti
  * @since 2019-12-14 11:28
  */
-public class NaturalPersonContactSpecTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NaturalPersonContactSpecTest.class);
+public class NaturalPersonSpecTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NaturalPersonSpecTest.class);
 
     static private final UUID ID = UUID.randomUUID();
     private static final String TENANT = "tenant";
@@ -45,7 +45,7 @@ public class NaturalPersonContactSpecTest {
     private static final OffsetDateTime CREATED = OffsetDateTime.now();
     private static final OffsetDateTime MODIFIED = CREATED;
 
-    private static final NaturalPersonContactSpec SERVICE = new NaturalPersonContactSpec() {
+    private static final NaturalPersonSpec SERVICE = new NaturalPersonSpec() {
         @Override
         public Optional<String> getGivennamePrefix() {
             return Optional.empty();
@@ -99,8 +99,8 @@ public class NaturalPersonContactSpecTest {
         @Override
         public ObjectIdentifier getIdentity() {
             return ImmutableObjectIdentifier.builder()
-                    .kind(NaturalPersonContactSpec.KIND)
-                    .version(NaturalPersonContactSpec.VERSION)
+                    .kind(NaturalPersonSpec.KIND)
+                    .version(NaturalPersonSpec.VERSION)
                     .uuid(ID)
                     .tenant(TENANT)
                     .name(KEY)
@@ -126,21 +126,21 @@ public class NaturalPersonContactSpecTest {
 
     @Test
     public void shouldReturnCorrectKindOfFolder() {
-        assert NaturalPersonContactSpec.KIND.equals(SERVICE.getKind());
+        assert NaturalPersonSpec.KIND.equals(SERVICE.getKind());
     }
 
     @Test
     public void shouldReturnCorrectVersionOfFolder() {
-        assert NaturalPersonContactSpec.VERSION.equals(SERVICE.getVersion());
+        assert NaturalPersonSpec.VERSION.equals(SERVICE.getVersion());
     }
 
     @BeforeAll
     public static void logStart() {
-        LOGGER.trace("Started tests for: {}", NaturalPersonContactSpec.class.getCanonicalName());
+        LOGGER.trace("Started tests for: {}", NaturalPersonSpec.class.getCanonicalName());
     }
 
     @AfterAll
     public static void logEnd() {
-        LOGGER.trace("Ended tests for: {}", NaturalPersonContactSpec.class.getCanonicalName());
+        LOGGER.trace("Ended tests for: {}", NaturalPersonSpec.class.getCanonicalName());
     }
 }

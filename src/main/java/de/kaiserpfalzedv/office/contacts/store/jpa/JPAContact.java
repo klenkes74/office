@@ -16,13 +16,23 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.contacts.api;
+package de.kaiserpfalzedv.office.contacts.store.jpa;
 
-import de.kaiserpfalzedv.base.actions.ResultService;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+
+import javax.persistence.Embedded;
+import javax.persistence.Inheritance;
+import javax.persistence.MappedSuperclass;
+
+import static javax.persistence.InheritanceType.TABLE_PER_CLASS;
 
 /**
  * @author rlichti
- * @since 2019-12-22 11:36
+ * @since 2019-12-22 12:19
  */
-public interface ContactResultService<T extends ContactResult> extends ResultService<T> {
+@MappedSuperclass
+@Inheritance(strategy = TABLE_PER_CLASS)
+public class JPAContact extends PanacheEntity {
+    @Embedded
+    public JPAContactSpec spec;
 }

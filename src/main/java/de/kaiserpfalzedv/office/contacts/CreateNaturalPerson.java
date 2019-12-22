@@ -33,7 +33,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @JsonSerialize(as = ImmutableCreateNaturalPerson.class)
 @JsonDeserialize(builder = ImmutableCreateNaturalPerson.Builder.class)
-public interface CreateNaturalPerson extends NaturalPersonCommandWithSpec, CreateCommand<NaturalPersonContactSpec> {
+public interface CreateNaturalPerson extends NaturalPersonCommandWithSpec, CreateCommand<NaturalPersonSpec> {
     String KIND = "de.kaiserpfalzedv.office.contacts.CreateNaturalPerson";
     String VERSION = "1.0.0";
 
@@ -51,7 +51,7 @@ public interface CreateNaturalPerson extends NaturalPersonCommandWithSpec, Creat
 
     @Override
     @Value.Default
-    default NaturalPersonContactSpec apply(NaturalPersonContactSpec orig) {
+    default NaturalPersonSpec apply(NaturalPersonSpec orig) {
         return orig;
     }
 }

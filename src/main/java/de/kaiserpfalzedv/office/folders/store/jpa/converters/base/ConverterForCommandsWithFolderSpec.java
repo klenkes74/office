@@ -21,7 +21,6 @@ package de.kaiserpfalzedv.office.folders.store.jpa.converters.base;
 import de.kaiserpfalzedv.base.api.ObjectIdentifier;
 import de.kaiserpfalzedv.base.store.DataConverter;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
-import de.kaiserpfalzedv.office.folders.ImmutableFolderSpec;
 import de.kaiserpfalzedv.office.folders.api.FolderCommandWithSpec;
 import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderChangeWithSpec;
 import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderSpec;

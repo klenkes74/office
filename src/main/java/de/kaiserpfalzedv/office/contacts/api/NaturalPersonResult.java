@@ -18,11 +18,13 @@
 
 package de.kaiserpfalzedv.office.contacts.api;
 
-import de.kaiserpfalzedv.base.actions.CommandService;
+import de.kaiserpfalzedv.base.actions.results.Result;
 
 /**
+ * @param <T> The contact command type this is the result to.
  * @author rlichti
- * @since 22.12.2019 10:32
+ * @since 2019-12-22 11:43
  */
-public interface ContactCommandService<T extends ContactCommand> extends CommandService<T> {
+public interface NaturalPersonResult<T extends NaturalPersonCommand> extends Result<T> {
+
 }

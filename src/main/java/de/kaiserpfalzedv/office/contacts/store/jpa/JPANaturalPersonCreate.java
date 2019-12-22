@@ -16,15 +16,22 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.contacts.api;
+package de.kaiserpfalzedv.office.contacts.store.jpa;
 
-import de.kaiserpfalzedv.base.actions.commands.Command;
-import de.kaiserpfalzedv.office.contacts.ContactSpec;
+import de.kaiserpfalzedv.office.contacts.CreateNaturalPerson;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 /**
  * @author rlichti
- * @since 22.12.2019 10:32
+ * @since 2019-20-22 13:40
  */
-public interface ContactCommand<T extends ContactSpec> extends Command<T> {
+@Entity
+@DiscriminatorValue(CreateNaturalPerson.KIND)
+public class JPANaturalPersonCreate extends JPANaturalPersonChangeWithSpec {
+    @Override
+    public CreateNaturalPerson toModel() {
+        return (CreateNaturalPerson) toModel(CreateNaturalPerson.KIND, CreateNaturalPerson.VERSION);
+    }
 }

@@ -18,13 +18,12 @@
 
 package de.kaiserpfalzedv.office.contacts.api;
 
-import de.kaiserpfalzedv.base.actions.commands.CommandWithSpec;
-import de.kaiserpfalzedv.office.contacts.ContactSpec;
 
+import de.kaiserpfalzedv.base.actions.CommandService;
 
 /**
  * @author rlichti
- * @since 22.12.2019 10:32
+ * @since 22.12.2019 11:06
  */
-public interface ContactCommandWithSpec<T extends ContactSpec> extends ContactCommand<T>, CommandWithSpec<T> {
+public interface NaturalPersonCommandService<T extends NaturalPersonCommand> extends CommandService<T> {
 }

@@ -29,29 +29,29 @@ import org.slf4j.LoggerFactory;
  * @author rlichti
  * @since 2019-12-22 11:52
  */
-public class NaturalPersonContactCreatedTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NaturalPersonContactCreatedTest.class);
+public class NaturalPersonCreatedTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NaturalPersonCreatedTest.class);
 
-    private static final NaturalPersonContactCreated SERVICE = new NaturalPersonContactCreated() {
+    private static final NaturalPersonCreated SERVICE = new NaturalPersonCreated() {
         @Override
         public Metadata getMetadata() {
             return null;
         }
 
         @Override
-        public NaturalPersonContactSpec getSpec() {
+        public NaturalPersonSpec getSpec() {
             return null;
         }
     };
 
     @Test
     public void shouldReturnCorrectKindOfFolder() {
-        assert NaturalPersonContactCreated.KIND.equals(SERVICE.getKind());
+        assert NaturalPersonCreated.KIND.equals(SERVICE.getKind());
     }
 
     @Test
     public void shouldReturnCorrectVersionOfFolder() {
-        assert NaturalPersonContactCreated.VERSION.equals(SERVICE.getVersion());
+        assert NaturalPersonCreated.VERSION.equals(SERVICE.getVersion());
     }
 
     @BeforeAll

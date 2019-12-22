@@ -24,6 +24,12 @@ import de.kaiserpfalzedv.base.api.ObjectIdentifier;
 public abstract class DataAlreadyExistsException extends DataException {
     private final ObjectIdentifier identifier;
 
+    public DataAlreadyExistsException(final ObjectIdentifier identifier, final String message, final Throwable cause) {
+        super(identifier, message, cause);
+
+        this.identifier = identifier;
+    }
+
     public DataAlreadyExistsException(final ObjectIdentifier identifier, final Throwable cause) {
         super(identifier, "Object with matching identifier already exists", cause);
 

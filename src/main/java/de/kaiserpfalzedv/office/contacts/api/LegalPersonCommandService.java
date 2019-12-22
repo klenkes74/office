@@ -19,9 +19,11 @@
 package de.kaiserpfalzedv.office.contacts.api;
 
 
+import de.kaiserpfalzedv.base.actions.CommandService;
+
 /**
  * @author rlichti
  * @since 22.12.2019 10:32
  */
-public interface LegalPersonContactCommandService extends ContactCommandService<LegalPersonContactCommand> {
+public interface LegalPersonCommandService extends CommandService<LegalPersonCommand> {
 }

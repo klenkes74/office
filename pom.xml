@@ -28,28 +28,34 @@
     <name>KP Office :: Base Services</name>
 
     <properties>
-        <activemq.basedir>/opt/servers/apache-artemis-${activemq.version}</activemq.basedir>
-        <activemq.version>2.10.1</activemq.version>
-        <amqp.username>office-base</amqp.username>
-        <amqp.password>kaevae1IePeePoo5</amqp.password>
-        <compiler-plugin.version>3.8.1</compiler-plugin.version>
-        <db.password>h2</db.password>
-        <db.username>h2</db.username>
-        <h2.version>1.4.197</h2.version>
-        <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
-        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus-plugin.version>1.0.1.Final</quarkus-plugin.version>
+
+        <activemq.basedir>/opt/servers/apache-artemis-${activemq.version}</activemq.basedir>
+        <activemq.version>2.10.1</activemq.version>
+        <amqp.username>office-base</amqp.username>
+        <amqp.password>kaevae1IePeePoo5</amqp.password>
+
+        <db.password>h2</db.password>
+        <db.username>h2</db.username>
+        <h2.version>1.4.197</h2.version>
+
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.platform.version>1.0.1.Final</quarkus.platform.version>
-        <surefire-plugin.version>2.22.1</surefire-plugin.version>
+        <imutables.version>2.8.2</imutables.version>
         <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
         <logback-classic.version>1.2.3</logback-classic.version>
+
+        <compiler-plugin.version>3.8.1</compiler-plugin.version>
+        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+        <surefire-plugin.version>2.22.1</surefire-plugin.version>
+        <quarkus-plugin.version>1.0.1.Final</quarkus-plugin.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -136,12 +142,13 @@
             <dependency>
                 <groupId>org.immutables</groupId>
                 <artifactId>value</artifactId>
-                <version>2.6.0</version>
+                <version>${imutables.version}</version>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.immutables</groupId>
                 <artifactId>encode</artifactId>
-                <version>2.6.0</version>
+                <version>${imutables.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -402,8 +409,17 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${compiler-plugin.version}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -634,6 +650,18 @@
                                 <portName>amqp.test.hornetq.tcp.port</portName>
                                 <portName>amqp.test.mqtt.tcp.port</portName>
                             </portNames>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/</source>
+                            </sources>
                         </configuration>
                     </execution>
                 </executions>

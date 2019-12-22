@@ -18,11 +18,14 @@
 
 package de.kaiserpfalzedv.base.store.jpa;
 
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentifier;
 import de.kaiserpfalzedv.base.store.UuidConverter;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -42,5 +45,21 @@ public class JPAIdentity implements Serializable {
     @Column(name = "_KEY", updatable = false)
     public String key;
 
+    @Transient
+    public JPAIdentity fromModel(ObjectIdentifier identity) {
+        uuid = identity.getUuid();
+        tenant = identity.getTenant().orElse(null);
+        key = identity.getName().orElse(null);
 
+        return this;
+    }
+
+    @Transient
+    public ObjectIdentifier toModel() {
+        return ImmutableObjectIdentifier.builder()
+                .uuid(uuid)
+                .tenant(tenant)
+                .name(key)
+                .build();
+    }
 }

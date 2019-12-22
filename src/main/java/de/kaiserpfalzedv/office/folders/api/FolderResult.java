@@ -19,8 +19,7 @@
 package de.kaiserpfalzedv.office.folders.api;
 
 import de.kaiserpfalzedv.base.actions.results.Result;
-import de.kaiserpfalzedv.office.folders.FolderSpec;
 
-public interface FolderResult<T extends FolderCommand> extends Result<FolderSpec> {
+public interface FolderResult<T extends FolderCommand> extends Result<T> {
 
 }

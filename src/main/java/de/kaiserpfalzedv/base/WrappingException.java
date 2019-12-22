@@ -16,13 +16,22 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.contacts.api;
+package de.kaiserpfalzedv.base;
 
 /**
- * @param <T> The contact command type this is the result to.
  * @author rlichti
- * @since 2019-12-22 11:43
+ * @since 2019-12-22 12:57
  */
-public interface NaturalPersonContactResult<T extends NaturalPersonContactCommand> extends ContactResult<T> {
+public class WrappingException extends RuntimeException {
+    public WrappingException(Throwable cause) {
+        super(cause);
+    }
 
+    public Throwable getWrapped() {
+        return super.getCause();
+    }
+
+    public Throwable getCause() {
+        return super.getCause().getCause();
+    }
 }

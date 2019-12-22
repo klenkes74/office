@@ -18,10 +18,14 @@
 
 package de.kaiserpfalzedv.base.store.jpa;
 
+import de.kaiserpfalzedv.base.api.ImmutableWorkflowData;
+import de.kaiserpfalzedv.base.api.WorkflowData;
 import de.kaiserpfalzedv.base.store.UuidConverter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /*
@@ -45,6 +49,8 @@ public class JPAWorkflowData implements Serializable {
     public UUID correlation;
     @Column(name = "_WORKFLOW_SEQUENCE", updatable = false)
     public Long sequence;
+    @Column(name = "_WORKFLOW_TIMESTAMP", updatable = false)
+    public OffsetDateTime timestamp;
 
     @Embedded
     @AttributeOverrides({
@@ -53,4 +59,42 @@ public class JPAWorkflowData implements Serializable {
             @AttributeOverride(name = "key", column = @Column(name = "_WORKFLOW_DEFINITION_KEY"))
     })
     public JPAIdentity workflow;
+
+
+    @Transient
+    public JPAWorkflowData fromModel(Optional<WorkflowData> data) {
+        if (data.isPresent()) {
+            WorkflowData wf = data.get();
+
+            workflow = new JPAIdentity().fromModel(wf.getDefinition());
+
+            kind = wf.getDefinition().getKind();
+            version = wf.getDefinition().getVersion();
+
+            workflow = new JPAIdentity().fromModel(wf.getDefinition());
+
+            correlation = wf.getCorrelation();
+            request = wf.getRequest();
+            sequence = wf.getSequence().orElse(null);
+            timestamp = wf.getTimestamp();
+        }
+
+        return this;
+    }
+
+    @Transient
+    public WorkflowData toModel() {
+        if (correlation == null)
+            return null;
+
+        return ImmutableWorkflowData.builder()
+                .definition(workflow.toModel())
+
+                .correlation(correlation)
+                .request(request)
+                .sequence(Optional.ofNullable(sequence))
+                .timestamp(timestamp)
+
+                .build();
+    }
 }

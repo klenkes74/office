@@ -30,7 +30,7 @@ import java.time.OffsetDateTime;
  * @author rlichti@kaiserpfalz-edv.de
  * @since 2019-12-15T10:20Z
  */
-public interface ContactSpec extends Spec<Serializable>, Serializable {
+public interface ContactSpec<T extends Serializable> extends Spec<T> {
     /**
      * The object identity of the person dataset.
      *

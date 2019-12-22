@@ -16,14 +16,32 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.contacts.api;
+package de.kaiserpfalzedv.office.contacts.store.jpa;
 
-import de.kaiserpfalzedv.office.contacts.LegalPersonContactSpec;
+
+import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 
 /**
  * @author rlichti
- * @since 22.12.2019 10:32
+ * @since 2019-12-22 12:20
  */
-public interface LegalPersonContactCommand extends ContactCommand<LegalPersonContactSpec> {
+@Embeddable
+public class JPAContactSpec implements Serializable {
+    @Embedded
+    public JPAIdentity identity;
+
+    @Column(name = "_DISPLAYNAME")
+    public String displayname;
+
+    @Column(name = "_CREATED", nullable = false)
+    public OffsetDateTime created;
+    @Column(name = "_MODIFIED", nullable = false)
+    public OffsetDateTime modified;
 }

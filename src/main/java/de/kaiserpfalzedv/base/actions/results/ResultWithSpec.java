@@ -18,10 +18,9 @@
 
 package de.kaiserpfalzedv.base.actions.results;
 
-import de.kaiserpfalzedv.base.BaseObject;
 import de.kaiserpfalzedv.base.api.SpecHolding;
 
 import java.io.Serializable;
 
-public interface ResultWithSpec<T extends Serializable> extends BaseObject<T>, SpecHolding<T> {
+public interface ResultWithSpec<T extends Serializable, S extends Serializable> extends Result<T>, SpecHolding<S> {
 }

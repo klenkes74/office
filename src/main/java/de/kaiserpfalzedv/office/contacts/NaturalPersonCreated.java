@@ -20,7 +20,7 @@ package de.kaiserpfalzedv.office.contacts;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.office.contacts.api.NaturalPersonContactResultWithSpec;
+import de.kaiserpfalzedv.office.contacts.api.NaturalPersonResultWithSpec;
 import de.kaiserpfalzedv.office.folders.ImmutableFolderCreated;
 import org.immutables.value.Value;
 
@@ -33,8 +33,8 @@ import org.immutables.value.Value;
 @Value.Immutable
 @JsonSerialize(as = ImmutableFolderCreated.class)
 @JsonDeserialize(builder = ImmutableFolderCreated.Builder.class)
-public interface NaturalPersonContactCreated extends NaturalPersonContactResultWithSpec<CreateNaturalPerson> {
-    String KIND = "de.kaiserpfalzedv.office.contacts.NaturalPersonContactCreated";
+public interface NaturalPersonCreated extends NaturalPersonResultWithSpec<CreateNaturalPerson, NaturalPersonSpec> {
+    String KIND = "de.kaiserpfalzedv.office.contacts.NaturalPersonCreated";
     String VERSION = "1.0.0";
 
     @Override

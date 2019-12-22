@@ -25,5 +25,5 @@ import de.kaiserpfalzedv.office.contacts.LegalPersonContactSpec;
  * @author rlichti
  * @since 22.12.2019 10:32
  */
-public interface LegalPersonCommandWithSpec extends LegalPersonContactCommand, CommandWithSpec<LegalPersonContactSpec> {
+public interface LegalPersonCommandWithSpec extends LegalPersonCommand, CommandWithSpec<LegalPersonContactSpec> {
 }

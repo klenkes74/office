@@ -22,7 +22,6 @@ import de.kaiserpfalzedv.base.api.Metadata;
 import de.kaiserpfalzedv.base.api.ObjectIdentifier;
 import de.kaiserpfalzedv.office.folders.CreateFolder;
 import de.kaiserpfalzedv.office.folders.FolderSpec;
-import de.kaiserpfalzedv.office.folders.ImmutableCreateFolder;
 import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolderCreate;
 import de.kaiserpfalzedv.office.folders.store.jpa.converters.base.ConverterForCommandsWithFolderSpec;
 

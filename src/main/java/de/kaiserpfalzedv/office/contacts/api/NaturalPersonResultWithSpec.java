@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.office.contacts.api;
 
 import de.kaiserpfalzedv.base.actions.results.ResultWithSpec;
-import de.kaiserpfalzedv.office.contacts.ContactSpec;
+import de.kaiserpfalzedv.office.contacts.NaturalPersonSpec;
 
 
 /**
@@ -27,5 +27,7 @@ import de.kaiserpfalzedv.office.contacts.ContactSpec;
  * @author rlichti
  * @since 2019-12-22 11:36
  */
-public interface NaturalPersonContactResultWithSpec<T extends NaturalPersonContactCommand> extends NaturalPersonContactResult<T>, ResultWithSpec<ContactSpec> {
+public interface NaturalPersonResultWithSpec<T extends NaturalPersonCommandWithSpec, S extends NaturalPersonSpec>
+        extends NaturalPersonResult<T>, ResultWithSpec<T, S> {
+    S getSpec();
 }

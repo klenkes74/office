@@ -18,12 +18,12 @@
 
 package de.kaiserpfalzedv.office.contacts.api;
 
-import de.kaiserpfalzedv.office.contacts.NaturalPersonContactSpec;
 
+import de.kaiserpfalzedv.base.actions.ResultService;
 
 /**
  * @author rlichti
- * @since 22.12.2019 11:06
+ * @since 2019-12-22 11:45
  */
-public interface NaturalPersonContactCommand extends ContactCommand<NaturalPersonContactSpec> {
+public interface NaturalPersonResultService<T extends NaturalPersonResult<? extends NaturalPersonCommand>> extends ResultService<T> {
 }

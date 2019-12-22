@@ -16,56 +16,46 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.folders.store.jpa;
+package de.kaiserpfalzedv.office.contacts.store.jpa;
 
+import de.kaiserpfalzedv.base.WrappingException;
 import de.kaiserpfalzedv.base.cdi.EventLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.base.store.CreationFailedException;
 import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
 import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
-import de.kaiserpfalzedv.office.folders.FolderCreated;
-import de.kaiserpfalzedv.office.folders.FolderSpec;
-import de.kaiserpfalzedv.office.folders.api.FolderResultService;
-import de.kaiserpfalzedv.office.folders.store.jpa.converters.FolderCreatedFolderConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import de.kaiserpfalzedv.office.contacts.NaturalPersonCreated;
+import de.kaiserpfalzedv.office.contacts.NaturalPersonSpec;
+import de.kaiserpfalzedv.office.contacts.api.NaturalPersonResultService;
+import de.kaiserpfalzedv.office.folders.store.jpa.JPAFolder;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
-import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 @JPA
 @EventLogged
 @Dependent
-public class JPAFolderService implements FolderResultService<FolderCreated> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JPAFolderService.class);
-
-    @Inject
-    FolderCreatedFolderConverter commandConverter;
-
+public class JPANaturalPersonService implements NaturalPersonResultService<NaturalPersonCreated> {
     @Transactional
-    public void observe(@Observes final FolderCreated command) {
-        FolderSpec spec = command.getSpec();
+    public void observe(@Observes final NaturalPersonCreated event) {
+        NaturalPersonSpec spec = event.getSpec();
 
         if (JPAFolder.find("identity.uuid", spec.getIdentity().getUuid()).count() != 0) {
-            throw new IllegalArgumentException(new UuidAlreadyExistsException(spec.getIdentity()));
+            throw new WrappingException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
         if (!spec.getIdentity().getTenant().orElse("./").isEmpty() && spec.getIdentity().getName().isPresent()) {
             if (JPAFolder.find("identity.scope = ?1 and identity.key = ?2", spec.getIdentity().getTenant().orElse("./."), spec.getIdentity().getName().orElse(null)).count() != 0) {
-                throw new IllegalArgumentException(new KeyAlreadyExistsException(spec.getIdentity()));
+                throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
             }
         }
 
-
         try {
-            JPAFolder jpa = commandConverter.convertFromAPI(command);
-            jpa.persistAndFlush();
-
-            LOGGER.info("Saved folder: {}", jpa);
+            JPANaturalPerson jpa = new JPANaturalPerson().fromModel(event);
+            jpa.persist();
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(new CreationFailedException(command.getMetadata().getIdentity(), e));
+            throw new WrappingException(new CreationFailedException(event.getMetadata().getIdentity(), e));
         }
     }
 }
