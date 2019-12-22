@@ -36,7 +36,7 @@ import java.lang.annotation.Annotation;
  * @author rlichti
  * @since 2019-12-18 22:56
  */
-@Priority(300)
+@Priority(80)
 @EventLogged
 @Interceptor
 public class EventLoggedInterceptor implements Serializable {

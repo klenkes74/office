@@ -42,8 +42,9 @@ public class ServiceTest {
     public void shouldReturnCorrectFolderWhenGivenTheUuid() {
         given()
                 .when()
+                .pathParam("tenant", "de.kaiserpfalz-edv")
                 .auth().preemptive().basic("scott", "jb0ss")
-                .get("/folders/3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8")
+                .get("/folders/{tenant}/?uuid=3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8")
                 .then()
                 .statusCode(200);
     }
@@ -52,8 +53,9 @@ public class ServiceTest {
     public void shouldReturnNotFoundWhenGivenTheWrongUuid() {
         given()
                 .when()
+                .pathParam("tenant", "de.kaiserpfalz-edv")
                 .auth().preemptive().basic("scott", "jb0ss")
-                .get("/folders/00000000-0000-0000-0000-000000000000")
+                .get("/folders/{tenant}/?uuid=00000000-0000-0000-0000-000000000000")
                 .then()
                 .statusCode(404);
     }
@@ -61,11 +63,11 @@ public class ServiceTest {
     @Test
     public void shouldReturnNotFoundWhenGivenAnUnknownScopeAndKey() {
         given()
-                .pathParam("scope", "no-scope")
+                .pathParam("tenant", "no-scope")
                 .pathParam("key", "not-there")
                 .when()
                 .auth().preemptive().basic("scott", "jb0ss")
-                .get("/folders/{scope}/{key}")
+                .get("/folders/{tenant}/{key}")
                 .then()
                 .statusCode(404);
     }
@@ -73,11 +75,11 @@ public class ServiceTest {
     @Test
     public void shouldReturnCorrectFolderWhenGivenTheCorrectScopeAndKey() {
         given()
-                .pathParam("scope", "de.kaiserpfalz-edv")
+                .pathParam("tenant", "de.kaiserpfalz-edv")
                 .pathParam("key", "I-19-0001")
                 .when()
                 .auth().preemptive().basic("scott", "jb0ss")
-                .get("/folders/{scope}/{key}")
+                .get("/folders/{tenant}/{key}")
                 .then()
                 .statusCode(200);
     }
@@ -90,10 +92,11 @@ public class ServiceTest {
 
         given()
                 .when()
+                .pathParam("tenant", "de.kaiserpfalz-edv")
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic("scott", "jb0ss")
                 .body(body)
-                .put("/folders")
+                .put("/folders/{tenant}")
                 .then()
                 .statusCode(allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
@@ -106,10 +109,11 @@ public class ServiceTest {
 
         given()
                 .when()
+                .pathParam("tenant", "de.kaiserpfalz-edv")
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic("scott", "jb0ss")
                 .body(body)
-                .put("/folders")
+                .put("/folders/{tenant}")
                 .then()
                 .statusCode(409);
     }

@@ -26,7 +26,7 @@
             <level>TRACE</level>
         </filter>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%X{test}][%X{id}] %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%X{tenant}][%X{correlation}] %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 

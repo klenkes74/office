@@ -16,47 +16,38 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.http;
+package de.kaiserpfalzedv.security;
 
-import io.quarkus.security.identity.SecurityIdentity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
-import java.util.ArrayList;
 
 @Provider
-@Priority(90)
-public class RequestMonitoringFilter implements ContainerRequestFilter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestMonitoringFilter.class);
+@Priority(80)
+public class TenantRequestFilter implements ContainerRequestFilter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TenantRequestFilter.class);
 
     @Context
     UriInfo info;
 
     @Inject
-    SecurityIdentity securityIdentity;
-
+    Event<Tenant> tenantEvent;
 
     @Override
     public void filter(ContainerRequestContext context) {
-        if (!LOGGER.isDebugEnabled()) return;
-
-        ArrayList<String> headers = new ArrayList<>();
-        context.getHeaders().forEach((k, v) -> headers.add("{'" + k + "': '" + v + "'}"));
-        ArrayList<String> queryParameters = new ArrayList<>();
-        info.getQueryParameters().forEach((k, v) -> queryParameters.add("{'" + k + "': '" + v + "'}"));
-
-        LOGGER.debug("{'method': '{}', 'path': '{}', 'principal': '{}', 'roles': {}, 'headers': '{}', 'query': '{}'}",
-                context.getMethod(), info.getPath(),
-                securityIdentity.getPrincipal().getName(), securityIdentity.getRoles(),
-                headers,
-                queryParameters
-        );
+        String data = info.getPathParameters().getFirst("tenant");
+        if (data != null) {
+            tenantEvent.fire(ImmutableTenant.builder().tenant(data).build());
+        } else {
+            LOGGER.debug("Can't set the tenant. No tenant given in request.");
+        }
     }
 }

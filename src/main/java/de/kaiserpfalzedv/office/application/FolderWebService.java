@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.office.application;
 
+import de.kaiserpfalzedv.base.cdi.CorrelationLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.office.folders.CreateFolder;
 import de.kaiserpfalzedv.office.folders.Folder;
@@ -42,9 +43,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @ApplicationScoped
-@Path("/folders/")
+@Path("/folders/{tenant}/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@CorrelationLogged
 public class FolderWebService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderWebService.class);
 
@@ -62,14 +64,11 @@ public class FolderWebService {
     SecurityIdentity securityIdentity;
 
     @GET
-    @Path("{uuid}")
     @RolesAllowed({"user", "admin"})
     @Metered(name = "folders.loadByUuid")
     @Counted(name = "folders.loadByUuid.count")
     @ConcurrentGauge(name = "folders.loadByUuid.concurrent")
-    public Folder getByUuid(
-            @PathParam("uuid") final UUID uuid
-    ) {
+    public Folder getByUuid(@QueryParam("uuid") final UUID uuid) {
         Optional<Folder> result = reader.loadById(uuid);
 
         if (result.isPresent()) {
@@ -83,23 +82,23 @@ public class FolderWebService {
     }
 
     @GET
-    @Path("{scope}/{key}")
+    @Path("{key}")
     @RolesAllowed({"user", "admin"})
     @Metered(name = "folders.loadByKey")
     @Counted(name = "folders.loadByKey.count")
     @ConcurrentGauge(name = "folders.loadByKey.concurrent")
     public Folder getByKey(
-            @PathParam("scope") final String scope,
+            @PathParam("tenant") final String tenant,
             @PathParam("key") final String key
     ) {
-        Optional<Folder> result = reader.loadByScopeAndKey(scope, key);
+        Optional<Folder> result = reader.loadByScopeAndKey(tenant, key);
 
         if (result.isPresent()) {
             return result.get();
         } else {
-            LOGGER.info("JPAFolderSpec not found: scope={}, key={}", scope, key);
+            LOGGER.info("JPAFolderSpec not found: tenant={}, key={}", tenant, key);
 
-            throw new WebApplicationException("JPAFolderSpec with scope='" + scope + "' and key='" + key + "' not found.",
+            throw new WebApplicationException("JPAFolderSpec with tenant='" + tenant + "' and key='" + key + "' not found.",
                     Response.Status.NOT_FOUND);
         }
     }
