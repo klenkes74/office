@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
   ~
@@ -17,23 +17,11 @@
   ~  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
   -->
 
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>de.kaiserpfalzedv.office</groupId>
-    <artifactId>root</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <name>KP Office :: Root</name>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>office-parent</module>
-        <module>office-base</module>
-        <module>office-security</module>
-        <module>office-folders</module>
-        <module>office-contacts</module>
-        <module>office-application</module>
-    </modules>
-</project>
+<beans
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+    <interceptors>
+        <class>de.kaiserpfalzedv.base.cdi.EventLoggedInterceptor</class>
+    </interceptors>
+</beans>
