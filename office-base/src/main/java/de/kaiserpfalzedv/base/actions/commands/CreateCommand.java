@@ -18,6 +18,8 @@
 
 package de.kaiserpfalzedv.base.actions.commands;
 
+import de.kaiserpfalzedv.base.api.Spec;
+
 import java.io.Serializable;
 
 /*
@@ -26,5 +28,5 @@ import java.io.Serializable;
  * @author rlichti
  * @since 2019-12-15 10:20
  */
-public interface CreateCommand<T extends Serializable> extends CommandWithSpec<T> {
+public interface CreateCommand<T extends Spec<? extends Serializable>> extends CommandWithSpec<T> {
 }

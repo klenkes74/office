@@ -18,15 +18,15 @@
 
 package de.kaiserpfalzedv.base.store;
 
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 
 @SuppressWarnings("CdiInjectionPointsInspection")
 public class NoModifiableDataFoundException extends ModificationFailedException {
-    public NoModifiableDataFoundException(final ObjectIdentifier identifier, final Throwable cause) {
+    public NoModifiableDataFoundException(final ObjectIdentity identifier, final Throwable cause) {
         super(identifier, "No modifiable data with this identity found", cause);
     }
 
-    public NoModifiableDataFoundException(final ObjectIdentifier identifier) {
+    public NoModifiableDataFoundException(final ObjectIdentity identifier) {
         super(identifier, "No modifiable data with this identity found");
     }
 }

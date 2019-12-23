@@ -20,7 +20,7 @@ package de.kaiserpfalzedv.folders;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import de.kaiserpfalzedv.base.api.Spec;
 import org.immutables.value.Value;
 
@@ -42,7 +42,7 @@ public interface FolderSpec extends Spec<Serializable>, Serializable {
     String VERSION = "1.0.0";
 
 
-    ObjectIdentifier getIdentity();
+    ObjectIdentity getIdentity();
 
     String getName();
 

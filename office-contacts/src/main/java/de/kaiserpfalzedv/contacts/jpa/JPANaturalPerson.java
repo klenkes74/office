@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.contacts.jpa;
 
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
 import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
 import de.kaiserpfalzedv.contacts.api.NaturalPersonResultWithSpec;
@@ -45,7 +45,7 @@ public class JPANaturalPerson extends JPAContact implements Serializable {
         spec = new JPANaturalPersonSpec();
 
         NaturalPersonSpec modelSpec = model.getSpec();
-        ObjectIdentifier modelIdentity = modelSpec.getIdentity();
+        ObjectIdentity modelIdentity = modelSpec.getIdentity();
 
         spec = new JPANaturalPersonSpec();
         spec.identity = new JPAIdentity();

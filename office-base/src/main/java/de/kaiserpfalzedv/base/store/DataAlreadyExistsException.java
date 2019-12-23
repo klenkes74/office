@@ -18,31 +18,31 @@
 
 package de.kaiserpfalzedv.base.store;
 
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 
 @SuppressWarnings("CdiInjectionPointsInspection")
 public abstract class DataAlreadyExistsException extends DataException {
-    private final ObjectIdentifier identifier;
+    private final ObjectIdentity identifier;
 
-    public DataAlreadyExistsException(final ObjectIdentifier identifier, final String message, final Throwable cause) {
+    public DataAlreadyExistsException(final ObjectIdentity identifier, final String message, final Throwable cause) {
         super(identifier, message, cause);
 
         this.identifier = identifier;
     }
 
-    public DataAlreadyExistsException(final ObjectIdentifier identifier, final Throwable cause) {
+    public DataAlreadyExistsException(final ObjectIdentity identifier, final Throwable cause) {
         super(identifier, "Object with matching identifier already exists", cause);
 
         this.identifier = identifier;
     }
 
-    public DataAlreadyExistsException(final ObjectIdentifier identifier) {
+    public DataAlreadyExistsException(final ObjectIdentity identifier) {
         super(identifier, "Object with matching identifier already exists");
 
         this.identifier = identifier;
     }
 
-    public ObjectIdentifier getIdentifier() {
+    public ObjectIdentity getIdentifier() {
         return identifier;
     }
 }

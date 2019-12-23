@@ -23,5 +23,5 @@ import de.kaiserpfalzedv.base.actions.commands.Command;
 
 import java.io.Serializable;
 
-public interface Result<T extends Command<? extends Serializable>, S extends Serializable> extends BaseObject {
+public interface Result<T extends Command<? extends Serializable>, S extends Serializable> extends BaseObject<S> {
 }

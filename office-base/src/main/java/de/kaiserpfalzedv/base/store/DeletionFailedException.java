@@ -18,15 +18,15 @@
 
 package de.kaiserpfalzedv.base.store;
 
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 
 @SuppressWarnings("CdiInjectionPointsInspection")
 public class DeletionFailedException extends DataException {
-    public DeletionFailedException(final ObjectIdentifier identifier, final String message, final Throwable cause) {
+    public DeletionFailedException(final ObjectIdentity identifier, final String message, final Throwable cause) {
         super(identifier, message, cause);
     }
 
-    public DeletionFailedException(final ObjectIdentifier identifier, final String message) {
+    public DeletionFailedException(final ObjectIdentity identifier, final String message) {
         super(identifier, message);
     }
 }

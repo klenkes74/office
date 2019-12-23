@@ -24,7 +24,7 @@
 
     <parent>
         <groupId>de.kaiserpfalzedv.office</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>office-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../office-parent/pom.xml</relativePath>
     </parent>

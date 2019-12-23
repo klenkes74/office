@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.folders;
 
 import de.kaiserpfalzedv.base.api.Metadata;
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -51,7 +51,7 @@ public class DeleteFolderTest {
 
     private static final FolderSpec FOLDER = new FolderSpec() {
         @Override
-        public ObjectIdentifier getIdentity() {
+        public ObjectIdentity getIdentity() {
             return null;
         }
 

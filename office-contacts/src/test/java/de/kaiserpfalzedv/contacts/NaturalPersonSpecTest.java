@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.contacts;
 
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -97,7 +97,7 @@ public class NaturalPersonSpecTest {
         }
 
         @Override
-        public ObjectIdentifier getIdentity() {
+        public ObjectIdentity getIdentity() {
             return ImmutableObjectIdentifier.builder()
                     .kind(NaturalPersonSpec.KIND)
                     .version(NaturalPersonSpec.VERSION)

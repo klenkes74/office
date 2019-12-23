@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.base;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
-import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.base.api.Metadata;
 import de.kaiserpfalzedv.base.api.Spec;
 import org.junit.jupiter.api.AfterAll;
@@ -59,7 +59,7 @@ public class BaseObjectTest {
         @Override
         public Metadata getMetadata() {
             return ImmutableMetadata.builder()
-                    .identity(ImmutableObjectIdentifier.builder()
+                    .identity(ImmutableObjectIdentity.builder()
                             .kind(KIND)
                             .version(VERSION)
                             .uuid(UUID)

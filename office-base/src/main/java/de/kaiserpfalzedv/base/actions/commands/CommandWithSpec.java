@@ -23,5 +23,6 @@ import de.kaiserpfalzedv.base.api.SpecHolding;
 
 import java.io.Serializable;
 
-public interface CommandWithSpec<T extends Spec<? extends Serializable>> extends Command<T>, SpecHolding<T>, Serializable {
+public interface CommandWithSpec<T extends Spec<? extends Serializable>>
+        extends Command<T>, SpecHolding<T>, Serializable {
 }

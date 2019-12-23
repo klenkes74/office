@@ -18,35 +18,35 @@
 
 package de.kaiserpfalzedv.base.store;
 
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 
 
 public abstract class DataException extends Exception {
-    private final ObjectIdentifier identifier;
+    private final ObjectIdentity identifier;
 
-    public DataException(final ObjectIdentifier identifier, final String message, final Throwable cause) {
+    public DataException(final ObjectIdentity identifier, final String message, final Throwable cause) {
         super(message + formatObjectIdentifier(identifier), cause);
 
         this.identifier = identifier;
     }
 
-    public DataException(final ObjectIdentifier identifier, final Throwable cause) {
+    public DataException(final ObjectIdentity identifier, final Throwable cause) {
         this(identifier, cause.getMessage(), cause);
     }
 
-    public DataException(final ObjectIdentifier identifier, final String message) {
+    public DataException(final ObjectIdentity identifier, final String message) {
         super(message + formatObjectIdentifier(identifier));
 
         this.identifier = identifier;
     }
 
 
-    public ObjectIdentifier getIdentifier() {
+    public ObjectIdentity getIdentifier() {
         return identifier;
     }
 
 
-    static String formatObjectIdentifier(ObjectIdentifier identifier) {
+    static String formatObjectIdentifier(ObjectIdentity identifier) {
         return " (Object: uuid=" + identifier.getUuid()
                 + (identifier.getTenant().isPresent() ? ", scope='" + identifier.getTenant().get() + "'" : "")
                 + (identifier.getName().isPresent() ? ", key='" + identifier.getName().get() + "'" : "")

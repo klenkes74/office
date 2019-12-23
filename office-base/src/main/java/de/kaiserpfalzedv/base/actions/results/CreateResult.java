@@ -18,13 +18,15 @@
 
 package de.kaiserpfalzedv.base.actions.results;
 
+import de.kaiserpfalzedv.base.actions.commands.CreateCommand;
+import de.kaiserpfalzedv.base.api.Spec;
+
 import java.io.Serializable;
 
-/*
- *
- *
+/**
  * @author rlichti
  * @since 2019-12-15 10:20
  */
-public interface CreateResult<T extends Serializable> extends Result<T> {
+public interface CreateResult<T extends CreateCommand<Spec<? extends Serializable>>, S extends Spec<? extends Serializable>>
+        extends ResultWithSpec<T, S> {
 }

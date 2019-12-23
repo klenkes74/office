@@ -18,7 +18,7 @@
 
 package de.kaiserpfalzedv.folders.store.inmemory;
 
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import de.kaiserpfalzedv.base.store.NoModifiableDataFoundException;
 import de.kaiserpfalzedv.folders.Folder;
 import org.infinispan.Cache;
@@ -105,7 +105,7 @@ public class InMemoryFolderStore {
     }
 
     public void store(final Folder folder) {
-        ObjectIdentifier identity = folder.getSpec().getIdentity();
+        ObjectIdentity identity = folder.getSpec().getIdentity();
         LOGGER.trace("Storing Folder: {}", identity);
 
         folders.put(identity.getUuid(), folder);
@@ -127,7 +127,7 @@ public class InMemoryFolderStore {
     }
 
     public void remove(final Folder folder) {
-        ObjectIdentifier identity = folder.getSpec().getIdentity();
+        ObjectIdentity identity = folder.getSpec().getIdentity();
         LOGGER.trace("Deleting Folder: {}", identity);
 
         if (identity.getName().isPresent()

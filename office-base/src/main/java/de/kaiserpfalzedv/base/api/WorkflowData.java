@@ -49,5 +49,5 @@ public interface WorkflowData extends Serializable {
      *
      * @return The identiy of the workflow that should be executed.
      */
-    ObjectIdentifier getDefinition();
+    ObjectIdentity getDefinition();
 }

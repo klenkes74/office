@@ -18,15 +18,15 @@
 
 package de.kaiserpfalzedv.base.store;
 
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 
 @SuppressWarnings("CdiInjectionPointsInspection")
 public class UuidAlreadyExistsException extends DataAlreadyExistsException {
-    public UuidAlreadyExistsException(final ObjectIdentifier identifier, final Throwable cause) {
+    public UuidAlreadyExistsException(final ObjectIdentity identifier, final Throwable cause) {
         super(identifier, cause);
     }
 
-    public UuidAlreadyExistsException(final ObjectIdentifier identifier) {
+    public UuidAlreadyExistsException(final ObjectIdentity identifier) {
         super(identifier);
     }
 }

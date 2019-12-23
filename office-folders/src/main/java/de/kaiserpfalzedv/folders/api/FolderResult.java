@@ -19,7 +19,10 @@
 package de.kaiserpfalzedv.folders.api;
 
 import de.kaiserpfalzedv.base.actions.results.Result;
+import de.kaiserpfalzedv.base.api.Spec;
 
-public interface FolderResult<T extends FolderCommand> extends Result<T> {
+import java.io.Serializable;
+
+public interface FolderResult<T extends FolderCommand, S extends Spec<? extends Serializable>> extends Result<T, S> {
 
 }

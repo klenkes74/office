@@ -43,7 +43,9 @@ import java.util.UUID;
 public class CorrelationIdInterceptor implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(CorrelationIdInterceptor.class);
 
-    public static final String MDC_KEY = "correlation";
+    public static final String MDC_CORRELATION = "correlation";
+    public static final String MDC_REQUEST = "request";
+    public static final String MDC_SEQUENCE = "sequence";
 
 
     @AroundInvoke
@@ -59,23 +61,36 @@ public class CorrelationIdInterceptor implements Serializable {
 
                 if (param.getMetadata().getWorkflowdata().isPresent()) {
                     String correlation = param.getMetadata().getWorkflowdata().get().getCorrelation().toString();
-                    return invokeMethodWithCorrelationInLoggingContext(ctx, correlation, "Extracted correlation id of the call: {}");
+                    String request = param.getMetadata().getWorkflowdata().get().getRequest().toString();
+                    String sequence = param.getMetadata().getWorkflowdata().get().getSequence().orElse(0L).toString();
+
+                    return invokeMethodWithCorrelationInLoggingContext(ctx, correlation, request, sequence, "Extracted correlation/request/sequence id of the call: {}/{}/{}");
                 }
             }
         }
 
         String correlation = UUID.randomUUID().toString();
-        return invokeMethodWithCorrelationInLoggingContext(ctx, correlation, "Created correlation id for call: {}");
+        String request = correlation;
+        String sequence = "0";
+        return invokeMethodWithCorrelationInLoggingContext(ctx, correlation, request, sequence, "Created correlation/request/sequence id for call: {}/{}/{}");
     }
 
-    public Object invokeMethodWithCorrelationInLoggingContext(InvocationContext ctx, String correlation, String s) throws Exception {
-        MDC.put(MDC_KEY, correlation);
-        LOGGER.trace(s, correlation);
+    public Object invokeMethodWithCorrelationInLoggingContext(
+            InvocationContext ctx,
+            String correlation,
+            String request,
+            String sequence,
+            String s
+    ) throws Exception {
+        MDC.put(MDC_CORRELATION, correlation);
+        MDC.put(MDC_REQUEST, request);
+        MDC.put(MDC_SEQUENCE, sequence);
+        LOGGER.trace(s, correlation, request, sequence);
 
         try {
             return ctx.proceed();
         } finally {
-            MDC.remove(MDC_KEY);
+            MDC.remove(MDC_CORRELATION);
         }
     }
 }

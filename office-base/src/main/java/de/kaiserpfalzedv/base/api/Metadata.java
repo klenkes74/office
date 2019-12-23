@@ -35,7 +35,7 @@ public interface Metadata extends Serializable {
      *
      * @return the identity of the object maintained.
      */
-    ObjectIdentifier getIdentity();
+    ObjectIdentity getIdentity();
 
     Optional<WorkflowData> getWorkflowdata();
 }

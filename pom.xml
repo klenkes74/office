@@ -34,6 +34,7 @@
         <module>office-security</module>
         <module>office-folders</module>
         <module>office-contacts</module>
+        <module>office-jpa-store</module>
         <module>office-application</module>
     </modules>
 </project>

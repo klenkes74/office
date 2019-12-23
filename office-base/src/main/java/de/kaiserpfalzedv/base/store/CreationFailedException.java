@@ -19,19 +19,19 @@
 package de.kaiserpfalzedv.base.store;
 
 
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 
 @SuppressWarnings("CdiInjectionPointsInspection")
 public class CreationFailedException extends DataException {
-    public CreationFailedException(final ObjectIdentifier identifier, final String message, final Throwable cause) {
+    public CreationFailedException(final ObjectIdentity identifier, final String message, final Throwable cause) {
         super(identifier, message, cause);
     }
 
-    public CreationFailedException(final ObjectIdentifier identifier, final String message) {
+    public CreationFailedException(final ObjectIdentity identifier, final String message) {
         super(identifier, message);
     }
 
-    public CreationFailedException(final ObjectIdentifier identifier, final Throwable cause) {
+    public CreationFailedException(final ObjectIdentity identifier, final Throwable cause) {
         super(identifier, cause);
     }
 }

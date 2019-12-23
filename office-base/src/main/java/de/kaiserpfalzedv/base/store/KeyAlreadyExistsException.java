@@ -18,15 +18,15 @@
 
 package de.kaiserpfalzedv.base.store;
 
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 
 @SuppressWarnings("CdiInjectionPointsInspection")
 public class KeyAlreadyExistsException extends DataAlreadyExistsException {
-    public KeyAlreadyExistsException(final ObjectIdentifier identifier, final Throwable cause) {
+    public KeyAlreadyExistsException(final ObjectIdentity identifier, final Throwable cause) {
         super(identifier, "Object key already exists for this tenant.", cause);
     }
 
-    public KeyAlreadyExistsException(final ObjectIdentifier identifier) {
+    public KeyAlreadyExistsException(final ObjectIdentity identifier) {
         super(identifier);
     }
 }

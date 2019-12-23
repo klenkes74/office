@@ -18,6 +18,9 @@
 
 package de.kaiserpfalzedv.base.actions.results;
 
+import de.kaiserpfalzedv.base.actions.commands.Command;
+import de.kaiserpfalzedv.base.api.Spec;
+
 import java.io.Serializable;
 
 /*
@@ -26,5 +29,6 @@ import java.io.Serializable;
  * @author rlichti
  * @since 2019-12-15 10:20
  */
-public interface DeleteResult<T extends Serializable> extends Result<T> {
+public interface DeleteResult<T extends Command<? extends Spec<? extends Serializable>>, S extends Spec<? extends Serializable>>
+        extends Result<T, S> {
 }

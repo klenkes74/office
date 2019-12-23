@@ -18,19 +18,19 @@
 
 package de.kaiserpfalzedv.base.store;
 
-import de.kaiserpfalzedv.base.api.ObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 
 @SuppressWarnings("CdiInjectionPointsInspection")
 public class ModificationFailedException extends DataException {
-    public ModificationFailedException(final ObjectIdentifier identifier, final String message, final Throwable cause) {
+    public ModificationFailedException(final ObjectIdentity identifier, final String message, final Throwable cause) {
         super(identifier, message, cause);
     }
 
-    public ModificationFailedException(final ObjectIdentifier identifier, final Throwable cause) {
+    public ModificationFailedException(final ObjectIdentity identifier, final Throwable cause) {
         super(identifier, cause);
     }
 
-    public ModificationFailedException(final ObjectIdentifier identifier, final String message) {
+    public ModificationFailedException(final ObjectIdentity identifier, final String message) {
         super(identifier, message);
     }
 }
