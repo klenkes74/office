@@ -23,5 +23,10 @@ import de.kaiserpfalzedv.base.api.SpecHolding;
 
 import java.io.Serializable;
 
+/**
+ * @param <T> The type of the object for this result.
+ * @author rlichti
+ * @since 2019-12-15
+ */
 public interface SingleResultWithSpec<T extends Serializable> extends SingleResult<T>, SpecHolding<T>, SingleObject<T> {
 }

@@ -23,9 +23,7 @@ import de.kaiserpfalzedv.base.api.Spec;
 
 import java.io.Serializable;
 
-/*
- *
- *
+/**
  * @author rlichti
  * @since 2019-12-15 10:20
  */

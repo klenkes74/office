@@ -32,7 +32,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @JsonSerialize(as = ImmutableFolderDeleted.class)
 @JsonDeserialize(builder = ImmutableFolderDeleted.Builder.class)
-public interface FolderDeleted extends FolderResult<DeleteFolder> {
+public interface FolderDeleted extends FolderResult {
     String KIND = "de.kaiserpfalzedv.folders.FolderDeleted";
     String VERSION = "1.0.0";
 

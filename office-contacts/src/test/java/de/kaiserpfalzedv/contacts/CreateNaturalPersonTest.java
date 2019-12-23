@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.contacts;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
-import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.base.api.Metadata;
 import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
@@ -100,7 +100,7 @@ public class CreateNaturalPersonTest {
 
         @Override
         public ObjectIdentity getIdentity() {
-            return ImmutableObjectIdentifier.builder()
+            return ImmutableObjectIdentity.builder()
                     .kind(NaturalPersonSpec.KIND)
                     .version(NaturalPersonSpec.VERSION)
                     .uuid(ID)
@@ -110,8 +110,8 @@ public class CreateNaturalPersonTest {
         }
 
         @Override
-        public String getDisplayname() {
-            return "displayname";
+        public Optional<String> getDisplayname() {
+            return Optional.of("displayname");
         }
 
         @Override
@@ -130,7 +130,7 @@ public class CreateNaturalPersonTest {
         @Override
         public Metadata getMetadata() {
             return ImmutableMetadata.builder()
-                    .identity(ImmutableObjectIdentifier.builder()
+                    .identity(ImmutableObjectIdentity.builder()
                             .kind(CreateNaturalPerson.KIND)
                             .version(CreateNaturalPerson.VERSION)
                             .uuid(ID)

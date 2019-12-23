@@ -24,5 +24,12 @@ import de.kaiserpfalzedv.base.api.SpecHolding;
 
 import java.io.Serializable;
 
-public interface ResultWithSpec<T extends CommandWithSpec<Spec<? extends Serializable>>, S extends Serializable> extends Result<T, S>, SpecHolding<S> {
+/**
+ * @param <T> The {@link de.kaiserpfalzedv.base.actions.commands.CommandWithSpec} the result answers.
+ * @param <S> The {@link de.kaiserpfalzedv.base.api.Spec} the result worked on.
+ * @author rlichti
+ * @since 2019-12-15
+ */
+public interface ResultWithSpec<T extends CommandWithSpec<? extends Spec<? extends Serializable>>, S extends Spec<? extends Serializable>>
+        extends Result<T, S>, SpecHolding<S> {
 }

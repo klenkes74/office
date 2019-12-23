@@ -18,11 +18,17 @@
 
 package de.kaiserpfalzedv.base.actions.commands;
 
-import de.kaiserpfalzedv.base.BaseObject;
+import de.kaiserpfalzedv.base.api.KindHolding;
+import de.kaiserpfalzedv.base.api.MetadataHolding;
 import de.kaiserpfalzedv.base.api.Spec;
 
 import java.io.Serializable;
 
-public interface Command<T extends Spec<? extends Serializable>> extends BaseObject<T> {
+/**
+ * @param <T> The {@link Spec} this command works on.
+ * @author rlichti
+ * @since 2019-12-15
+ */
+public interface Command<T extends Spec<? extends Serializable>> extends KindHolding, MetadataHolding {
     T apply(final T orig) throws CommandException;
 }

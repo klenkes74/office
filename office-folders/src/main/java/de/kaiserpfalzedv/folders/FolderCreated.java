@@ -32,7 +32,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @JsonSerialize(as = ImmutableFolderCreated.class)
 @JsonDeserialize(builder = ImmutableFolderCreated.Builder.class)
-public interface FolderCreated extends FolderResultWithSpec<CreateFolder, FolderSpec> {
+public interface FolderCreated extends FolderResultWithSpec {
     String KIND = "de.kaiserpfalzedv.folders.FolderCreated";
     String VERSION = "1.0.0";
 

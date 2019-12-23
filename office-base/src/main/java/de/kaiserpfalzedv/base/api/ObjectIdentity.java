@@ -29,21 +29,7 @@ import java.util.UUID;
 @Value.Immutable
 @JsonSerialize(as = ImmutableObjectIdentity.class)
 @JsonDeserialize(builder = ImmutableObjectIdentity.Builder.class)
-public interface ObjectIdentity extends Serializable {
-    /**
-     * Tpye of the object that is identified.
-     *
-     * @return the unique type of the object.
-     */
-    String getKind();
-
-    /**
-     * The version of the object type.
-     *
-     * @return the version of the object specified by {@link #getKind()}.
-     */
-    String getVersion();
-
+public interface ObjectIdentity extends KindHolding, Serializable {
     /**
      * The single point of truth of uniqueness. No two objects of the world should have the same UUID.
      *

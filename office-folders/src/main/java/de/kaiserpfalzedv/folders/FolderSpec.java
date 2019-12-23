@@ -18,8 +18,6 @@
 
 package de.kaiserpfalzedv.folders;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import de.kaiserpfalzedv.base.api.Spec;
 import org.immutables.value.Value;
@@ -28,16 +26,14 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-/*
- *
- *
+/**
  * @author rlichti@kaiserpfalz-edv.de
  * @since 2019-12-15T10:20Z
  */
 @Value.Immutable
-@JsonSerialize(as = ImmutableFolderSpec.class)
-@JsonDeserialize(builder = ImmutableFolderSpec.Builder.class)
-public interface FolderSpec extends Spec<Serializable>, Serializable {
+//@JsonSerialize(as = ImmutableFolderSpec.class)
+//@JsonDeserialize(builder = ImmutableFolderSpec.Builder.class)
+public interface FolderSpec extends Spec<FolderSpec>, Serializable {
     String KIND = "de.kaiserpfalzedv.folders.FolderSpec";
     String VERSION = "1.0.0";
 
@@ -46,13 +42,7 @@ public interface FolderSpec extends Spec<Serializable>, Serializable {
 
     String getName();
 
-    Optional<String> getDisplayname();
-
     Optional<String> getDescription();
 
     Optional<OffsetDateTime> getClosed();
-
-    OffsetDateTime getCreated();
-
-    OffsetDateTime getModified();
 }

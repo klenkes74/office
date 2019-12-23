@@ -39,6 +39,10 @@
         </dependency>
         <dependency>
             <groupId>de.kaiserpfalzedv.office</groupId>
+            <artifactId>office-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalzedv.office</groupId>
             <artifactId>office-folders</artifactId>
         </dependency>
         <dependency>
@@ -48,7 +52,11 @@
 
         <dependency>
             <groupId>de.kaiserpfalzedv.office</groupId>
-            <artifactId>office-jpa-store</artifactId>
+            <artifactId>office-store-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalzedv.office</groupId>
+            <artifactId>office-store-infinispan</artifactId>
         </dependency>
 
         <dependency>

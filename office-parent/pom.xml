@@ -89,7 +89,12 @@
             </dependency>
             <dependency>
                 <groupId>de.kaiserpfalzedv.office</groupId>
-                <artifactId>office-jpa-store</artifactId>
+                <artifactId>office-store-jpa</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>de.kaiserpfalzedv.office</groupId>
+                <artifactId>office-store-infinispan</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -359,6 +364,15 @@
                         <excludedGroups>integration</excludedGroups>
                         <systemProperties>
                             <quarkus.profile>test</quarkus.profile>
+                            <quarkus.datasource.url>jdbc:h2:tcp://localhost:${h2.test.tcp.port}/quarkus
+                            </quarkus.datasource.url>
+                            <quarkus.datasource.driver>org.h2.Driver</quarkus.datasource.driver>
+                            <quarkus.hibernate-orm.dialect>org.hibernate.dialect.H2Dialect
+                            </quarkus.hibernate-orm.dialect>
+                            <quarkus.hibernate-orm.database.generation>none</quarkus.hibernate-orm.database.generation>
+                            <quarkus.datasource.username>h2</quarkus.datasource.username>
+                            <quarkus.datasource.password>h2</quarkus.datasource.password>
+
                             <jacoco-agent.destfile>${project.build.directory}/jacoco-ut.exec</jacoco-agent.destfile>
                             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         </systemProperties>
@@ -662,6 +676,12 @@
                 </dependency>
 
                 <dependency>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest</artifactId>
+                    <version>2.1</version>
+                </dependency>
+
+                <dependency>
                     <groupId>org.slf4j</groupId>
                     <artifactId>jul-to-slf4j</artifactId>
                     <scope>test</scope>
@@ -764,16 +784,6 @@
             </activation>
 
             <dependencies>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-infinispan-embedded</artifactId>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>org.jboss.slf4j</groupId>
-                            <artifactId>slf4j-jboss-logging</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-resteasy</artifactId>

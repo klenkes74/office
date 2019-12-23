@@ -18,7 +18,9 @@
 
 package de.kaiserpfalzedv.folders;
 
-import de.kaiserpfalzedv.base.api.Metadata;
+import de.kaiserpfalzedv.base.api.ImmutableMetadata;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
+import de.kaiserpfalzedv.base.api.ImmutableWorkflowData;
 import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,9 +33,7 @@ import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 
-/*
- *
- *
+/**
  * @author rlichti
  * @since 2019-12-14 10:42
  */
@@ -51,7 +51,7 @@ public class CloseFolderTest {
     private static final FolderSpec FOLDER = new FolderSpec() {
         @Override
         public ObjectIdentity getIdentity() {
-            return ImmutableObjectIdentifier.builder()
+            return ImmutableObjectIdentity.builder()
                     .kind(KIND)
                     .version(VERSION)
                     .uuid(ID)
@@ -91,21 +91,16 @@ public class CloseFolderTest {
         }
     };
 
-    private static final CloseFolder SERVICE = new CloseFolder() {
-        @Override
-        public Metadata getMetadata() {
-            return ImmutableMetadata.builder()
-                    .identity(ImmutableObjectIdentifier.builder()
-                            .kind(KIND)
-                            .version(VERSION)
-                            .uuid(ID)
-                            .tenant(SCOPE)
-                            .name(KEY)
-                            .build()
-                    )
-                    .build();
-        }
-    };
+    private static final CloseFolder SERVICE = (CloseFolder) () -> ImmutableMetadata.builder()
+            .identity(ImmutableObjectIdentity.builder()
+                    .kind(CloseFolder.KIND)
+                    .version(CloseFolder.VERSION)
+                    .uuid(ID)
+                    .tenant(SCOPE)
+                    .name(KEY)
+                    .build()
+            )
+            .build();
 
     @Test
     public void shouldReturnCorrectKindOfFolder() {
@@ -132,7 +127,7 @@ public class CloseFolderTest {
                 .metadata(ImmutableMetadata.builder()
                         .from(SERVICE.getMetadata())
                         .workflowdata(ImmutableWorkflowData.builder()
-                                .definition(ImmutableObjectIdentifier.builder()
+                                .definition(ImmutableObjectIdentity.builder()
                                         .kind("de.kaiserpfalzedv.wf.office.folders.close")
                                         .version("1.0.0")
                                         .uuid(UUID.randomUUID())

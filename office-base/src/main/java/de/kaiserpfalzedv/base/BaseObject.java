@@ -19,30 +19,14 @@
 package de.kaiserpfalzedv.base;
 
 
-import de.kaiserpfalzedv.base.api.Metadata;
+import de.kaiserpfalzedv.base.api.KindHolding;
+import de.kaiserpfalzedv.base.api.MetadataHolding;
 
 import java.io.Serializable;
 
-/*
- *
- *
+/**
  * @author rlichti
  * @since 2019-12-04
  */
-public interface BaseObject<T extends Serializable> extends Serializable {
-    String getKind();
-
-    /**
-     * The version of the workflow or the defined BaseObject canonical name.
-     *
-     * @return the version as string conforming to {@linkplain <a href="https://semver.org/">semver.org</a>}.
-     */
-    String getVersion();
-
-    /**
-     * The metadata of the object. It's an identifier plus some technical data like modification times.
-     *
-     * @return The metadata of the object.
-     */
-    Metadata getMetadata();
+public interface BaseObject<T extends Serializable> extends KindHolding, MetadataHolding, Serializable {
 }

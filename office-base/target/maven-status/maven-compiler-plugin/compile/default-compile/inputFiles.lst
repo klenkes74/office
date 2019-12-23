@@ -11,6 +11,7 @@
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/cdi/CorrelationIdInterceptor.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/actions/package-info.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/actions/results/DeleteResult.java
+/home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/api/KindHolding.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/api/status/OkStatus.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/store/DeletionFailedException.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/api/status/NackStatus.java
@@ -27,6 +28,7 @@
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/api/ObjectIdentity.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/store/KeyAlreadyExistsException.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/actions/commands/CreateCommand.java
+/home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/api/MetadataHolding.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/store/CreationFailedException.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/cdi/JPA.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/actions/commands/CommandException.java
@@ -46,6 +48,7 @@
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/actions/results/SingleResultWithSpec.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/cdi/CorrelationLogged.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/api/WorkflowData.java
+/home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/api/IdentityHolding.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/actions/results/Result.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/api/status/Status.java
 /home/rlichti/NotBackedUp/github/office/office-base/src/main/java/de/kaiserpfalzedv/base/actions/commands/ModifyCommandException.java

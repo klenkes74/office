@@ -17,14 +17,35 @@
  */
 
 package de.kaiserpfalzedv.base.api;
-/*
- *
- *
+
+import java.io.Serializable;
+import java.time.OffsetDateTime;
+import java.util.Optional;
+
+
+/**
  * @author rlichti
  * @since 2019-12-15 12:02
  */
-
-import java.io.Serializable;
-
 public interface Spec<T extends Serializable> extends Serializable {
+    /**
+     * A string to be displayed to users in lists, titles, ...
+     *
+     * @return a string that is used by human users to identify the data within this spec.
+     */
+    Optional<String> getDisplayname();
+
+    /**
+     * The creation date of the spec data.
+     *
+     * @return when the spec has been created.
+     */
+    OffsetDateTime getCreated();
+
+    /**
+     * The last modification timestamp of the spec data.
+     *
+     * @return when the spec has been modified latest. If there has been no modification it is the creation timestamp.
+     */
+    OffsetDateTime getModified();
 }

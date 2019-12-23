@@ -22,5 +22,10 @@ import de.kaiserpfalzedv.base.SingleObject;
 
 import java.io.Serializable;
 
+/**
+ * @param <T> A single result. The spec may be empty.
+ * @author rlichti
+ * @since 2019-12-15
+ */
 public interface SingleResult<T extends Serializable> extends SingleObject<T> {
 }

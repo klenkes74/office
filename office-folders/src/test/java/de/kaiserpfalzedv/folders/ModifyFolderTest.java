@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.folders;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
-import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.base.api.Metadata;
 import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,7 +52,7 @@ public class ModifyFolderTest {
     private static final FolderSpec FOLDER = new FolderSpec() {
         @Override
         public ObjectIdentity getIdentity() {
-            return ImmutableObjectIdentifier.builder()
+            return ImmutableObjectIdentity.builder()
                     .kind(KIND)
                     .version(VERSION)
                     .uuid(ID)
@@ -96,7 +97,7 @@ public class ModifyFolderTest {
         @Override
         public Metadata getMetadata() {
             return ImmutableMetadata.builder()
-                    .identity(ImmutableObjectIdentifier.builder()
+                    .identity(ImmutableObjectIdentity.builder()
                             .kind(KIND)
                             .version(VERSION)
                             .uuid(ID)
@@ -137,7 +138,7 @@ public class ModifyFolderTest {
         LOGGER.debug("result: {}", result);
 
         assert SERVICE.getSpec().getIdentity().getUuid().equals(result.getIdentity().getUuid());
-        assert SERVICE.getSpec().getIdentity().getTenant().orElse(null).equals(result.getIdentity().getTenant().orElse(null));
+        assert Objects.equals(SERVICE.getSpec().getIdentity().getTenant().orElse(null), result.getIdentity().getTenant().orElse(null));
         assert "name".equals(result.getIdentity().getName().orElse(null));
         assert SERVICE.getSpec().getName().equals(result.getName());
         assert SERVICE.getSpec().getDescription().equals(result.getDescription());

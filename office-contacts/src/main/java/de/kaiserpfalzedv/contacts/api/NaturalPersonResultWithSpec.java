@@ -18,7 +18,7 @@
 
 package de.kaiserpfalzedv.contacts.api;
 
-import de.kaiserpfalzedv.base.actions.results.ResultWithSpec;
+import de.kaiserpfalzedv.base.api.SpecHolding;
 import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
 
 
@@ -28,6 +28,5 @@ import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
  * @since 2019-12-22 11:36
  */
 public interface NaturalPersonResultWithSpec<T extends NaturalPersonCommandWithSpec, S extends NaturalPersonSpec>
-        extends NaturalPersonResult<T>, ResultWithSpec<T, S> {
-    S getSpec();
+        extends NaturalPersonResult, SpecHolding<S> {
 }

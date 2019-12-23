@@ -23,6 +23,11 @@ import de.kaiserpfalzedv.base.api.SpecHolding;
 
 import java.io.Serializable;
 
-public interface CommandWithSpec<T extends Spec<? extends Serializable>>
-        extends Command<T>, SpecHolding<T>, Serializable {
+/**
+ * @param <T> The {@link Spec} this command works on.
+ * @author rlichti
+ * @since 2019-12-15
+ */
+public interface CommandWithSpec<T extends Spec<? extends Serializable>> extends Command<T>, SpecHolding<T> {
+    T apply(final T orig) throws CommandException;
 }

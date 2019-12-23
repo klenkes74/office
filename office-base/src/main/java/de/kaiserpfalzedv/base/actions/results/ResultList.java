@@ -23,5 +23,10 @@ import de.kaiserpfalzedv.base.SingleObject;
 
 import java.io.Serializable;
 
+/**
+ * @param <T> The type of objects within the list.
+ * @author rlichti
+ * @since 2019-12-15
+ */
 public interface ResultList<T extends SingleObject<? extends Serializable>> extends ObjectList<T> {
 }

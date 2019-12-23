@@ -18,8 +18,12 @@
 
 package de.kaiserpfalzedv.folders.api;
 
-import de.kaiserpfalzedv.base.actions.results.ResultWithSpec;
+import de.kaiserpfalzedv.base.api.SpecHolding;
 import de.kaiserpfalzedv.folders.FolderSpec;
 
-public interface FolderResultWithSpec<T extends FolderCommand, S extends FolderSpec> extends FolderResult<T>, ResultWithSpec<T, S> {
+/**
+ * @author rlichti
+ * @since 2019-12-15
+ */
+public interface FolderResultWithSpec extends FolderResult, SpecHolding<FolderSpec> {
 }

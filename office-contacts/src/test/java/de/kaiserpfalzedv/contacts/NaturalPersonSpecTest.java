@@ -18,7 +18,7 @@
 
 package de.kaiserpfalzedv.contacts;
 
-import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -98,7 +98,7 @@ public class NaturalPersonSpecTest {
 
         @Override
         public ObjectIdentity getIdentity() {
-            return ImmutableObjectIdentifier.builder()
+            return ImmutableObjectIdentity.builder()
                     .kind(NaturalPersonSpec.KIND)
                     .version(NaturalPersonSpec.VERSION)
                     .uuid(ID)
@@ -108,8 +108,8 @@ public class NaturalPersonSpecTest {
         }
 
         @Override
-        public String getDisplayname() {
-            return "displayname";
+        public Optional<String> getDisplayname() {
+            return Optional.of("displayname");
         }
 
         @Override

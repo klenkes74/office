@@ -19,7 +19,7 @@
 package de.kaiserpfalzedv.folders;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
-import de.kaiserpfalzedv.base.api.ImmutableObjectIdentifier;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.base.api.Metadata;
 import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
@@ -51,7 +51,7 @@ public class CreateFolderTest {
     private static final FolderSpec FOLDER = new FolderSpec() {
         @Override
         public ObjectIdentity getIdentity() {
-            return ImmutableObjectIdentifier.builder()
+            return ImmutableObjectIdentity.builder()
                     .kind(KIND)
                     .version(VERSION)
                     .uuid(ID)
@@ -96,7 +96,7 @@ public class CreateFolderTest {
         @Override
         public Metadata getMetadata() {
             return ImmutableMetadata.builder()
-                    .identity(ImmutableObjectIdentifier.builder()
+                    .identity(ImmutableObjectIdentity.builder()
                             .kind(KIND)
                             .version(VERSION)
                             .uuid(ID)

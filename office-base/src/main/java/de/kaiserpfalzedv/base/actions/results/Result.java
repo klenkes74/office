@@ -18,10 +18,18 @@
 
 package de.kaiserpfalzedv.base.actions.results;
 
-import de.kaiserpfalzedv.base.BaseObject;
 import de.kaiserpfalzedv.base.actions.commands.Command;
+import de.kaiserpfalzedv.base.api.KindHolding;
+import de.kaiserpfalzedv.base.api.MetadataHolding;
 
 import java.io.Serializable;
 
-public interface Result<T extends Command<? extends Serializable>, S extends Serializable> extends BaseObject<S> {
+/**
+ * @param <T> The command this result answers.
+ * @param <S> The spec of the data this result worked on.
+ * @author rlichti
+ * @since 2019-12-15
+ */
+public interface Result<T extends Command<? extends Serializable>, S extends Serializable>
+        extends KindHolding, MetadataHolding {
 }
