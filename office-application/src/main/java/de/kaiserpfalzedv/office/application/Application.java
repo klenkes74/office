@@ -19,6 +19,7 @@
 package de.kaiserpfalzedv.office.application;
 
 import de.kaiserpfalzedv.base.cdi.JPA;
+import de.kaiserpfalzedv.contacts.store.NaturalPersonReadAdapter;
 import de.kaiserpfalzedv.folders.store.FolderReadAdapter;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
@@ -46,7 +47,12 @@ public class Application {
 
     @Inject
     @JPA
-    FolderReadAdapter store;
+    FolderReadAdapter folderStore;
+
+    @Inject
+    @JPA
+    NaturalPersonReadAdapter naturalPersonStore;
+
 
     void onStart(@Observes StartupEvent event) {
         LOGGER.info("Started: {} (v{})", name, version);
@@ -62,7 +68,8 @@ public class Application {
 
     @Scheduled(every = "10s")
     void logWatchdog() {
-        long folders = store.count();
-        LOGGER.info("log watchdog. folder count={}", folders);
+        long folders = folderStore.count();
+        long naturalPersons = naturalPersonStore.count();
+        LOGGER.info("log watchdog. folders={}, natural persons={}", folders, naturalPersons);
     }
 }

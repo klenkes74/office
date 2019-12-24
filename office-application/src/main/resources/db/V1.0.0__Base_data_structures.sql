@@ -22,7 +22,7 @@ CREATE SEQUENCE PUBLIC.HIBERNATE_SEQUENCE START 1;
 -- JPAFolderSpec Data Table
 CREATE TABLE BASE.FOLDERS
 (
-    id           INTEGER PRIMARY KEY,
+    id           BIGINT PRIMARY KEY,
 
     _UUID        CHAR(36)     NOT NULL UNIQUE,
     _TENANT      VARCHAR(256) NOT NULL DEFAULT './.',
@@ -39,7 +39,7 @@ CREATE TABLE BASE.FOLDERS
 
 CREATE TABLE BASE.FOLDERS_CHANGES
 (
-    id                          INTEGER PRIMARY KEY,
+    id                          BIGINT PRIMARY KEY,
     _ACTION                     VARCHAR(256) NOT NULL,
 
     _COMMAND_UUID               char(36)     NOT NULL UNIQUE,
@@ -75,7 +75,7 @@ CREATE TABLE BASE.FOLDERS_CHANGES
 -- JPAContacts Data Table
 CREATE TABLE BASE.NATURAL_PERSONS
 (
-    id                       INTEGER PRIMARY KEY,
+    id                       BIGINT PRIMARY KEY,
 
     _UUID                    CHAR(36)     NOT NULL UNIQUE,
     _TENANT                  VARCHAR(256) NOT NULL DEFAULT './.',
@@ -103,7 +103,7 @@ CREATE TABLE BASE.NATURAL_PERSONS
 
 CREATE TABLE BASE.NATURAL_PERSONS_CHANGES
 (
-    id                          INTEGER PRIMARY KEY,
+    id                          BIGINT PRIMARY KEY,
     _ACTION                     VARCHAR(256) NOT NULL,
 
     _COMMAND_UUID               char(36)     NOT NULL UNIQUE,
