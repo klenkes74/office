@@ -74,7 +74,7 @@ public class JPANaturalPersonSpec implements Serializable {
     public JPANaturalPersonSpec fromModel(NaturalPersonSpec model) {
         identity = new JPAIdentity().fromModel(model.getIdentity());
 
-        displayname = model.getDisplayname().orElse(null);
+        displayname = model.getDisplayname();
         created = model.getCreated();
         modified = model.getModified();
 

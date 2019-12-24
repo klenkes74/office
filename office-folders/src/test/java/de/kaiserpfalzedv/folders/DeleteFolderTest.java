@@ -40,6 +40,7 @@ public class DeleteFolderTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(DeleteFolderTest.class);
 
     static private final UUID ID = UUID.randomUUID();
+    static private final String DISPLAYNAME = "displayname";
 
     private static final DeleteFolder SERVICE = new DeleteFolder() {
         @Override
@@ -61,8 +62,8 @@ public class DeleteFolderTest {
         }
 
         @Override
-        public Optional<String> getDisplayname() {
-            return Optional.empty();
+        public String getDisplayname() {
+            return DISPLAYNAME;
         }
 
         @Override

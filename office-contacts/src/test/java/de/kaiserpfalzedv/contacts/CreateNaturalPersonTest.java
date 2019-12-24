@@ -44,6 +44,7 @@ public class CreateNaturalPersonTest {
     static private final UUID ID = UUID.randomUUID();
     private static final String TENANT = "tenant";
     private static final String KEY = "key";
+    private static final String DISPLAYNAME = "displayname";
     private static final OffsetDateTime CREATED = OffsetDateTime.now();
     private static final OffsetDateTime MODIFIED = CREATED;
 
@@ -110,8 +111,8 @@ public class CreateNaturalPersonTest {
         }
 
         @Override
-        public Optional<String> getDisplayname() {
-            return Optional.of("displayname");
+        public String getDisplayname() {
+            return DISPLAYNAME;
         }
 
         @Override

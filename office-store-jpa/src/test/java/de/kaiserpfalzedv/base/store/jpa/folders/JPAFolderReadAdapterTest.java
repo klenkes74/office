@@ -46,7 +46,7 @@ public class JPAFolderReadAdapterTest {
     private static final String SCOPE = "de.kaiserpfalz-edv";
     private static final String KEY = "I-19-0001";
     private static final String NAME = "Softwaretest Akte 1";
-    private static final String SHORTNAME = "SW Test 1";
+    private static final String DISPLAYNAME = "SW Test 1";
     private static final String DESCRIPTION = "Einfache Akte für Softwaretests";
     private static final OffsetDateTime CREATED = OffsetDateTime.of(2018, 12, 17, 18, 12, 0, 0, ZoneOffset.ofHours(0));
     private static final OffsetDateTime MODIFIED = OffsetDateTime.of(2018, 12, 17, 18, 12, 0, 0, ZoneOffset.ofHours(0));
@@ -76,7 +76,7 @@ public class JPAFolderReadAdapterTest {
         assert SCOPE.equals(data.getSpec().getIdentity().getTenant().orElse(""));
         assert KEY.equals(data.getSpec().getIdentity().getName().orElse(null));
         assert NAME.equals(data.getSpec().getName());
-        assert SHORTNAME.equals(data.getSpec().getDisplayname().orElse(null));
+        assert DISPLAYNAME.equals(data.getSpec().getDisplayname());
         assert DESCRIPTION.equals(data.getSpec().getDescription().orElse(null));
         assert !data.getSpec().getClosed().isPresent();
     }

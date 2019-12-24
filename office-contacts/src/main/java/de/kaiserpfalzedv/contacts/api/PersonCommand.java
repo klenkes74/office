@@ -16,28 +16,15 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.api;
+package de.kaiserpfalzedv.contacts.api;
 
-import java.io.Serializable;
-import java.time.OffsetDateTime;
+import de.kaiserpfalzedv.base.actions.commands.Command;
+import de.kaiserpfalzedv.contacts.PersonSpec;
 
 
 /**
  * @author rlichti
- * @since 2019-12-15 12:02
+ * @since 22.12.2019 11:06
  */
-public interface Spec<T extends Serializable> extends Serializable, DisplaynameHolding {
-    /**
-     * The creation date of the spec data.
-     *
-     * @return when the spec has been created.
-     */
-    OffsetDateTime getCreated();
-
-    /**
-     * The last modification timestamp of the spec data.
-     *
-     * @return when the spec has been modified latest. If there has been no modification it is the creation timestamp.
-     */
-    OffsetDateTime getModified();
+public interface PersonCommand<T extends PersonSpec> extends Command<T> {
 }

@@ -52,7 +52,7 @@ public class JPAFolderSpec implements Serializable {
     public JPAFolderSpec fromModel(final FolderSpec data) {
         identity = new JPAIdentity().fromModel(data.getIdentity());
 
-        displayname = data.getDisplayname().orElse(null);
+        displayname = data.getDisplayname();
         name = data.getName();
         description = data.getDescription().orElse(null);
         closed = data.getClosed().orElse(null);
@@ -67,7 +67,7 @@ public class JPAFolderSpec implements Serializable {
         return ImmutableFolderSpec.builder()
                 .identity(identity.toModel())
 
-                .displayname(Optional.ofNullable(displayname))
+                .displayname(displayname)
                 .name(name)
                 .description(Optional.ofNullable(description))
                 .closed(Optional.ofNullable(closed))

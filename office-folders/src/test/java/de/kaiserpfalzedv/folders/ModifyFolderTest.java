@@ -46,6 +46,7 @@ public class ModifyFolderTest {
     private static final String SCOPE = "scope";
     private static final String KEY = "key";
     private static final String NAME = "name";
+    private static final String DISPLAYNAME = "displayname";
     private static final OffsetDateTime CREATED = OffsetDateTime.now();
     private static final OffsetDateTime MODIFIED = CREATED;
 
@@ -67,8 +68,8 @@ public class ModifyFolderTest {
         }
 
         @Override
-        public Optional<String> getDisplayname() {
-            return Optional.empty();
+        public String getDisplayname() {
+            return DISPLAYNAME;
         }
 
         @Override
