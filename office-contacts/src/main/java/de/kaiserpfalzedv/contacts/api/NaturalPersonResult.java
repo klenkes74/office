@@ -18,13 +18,11 @@
 
 package de.kaiserpfalzedv.contacts.api;
 
-import de.kaiserpfalzedv.base.actions.results.Result;
 import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
 
 /**
- * @param <T> The contact command type this is the result to.
  * @author rlichti
  * @since 2019-12-22 11:43
  */
-public interface NaturalPersonResult extends Result<NaturalPersonCommand, NaturalPersonSpec> {
+public interface NaturalPersonResult extends PersonResult<NaturalPersonCommand, NaturalPersonSpec> {
 }

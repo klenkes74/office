@@ -16,15 +16,14 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base;
+package de.kaiserpfalzedv.contacts.store;
 
-import de.kaiserpfalzedv.base.api.SpecHolding;
-
-import java.io.Serializable;
+import de.kaiserpfalzedv.base.store.DataReadAdapter;
+import de.kaiserpfalzedv.contacts.NaturalPerson;
 
 /**
  * @author rlichti
- * @since 2019-12-08
+ * @since 2019-20-24T16:34
  */
-public interface SingleObject<T extends Serializable> extends BaseObject<T>, SpecHolding<T> {
+public interface NaturalPersonReadAdapter extends DataReadAdapter<NaturalPerson> {
 }

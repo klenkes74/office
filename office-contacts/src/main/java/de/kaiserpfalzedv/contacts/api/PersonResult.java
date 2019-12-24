@@ -16,8 +16,9 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.contacts;
+package de.kaiserpfalzedv.contacts.api;
 
+import de.kaiserpfalzedv.base.actions.results.Result;
 import de.kaiserpfalzedv.base.api.IdentityHolding;
 import de.kaiserpfalzedv.base.api.KindHolding;
 import de.kaiserpfalzedv.base.api.Spec;
@@ -25,8 +26,10 @@ import de.kaiserpfalzedv.base.api.Spec;
 import java.io.Serializable;
 
 /**
- * @author rlichti@kaiserpfalz-edv.de
- * @since 2019-12-15T10:20Z
+ * @param <T> The contact command type this is the result to.
+ * @param <S> The spec this command works on.
+ * @author rlichti
+ * @since 2019-12-22 11:43
  */
-public interface PersonSpec extends Spec<Serializable>, IdentityHolding, KindHolding {
+public interface PersonResult<T extends PersonCommand<? extends Serializable>, S extends Spec<Serializable> & IdentityHolding & KindHolding> extends Result<T, S> {
 }

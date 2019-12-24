@@ -20,20 +20,17 @@ package de.kaiserpfalzedv.folders;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.base.BaseObject;
 import de.kaiserpfalzedv.base.SingleObject;
 import org.immutables.value.Value;
 
-/*
- *
- *
+/**
  * @author rlichti@kaiserpfalz-edv.de
  * @since 2019-12-15T10:20Z
  */
 @Value.Immutable
 @JsonSerialize(as = ImmutableFolder.class)
 @JsonDeserialize(builder = ImmutableFolder.Builder.class)
-public interface Folder extends SingleObject<FolderSpec>, BaseObject<FolderSpec> {
+public interface Folder extends SingleObject<FolderSpec> {
     String KIND = "de.kaiserpfalzedv.folders.Folder";
     String VERSION = "1.0.0";
 

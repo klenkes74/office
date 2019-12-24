@@ -18,8 +18,8 @@
 
 package de.kaiserpfalzedv.folders.store;
 
-import de.kaiserpfalzedv.base.store.DataStoreAdapter;
+import de.kaiserpfalzedv.base.store.DataWriteAdapter;
 import de.kaiserpfalzedv.folders.Folder;
 
-public interface FolderWriteAdapter extends DataStoreAdapter<Folder> {
+public interface FolderWriteAdapter extends DataWriteAdapter<Folder> {
 }

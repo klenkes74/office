@@ -16,14 +16,13 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.application;
+package de.kaiserpfalzedv.office.contacts;
 
 import de.kaiserpfalzedv.base.cdi.CorrelationLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
-import de.kaiserpfalzedv.folders.CreateFolder;
-import de.kaiserpfalzedv.folders.Folder;
-import de.kaiserpfalzedv.folders.ImmutableCreateFolder;
-import de.kaiserpfalzedv.folders.store.FolderReadAdapter;
+import de.kaiserpfalzedv.contacts.CreateNaturalPerson;
+import de.kaiserpfalzedv.contacts.NaturalPerson;
+import de.kaiserpfalzedv.contacts.store.NaturalPersonReadAdapter;
 import org.eclipse.microprofile.metrics.annotation.ConcurrentGauge;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
@@ -41,73 +40,75 @@ import java.util.Optional;
 import java.util.UUID;
 
 @ApplicationScoped
-@Path("/folders/{tenant}/")
+@Path("/contacts/{tenant}/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @CorrelationLogged
-public class FolderWebService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FolderWebService.class);
+public class ContactsWebService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContactsWebService.class);
 
     @Inject
     @JPA
-    FolderReadAdapter reader;
+    NaturalPersonReadAdapter reader;
 
     @Inject
-    Event<CreateFolder> createEvent;
+    Event<CreateNaturalPerson> naturalPersonCreateEventSink;
 
 
     @GET
+    @Path("natural/")
     @RolesAllowed({"user", "admin"})
-    @Metered(name = "folders.loadByUuid")
-    @Counted(name = "folders.loadByUuid.count")
-    @ConcurrentGauge(name = "folders.loadByUuid.concurrent")
-    public Folder getByUuid(@QueryParam("uuid") final UUID uuid) {
-        Optional<Folder> result = reader.loadById(uuid);
+    @Metered(name = "contacts.loadByUuid")
+    @Counted(name = "contacts.loadByUuid.count")
+    @ConcurrentGauge(name = "contacts.loadByUuid.concurrent")
+    public NaturalPerson getByUuid(@QueryParam("uuid") final UUID uuid) {
+        Optional<NaturalPerson> result = reader.loadById(uuid);
 
         if (result.isPresent()) {
             return result.get();
         } else {
-            LOGGER.info("JPAFolderSpec not found: uuid={}", uuid);
+            LOGGER.info("Person not found: uuid={}", uuid);
 
-            throw new WebApplicationException("JPAFolderSpec with uuid='" + uuid + "' not found.",
+            throw new WebApplicationException("Person with uuid='" + uuid + "' not found.",
                     Response.Status.NOT_FOUND);
         }
     }
 
     @GET
-    @Path("{key}")
+    @Path("natural/{key}")
     @RolesAllowed({"user", "admin"})
-    @Metered(name = "folders.loadByKey")
-    @Counted(name = "folders.loadByKey.count")
-    @ConcurrentGauge(name = "folders.loadByKey.concurrent")
-    public Folder getByKey(
+    @Metered(name = "contacts.loadByKey")
+    @Counted(name = "contacts.loadByKey.count")
+    @ConcurrentGauge(name = "contacts.loadByKey.concurrent")
+    public NaturalPerson getByKey(
             @PathParam("tenant") final String tenant,
             @PathParam("key") final String key
     ) {
-        Optional<Folder> result = reader.loadByScopeAndKey(tenant, key);
+        Optional<NaturalPerson> result = reader.loadByScopeAndKey(tenant, key);
 
         if (result.isPresent()) {
             return result.get();
         } else {
-            LOGGER.info("JPAFolderSpec not found: tenant={}, key={}", tenant, key);
+            LOGGER.info("person not found: tenant={}, key={}", tenant, key);
 
-            throw new WebApplicationException("JPAFolderSpec with tenant='" + tenant + "' and key='" + key + "' not found.",
+            throw new WebApplicationException("Person with tenant='" + tenant + "' and key='" + key + "' not found.",
                     Response.Status.NOT_FOUND);
         }
     }
 
 
     @PUT
-    @RolesAllowed("admin")
-    @Metered(name = "folders.createFolder")
-    @Counted(name = "folders.createFolder.count")
-    @ConcurrentGauge(name = "folders.createFolder.concurrent")
-    public void createFolder(final ImmutableCreateFolder command) {
+    @Path("natural/")
+    @RolesAllowed("user")
+    @Metered(name = "contacts.createNaturalPerson")
+    @Counted(name = "contacts.createNaturalPerson.count")
+    @ConcurrentGauge(name = "contacts.createNaturalPerson.concurrent")
+    public void createNaturalPerson(final CreateNaturalPerson command) {
         try {
-            createEvent.fire(command);
+            naturalPersonCreateEventSink.fire(command);
         } catch (IllegalArgumentException e) {
             throw new WebApplicationException(
-                    e.getCause() != null ? e.getCause().getMessage() : "Can't create new folder.",
+                    e.getCause() != null ? e.getCause().getMessage() : "Can't create new natural person.",
                     Response.Status.CONFLICT
             );
         }

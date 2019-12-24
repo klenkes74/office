@@ -16,15 +16,18 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base;
+package de.kaiserpfalzedv.contacts.api;
 
-import de.kaiserpfalzedv.base.api.SpecHolding;
+import de.kaiserpfalzedv.base.actions.commands.CommandWithSpec;
+import de.kaiserpfalzedv.base.api.IdentityHolding;
+import de.kaiserpfalzedv.base.api.KindHolding;
+import de.kaiserpfalzedv.base.api.Spec;
 
 import java.io.Serializable;
 
 /**
  * @author rlichti
- * @since 2019-12-08
+ * @since 22.12.2019 11:06
  */
-public interface SingleObject<T extends Serializable> extends BaseObject<T>, SpecHolding<T> {
+public interface PersonCommandWithSpec<T extends Spec<Serializable> & IdentityHolding & KindHolding> extends PersonCommand<T>, CommandWithSpec<T> {
 }

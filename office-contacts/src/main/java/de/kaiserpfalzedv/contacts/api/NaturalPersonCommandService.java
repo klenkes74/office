@@ -19,11 +19,9 @@
 package de.kaiserpfalzedv.contacts.api;
 
 
-import de.kaiserpfalzedv.base.actions.CommandService;
-
 /**
  * @author rlichti
  * @since 22.12.2019 11:06
  */
-public interface NaturalPersonCommandService<T extends NaturalPersonCommand> extends CommandService<T> {
+public interface NaturalPersonCommandService<T extends NaturalPersonCommand> extends PersonCommandService<T> {
 }

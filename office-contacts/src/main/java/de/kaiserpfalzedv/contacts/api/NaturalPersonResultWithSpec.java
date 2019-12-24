@@ -18,15 +18,15 @@
 
 package de.kaiserpfalzedv.contacts.api;
 
-import de.kaiserpfalzedv.base.api.SpecHolding;
 import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
 
 
 /**
  * @param <T> The contact command type this is the result for.
+ * @param <S> The spec the command works on.
  * @author rlichti
  * @since 2019-12-22 11:36
  */
 public interface NaturalPersonResultWithSpec<T extends NaturalPersonCommandWithSpec, S extends NaturalPersonSpec>
-        extends NaturalPersonResult, SpecHolding<S> {
+        extends NaturalPersonResult, PersonResultWithSpec<T, S> {
 }

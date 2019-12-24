@@ -18,7 +18,6 @@
 
 package de.kaiserpfalzedv.base.store.jpa.contacts;
 
-import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
 import de.kaiserpfalzedv.contacts.ImmutableNaturalPersonSpec;
 import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
@@ -100,16 +99,7 @@ public class JPANaturalPersonSpec implements Serializable {
                 .kind(NaturalPersonSpec.KIND)
                 .version(NaturalPersonSpec.VERSION)
 
-                .identity(ImmutableObjectIdentity.builder()
-                        .kind(NaturalPersonSpec.KIND)
-                        .version(NaturalPersonSpec.VERSION)
-
-                        .uuid(identity.uuid)
-                        .tenant(identity.tenant)
-                        .name(identity.key)
-
-                        .build()
-                )
+                .identity(identity.toModel())
 
                 .displayname(displayname)
 

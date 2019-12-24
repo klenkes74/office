@@ -16,16 +16,21 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store;
+package de.kaiserpfalzedv.contacts.api;
 
-import java.util.UUID;
+import de.kaiserpfalzedv.base.api.IdentityHolding;
+import de.kaiserpfalzedv.base.api.KindHolding;
+import de.kaiserpfalzedv.base.api.Spec;
+import de.kaiserpfalzedv.base.api.SpecHolding;
 
-public interface DataStoreAdapter<T> {
-    void create(final T spec) throws UuidAlreadyExistsException, KeyAlreadyExistsException, CreationFailedException;
+import java.io.Serializable;
 
-    void modify(final T spec) throws ModificationFailedException;
 
-    void close(final UUID id) throws ModificationFailedException;
-
-    void delete(final UUID id) throws DeletionFailedException;
+/**
+ * @param <T> The contact command type this is the result for.
+ * @author rlichti
+ * @since 2019-12-22 11:36
+ */
+public interface PersonResultWithSpec<T extends PersonCommandWithSpec<? extends Serializable>, S extends Spec<Serializable> & IdentityHolding & KindHolding>
+        extends NaturalPersonResult, SpecHolding<S> {
 }

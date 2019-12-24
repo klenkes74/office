@@ -16,15 +16,16 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base;
+package de.kaiserpfalzedv.base.store;
 
-import de.kaiserpfalzedv.base.api.SpecHolding;
+import java.util.UUID;
 
-import java.io.Serializable;
+public interface DataWriteAdapter<T> {
+    void create(final T spec) throws UuidAlreadyExistsException, KeyAlreadyExistsException, CreationFailedException;
 
-/**
- * @author rlichti
- * @since 2019-12-08
- */
-public interface SingleObject<T extends Serializable> extends BaseObject<T>, SpecHolding<T> {
+    void modify(final T spec) throws ModificationFailedException;
+
+    void close(final UUID id) throws ModificationFailedException;
+
+    void delete(final UUID id) throws DeletionFailedException;
 }

@@ -18,6 +18,9 @@
 
 package de.kaiserpfalzedv.base.store.jpa.contacts;
 
+import de.kaiserpfalzedv.base.api.ImmutableMetadata;
+import de.kaiserpfalzedv.contacts.ImmutableNaturalPerson;
+import de.kaiserpfalzedv.contacts.NaturalPerson;
 import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
@@ -36,8 +39,7 @@ import java.util.UUID;
 @Table(name = "NATURAL_PERSONS", schema = "BASE")
 public class JPANaturalPerson extends PanacheEntity implements Serializable {
     @Embedded
-    JPANaturalPersonSpec spec;
-
+    public JPANaturalPersonSpec spec;
 
     public static PanacheQuery<JPANaturalPerson> findByUuid(final UUID uuid) {
         return find("spec.identity.uuid", uuid);
@@ -52,17 +54,25 @@ public class JPANaturalPerson extends PanacheEntity implements Serializable {
     }
 
 
-    public JPANaturalPerson fromModel(final NaturalPersonSpec spec) {
-        this.spec = new JPANaturalPersonSpec().fromModel(spec);
-
-        return this;
-    }
-
-    public NaturalPersonSpec toModel() {
+    public NaturalPerson toModel() {
         if (spec == null) {
             throw new IllegalStateException("JPANaturalPerson: spec is not initialized.");
         }
 
-        return spec.toModel();
+        return ImmutableNaturalPerson.builder()
+                .kind(NaturalPerson.KIND)
+                .version(NaturalPerson.VERSION)
+                .metadata(ImmutableMetadata.builder()
+                        .identity(spec.identity.toModel())
+                        .build()
+                )
+                .spec(spec.toModel())
+                .build();
+    }
+
+    public JPANaturalPerson fromModel(final NaturalPersonSpec model) {
+        spec = new JPANaturalPersonSpec().fromModel(model);
+
+        return this;
     }
 }

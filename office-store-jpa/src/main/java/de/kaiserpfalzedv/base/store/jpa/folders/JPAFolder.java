@@ -27,6 +27,7 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.UUID;
 
 /*
@@ -37,7 +38,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "FOLDERS", schema = "BASE")
-public class JPAFolder extends PanacheEntity {
+public class JPAFolder extends PanacheEntity implements Serializable {
     @Embedded
     public JPAFolderSpec spec;
 
