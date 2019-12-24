@@ -83,7 +83,7 @@ public class JPAFolderReadAdapterTest {
 
     @Test
     public void shouldRetrieveDataWhenLoadingByScope() {
-        Collection<Folder> result = readAdapter.loadByScope(SCOPE);
+        Collection<Folder> result = readAdapter.loadByTenant(SCOPE);
         LOGGER.trace("result: {}", result);
 
         assert result.size() > 0;
@@ -91,7 +91,7 @@ public class JPAFolderReadAdapterTest {
 
     @Test
     public void shouldRetrieveEmptySetWhenInvalidScopeIsQueried() {
-        Collection<Folder> result = readAdapter.loadByScope("empty");
+        Collection<Folder> result = readAdapter.loadByTenant("empty");
         LOGGER.trace("result: {}", result);
 
         assert result.isEmpty();
@@ -116,7 +116,7 @@ public class JPAFolderReadAdapterTest {
     @Test
     @Transactional
     public void shouldRetrieveALotOfFoldersWhenTheyExist() {
-        ArrayList<Folder> result = readAdapter.loadByScope(SCOPE);
+        ArrayList<Folder> result = readAdapter.loadByTenant(SCOPE);
 
         long count = readAdapter.count();
         LOGGER.info("Loaded ({}/{}) entries: {}", result.size(), count, result);

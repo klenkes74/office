@@ -28,9 +28,9 @@ public interface DataReadAdapter<T extends Serializable> {
 
     Optional<T> loadByScopeAndKey(final String scope, final String key);
 
-    ArrayList<T> loadByScope(final String scope);
+    ArrayList<T> loadByTenant(final String scope);
 
-    ArrayList<T> loadByScope(final String scope, final int index, final int size);
+    ArrayList<T> loadByTenant(final String scope, final int index, final int size);
 
     long count();
 }

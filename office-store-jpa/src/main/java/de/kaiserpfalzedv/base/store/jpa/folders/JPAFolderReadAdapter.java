@@ -36,8 +36,8 @@ import java.util.UUID;
 @Dependent
 public class JPAFolderReadAdapter implements FolderReadAdapter {
     @Override
-    public Optional<Folder> loadById(UUID id) {
-        JPAFolder data = JPAFolder.find("spec.identity.uuid", id).firstResult();
+    public Optional<Folder> loadById(UUID uuid) {
+        JPAFolder data = JPAFolder.findByUuid(uuid).firstResult();
 
         if (data == null) {
             return Optional.empty();
@@ -47,8 +47,8 @@ public class JPAFolderReadAdapter implements FolderReadAdapter {
     }
 
     @Override
-    public Optional<Folder> loadByScopeAndKey(String scope, String key) {
-        JPAFolder data = JPAFolder.find("spec.identity.tenant=?1 and spec.identity.key=?2", scope, key).firstResult();
+    public Optional<Folder> loadByScopeAndKey(final String tenant, final String key) {
+        JPAFolder data = JPAFolder.findByTenantAndKey(tenant, key).firstResult();
 
         if (data == null) {
             return Optional.empty();
@@ -58,8 +58,8 @@ public class JPAFolderReadAdapter implements FolderReadAdapter {
     }
 
     @Override
-    public ArrayList<Folder> loadByScope(String scope) {
-        List<JPAFolder> data = JPAFolder.find("spec.identity.tenant", scope).list();
+    public ArrayList<Folder> loadByTenant(final String tenant) {
+        List<JPAFolder> data = JPAFolder.findByTenant(tenant).list();
 
         ArrayList<Folder> result = new ArrayList<>(data.size());
         data.forEach(d -> result.add(d.toModel()));
@@ -68,8 +68,8 @@ public class JPAFolderReadAdapter implements FolderReadAdapter {
     }
 
     @Override
-    public ArrayList<Folder> loadByScope(final String scope, final int index, final int size) {
-        List<JPAFolder> data = JPAFolder.find("spec.identity.tenant", scope).page(index, size).list();
+    public ArrayList<Folder> loadByTenant(final String tenant, final int index, final int size) {
+        List<JPAFolder> data = JPAFolder.findByTenant(tenant).page(index, size).list();
 
         ArrayList<Folder> result = new ArrayList<>(data.size());
         data.forEach(d -> result.add(d.toModel()));

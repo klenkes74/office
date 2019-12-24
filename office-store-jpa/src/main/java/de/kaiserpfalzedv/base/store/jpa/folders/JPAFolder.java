@@ -22,10 +22,12 @@ import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.folders.Folder;
 import de.kaiserpfalzedv.folders.ImmutableFolder;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.UUID;
 
 /*
  *
@@ -38,6 +40,20 @@ import javax.persistence.Table;
 public class JPAFolder extends PanacheEntity {
     @Embedded
     public JPAFolderSpec spec;
+
+
+    public static PanacheQuery<JPAFolder> findByUuid(final UUID uuid) {
+        return find("spec.identity.uuid", uuid);
+    }
+
+    public static PanacheQuery<JPAFolder> findByTenant(final String tenant) {
+        return find("spec.identity.tenant=?1", tenant);
+    }
+
+    public static PanacheQuery<JPAFolder> findByTenantAndKey(final String tenant, final String key) {
+        return find("spec.identity.tenant=?1 and spec.identity.key=?2", tenant, key);
+    }
+
 
     public JPAFolder fromModel(final Folder folder) {
         spec = new JPAFolderSpec().fromModel(folder.getSpec());

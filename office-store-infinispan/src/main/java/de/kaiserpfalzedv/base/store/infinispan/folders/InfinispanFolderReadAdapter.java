@@ -54,12 +54,12 @@ public class InfinispanFolderReadAdapter implements FolderReadAdapter {
     }
 
     @Override
-    public ArrayList<Folder> loadByScope(String scope) {
+    public ArrayList<Folder> loadByTenant(String scope) {
         return store.loadByScope(scope);
     }
 
     @Override
-    public ArrayList<Folder> loadByScope(String scope, int index, int size) {
+    public ArrayList<Folder> loadByTenant(String scope, int index, int size) {
         ArrayList<Folder> data = store.loadByScope(scope);
 
         if (index >= data.size()) {

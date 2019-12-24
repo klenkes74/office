@@ -41,12 +41,12 @@ public class JPANaturalPersonService implements NaturalPersonResultService<Natur
     public void observe(@Observes final NaturalPersonCreated event) {
         NaturalPersonSpec spec = event.getSpec();
 
-        if (JPAFolder.find("spec.identity.uuid", spec.getIdentity().getUuid()).count() != 0) {
+        if (JPAFolder.findByUuid(spec.getIdentity().getUuid()).count() != 0) {
             throw new WrappingException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
         if (!spec.getIdentity().getTenant().orElse("./").isEmpty() && spec.getIdentity().getName().isPresent()) {
-            if (JPAFolder.find("spec.identity.tenant = ?1 and spec.identity.key = ?2", spec.getIdentity().getTenant().orElse("./."), spec.getIdentity().getName().orElse(null)).count() != 0) {
+            if (JPAFolder.findByTenantAndKey(spec.getIdentity().getTenant().orElse("./."), spec.getIdentity().getName().orElse(null)).count() != 0) {
                 throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
             }
         }

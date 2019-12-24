@@ -126,7 +126,7 @@ class InfinispanFolderReadAdapterTest {
 
     @Test
     void shouldReturn10FoldersWhenScopeIsCorrect() {
-        ArrayList<Folder> result = service.loadByScope("scope");
+        ArrayList<Folder> result = service.loadByTenant("scope");
         LOGGER.debug("result.size: {}", result.size());
 
         assert result.size() == 50;
@@ -134,7 +134,7 @@ class InfinispanFolderReadAdapterTest {
 
     @Test
     void shouldReturn10FoldersWhenScopeIsCorrectAndThePageIsGiven() {
-        ArrayList<Folder> result = service.loadByScope("scope", 0, 10);
+        ArrayList<Folder> result = service.loadByTenant("scope", 0, 10);
         LOGGER.debug("result.size: {}", result.size());
 
         assert result.size() == 10;
@@ -142,7 +142,7 @@ class InfinispanFolderReadAdapterTest {
 
     @Test
     void shouldReturn5FoldersWhenScopeIsCorrectAndThePageIsGivenButLastPageIsSmaller() {
-        ArrayList<Folder> result = service.loadByScope("scope", 44, 10);
+        ArrayList<Folder> result = service.loadByTenant("scope", 44, 10);
         LOGGER.debug("result.size: {}", result.size());
 
         assert result.size() == 5;
@@ -150,7 +150,7 @@ class InfinispanFolderReadAdapterTest {
 
     @Test
     void shouldReturnEmptyArrayWhenScopeIsCorrectAndThePageIsGivenButAfterTheLastPage() {
-        ArrayList<Folder> result = service.loadByScope("scope", 51, 10);
+        ArrayList<Folder> result = service.loadByTenant("scope", 51, 10);
         LOGGER.debug("result.size: {}", result.size());
 
         assert result.isEmpty();
@@ -158,7 +158,7 @@ class InfinispanFolderReadAdapterTest {
 
     @Test
     void shouldReturnNoFoldersWhenScopeIsInvalid() {
-        ArrayList<Folder> result = service.loadByScope("invalid");
+        ArrayList<Folder> result = service.loadByTenant("invalid");
         LOGGER.debug("result.size: {}", result.size());
 
         assert result.isEmpty();

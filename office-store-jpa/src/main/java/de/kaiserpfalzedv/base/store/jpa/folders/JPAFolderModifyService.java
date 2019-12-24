@@ -49,11 +49,16 @@ public class JPAFolderModifyService implements FolderCommandService<ModifyFolder
     public void observe(@Observes final ModifyFolder command) {
         FolderSpec spec = command.getSpec();
 
-        if (JPAFolder.find("spec.identity.uuid", spec.getIdentity().getUuid()).count() != 0) {
+        if (JPAFolder.findByUuid(spec.getIdentity().getUuid()).count() != 0) {
             throw new IllegalArgumentException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
-        if (JPAFolder.find("spec.identity.tenant = ?1 and spec.identity.key = ?2", spec.getIdentity().getTenant().orElse("./."), spec.getIdentity().getName()).count() != 0) {
+        if (
+                JPAFolder.findByTenantAndKey(
+                        spec.getIdentity().getTenant().orElse("./."),
+                        spec.getIdentity().getName().orElse("./.")
+                ).count() != 0
+        ) {
             throw new IllegalArgumentException(new KeyAlreadyExistsException(spec.getIdentity()));
         }
 

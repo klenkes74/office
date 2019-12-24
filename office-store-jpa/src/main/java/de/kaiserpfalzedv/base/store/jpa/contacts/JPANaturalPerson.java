@@ -20,11 +20,13 @@ package de.kaiserpfalzedv.base.store.jpa.contacts;
 
 import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * @author rlichti
@@ -35,6 +37,20 @@ import java.io.Serializable;
 public class JPANaturalPerson extends PanacheEntity implements Serializable {
     @Embedded
     JPANaturalPersonSpec spec;
+
+
+    public static PanacheQuery<JPANaturalPerson> findByUuid(final UUID uuid) {
+        return find("spec.identity.uuid", uuid);
+    }
+
+    public static PanacheQuery<JPANaturalPerson> findByTenant(final String tenant) {
+        return find("spec.identity.tenant=?1", tenant);
+    }
+
+    public static PanacheQuery<JPANaturalPerson> findByTenantAndKey(final String tenant, final String key) {
+        return find("spec.identity.tenant=?1 and spec.identity.key=?2", tenant, key);
+    }
+
 
     public JPANaturalPerson fromModel(final NaturalPersonSpec spec) {
         this.spec = new JPANaturalPersonSpec().fromModel(spec);
