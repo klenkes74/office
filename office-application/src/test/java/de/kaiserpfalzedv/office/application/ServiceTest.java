@@ -80,6 +80,7 @@ public class ServiceTest {
                 .when()
                 .auth().preemptive().basic("scott", "jb0ss")
                 .get("/folders/{tenant}/{key}")
+                .prettyPeek()
                 .then()
                 .statusCode(200);
     }

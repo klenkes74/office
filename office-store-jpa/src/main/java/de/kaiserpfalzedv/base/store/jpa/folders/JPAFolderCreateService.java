@@ -53,12 +53,12 @@ public class JPAFolderCreateService implements FolderCommandService<CreateFolder
     public void observe(@Observes final CreateFolder command) {
         FolderSpec spec = command.getSpec();
 
-        if (JPAFolder.find("identity.uuid", spec.getIdentity().getUuid()).count() != 0) {
+        if (JPAFolder.find("spec.identity.uuid", spec.getIdentity().getUuid()).count() != 0) {
             throw new IllegalArgumentException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
         if (!spec.getIdentity().getTenant().orElse("./").isEmpty() && spec.getIdentity().getName().isPresent()) {
-            if (JPAFolder.find("identity.scope = ?1 and identity.key = ?2", spec.getIdentity().getTenant().orElse("./."), spec.getIdentity().getName().orElse(null)).count() != 0) {
+            if (JPAFolder.find("spec.identity.tenant = ?1 and spec.identity.key = ?2", spec.getIdentity().getTenant().orElse("./."), spec.getIdentity().getName().orElse(null)).count() != 0) {
                 throw new IllegalArgumentException(new KeyAlreadyExistsException(spec.getIdentity()));
             }
         }
@@ -74,6 +74,7 @@ public class JPAFolderCreateService implements FolderCommandService<CreateFolder
                             .workflowdata(Optional.ofNullable(jpa.workflow.toModel()))
                             .build()
                     )
+                    .spec(jpa.spec.toModel())
                     .build();
             eventSource.fire(event);
         } catch (IllegalArgumentException e) {

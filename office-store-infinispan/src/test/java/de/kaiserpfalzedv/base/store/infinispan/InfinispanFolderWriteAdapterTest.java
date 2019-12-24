@@ -19,14 +19,17 @@
 package de.kaiserpfalzedv.base.store.infinispan;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
 import de.kaiserpfalzedv.base.store.ModificationFailedException;
 import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
+import de.kaiserpfalzedv.base.store.infinispan.folders.InfinispanFolderReadAdapter;
+import de.kaiserpfalzedv.base.store.infinispan.folders.InfinispanFolderStore;
+import de.kaiserpfalzedv.base.store.infinispan.folders.InfinispanFolderWriteAdapter;
 import de.kaiserpfalzedv.folders.Folder;
-import de.kaiserpfalzedv.folders.store.inmemory.InMemoryFolderReadAdapter;
-import de.kaiserpfalzedv.folders.store.inmemory.InMemoryFolderStore;
-import de.kaiserpfalzedv.folders.store.inmemory.InMemoryFolderWriteAdapter;
+import de.kaiserpfalzedv.folders.ImmutableFolder;
+import de.kaiserpfalzedv.folders.ImmutableFolderSpec;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -54,7 +58,7 @@ class InfinispanFolderWriteAdapterTest {
     private static final ZoneOffset EuropeBerlin = ZoneOffset.ofHours(-1);
     private static final ArrayList<Folder> data = FolderData.generateFolderData("scope", 50);
 
-    private InMemoryFolderStore store;
+    private InfinispanFolderStore store;
     private Folder validFolder = data.get(0);
     private UUID validUUID = validFolder.getMetadata().getIdentity().getUuid();
     private String[] validScopeAndKey = {
@@ -62,16 +66,16 @@ class InfinispanFolderWriteAdapterTest {
             validFolder.getMetadata().getIdentity().getName().orElse(null)
     };
 
-    private InMemoryFolderWriteAdapter service;
+    private InfinispanFolderWriteAdapter service;
 
 
     @BeforeEach
     void setUp() {
-        store = new InMemoryFolderStore();
+        store = new InfinispanFolderStore();
         store.createCaches(); // call PostConstruct to get the caches prepared
         data.forEach(store::store);
 
-        service = new InMemoryFolderWriteAdapter(store);
+        service = new InfinispanFolderWriteAdapter(store);
         LOGGER.debug("Stored folder count: {}", store.getObjectCount());
     }
 
@@ -79,7 +83,7 @@ class InfinispanFolderWriteAdapterTest {
     void shouldPrintAValidStringRepresentation() {
         LOGGER.debug("result: {}", service);
 
-        assertThat(service.toString(), matchesRegex("InMemoryFolderWriteAdapter\\[identity=[0-9]+, store=.*"));
+        assertThat(service.toString(), matchesRegex("InfinispanFolderWriteAdapter\\[identity=[0-9]+, store=.*"));
     }
 
     @Test
@@ -107,7 +111,7 @@ class InfinispanFolderWriteAdapterTest {
 
     @Test
     void shouldNotCreateAFolderWhenTheScopeAndKeyAreNotUnique() throws UuidAlreadyExistsException {
-        ObjectIdentity identity = ImmutableObjectIdentifier.builder()
+        ObjectIdentity identity = ImmutableObjectIdentity.builder()
                 .kind(Folder.KIND)
                 .version(Folder.VERSION)
 
@@ -203,12 +207,12 @@ class InfinispanFolderWriteAdapterTest {
 
     @BeforeAll
     public static void logStart() {
-        LOGGER.trace("Started tests for: {}", InMemoryFolderReadAdapter.class.getCanonicalName());
+        LOGGER.trace("Started tests for: {}", InfinispanFolderReadAdapter.class.getCanonicalName());
     }
 
     @AfterAll
     public static void logEnd() {
-        LOGGER.trace("Ended tests for: {}", InMemoryFolderReadAdapter.class.getCanonicalName());
+        LOGGER.trace("Ended tests for: {}", InfinispanFolderReadAdapter.class.getCanonicalName());
     }
 
 
@@ -258,7 +262,7 @@ class InfinispanFolderWriteAdapterTest {
                                 EuropeBerlin))
                         : Optional.empty();
 
-                ObjectIdentity identity = ImmutableObjectIdentifier.builder()
+                ObjectIdentity identity = ImmutableObjectIdentity.builder()
                         .kind(Folder.KIND)
                         .version(Folder.VERSION)
 

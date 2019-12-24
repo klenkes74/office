@@ -19,13 +19,18 @@
 package de.kaiserpfalzedv.base.store.infinispan;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import de.kaiserpfalzedv.base.store.NoModifiableDataFoundException;
+import de.kaiserpfalzedv.base.store.infinispan.folders.InfinispanFolderStore;
 import de.kaiserpfalzedv.folders.Folder;
 import de.kaiserpfalzedv.folders.ImmutableFolder;
 import de.kaiserpfalzedv.folders.ImmutableFolderSpec;
-import de.kaiserpfalzedv.folders.store.inmemory.InMemoryFolderStore;
 import org.infinispan.manager.DefaultCacheManager;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -50,7 +56,7 @@ class InfinispanFolderStoreTest {
     private static final ZoneOffset EuropeBerlin = ZoneOffset.ofHours(-1);
     private static final ArrayList<Folder> data = FolderData.generateFolderData("scope", 50);
 
-    private InMemoryFolderStore service;
+    private InfinispanFolderStore service;
     private UUID validUUID = data.get(0).getMetadata().getIdentity().getUuid();
     private String[] validScopeAndKey = {
             data.get(0).getMetadata().getIdentity().getTenant().orElse(null),
@@ -59,7 +65,7 @@ class InfinispanFolderStoreTest {
 
     @BeforeEach
     void setUp() {
-        service = new InMemoryFolderStore();
+        service = new InfinispanFolderStore();
         service.createCaches(); // call PostConstruct to get the caches prepared
         data.forEach(service::store);
 
@@ -69,7 +75,7 @@ class InfinispanFolderStoreTest {
 
     @Test
     void shouldCreateAValidServiceWhenCacheManagerIsSpecified() {
-        service = new InMemoryFolderStore(new DefaultCacheManager());
+        service = new InfinispanFolderStore(new DefaultCacheManager());
         service.createCaches();
         data.forEach(service::store);
 
@@ -80,7 +86,7 @@ class InfinispanFolderStoreTest {
     void shouldPrintAValidStringRepresentation() {
         LOGGER.debug("result: {}", service);
 
-        assertThat(service.toString(), matchesRegex("InMemoryFolderStore\\[identity=[0-9]+, cacheManager=org.infinispan.manager.DefaultCacheManager@[0-9a-z]+@Address:null\\]"));
+        assertThat(service.toString(), matchesRegex("InfinispanFolderStore\\[identity=[0-9]+, cacheManager=org.infinispan.manager.DefaultCacheManager@[0-9a-z]+@Address:null\\]"));
     }
 
     @Test
@@ -241,12 +247,12 @@ class InfinispanFolderStoreTest {
 
     @BeforeAll
     public static void logStart() {
-        LOGGER.trace("Started tests for: {}", InMemoryFolderStore.class.getCanonicalName());
+        LOGGER.trace("Started tests for: {}", InfinispanFolderStore.class.getCanonicalName());
     }
 
     @AfterAll
     public static void logEnd() {
-        LOGGER.trace("Ended tests for: {}", InMemoryFolderStore.class.getCanonicalName());
+        LOGGER.trace("Ended tests for: {}", InfinispanFolderStore.class.getCanonicalName());
     }
 
 
@@ -295,7 +301,7 @@ class InfinispanFolderStoreTest {
                                 EuropeBerlin))
                         : Optional.empty();
 
-                ObjectIdentity identity = ImmutableObjectIdentifier.builder()
+                ObjectIdentity identity = ImmutableObjectIdentity.builder()
                         .kind(Folder.KIND)
                         .version(Folder.VERSION)
 
