@@ -49,13 +49,13 @@ public class InfinispanFolderWriteAdapter implements FolderWriteAdapter {
     }
 
     @Override
-    public void create(Folder spec) throws UuidAlreadyExistsException, KeyAlreadyExistsException {
-        if (store.loadByUuid(spec.getSpec().getIdentity().getUuid()).isPresent()) {
+    public void create(final Folder spec) throws UuidAlreadyExistsException, KeyAlreadyExistsException {
+        if (store.loadByUuid(spec.getSpec().getIdentity().getTenant(), spec.getSpec().getIdentity().getUuid()).isPresent()) {
             throw new UuidAlreadyExistsException(spec.getSpec().getIdentity());
         }
 
         if (store.loadByScopeAndKey(
-                spec.getSpec().getIdentity().getTenant().orElse(InfinispanFolderStore.DEFAULT_TENANT),
+                spec.getSpec().getIdentity().getTenant(),
                 spec.getSpec().getIdentity().getName().orElse(null)
         )
                 .isPresent()) {
@@ -66,19 +66,20 @@ public class InfinispanFolderWriteAdapter implements FolderWriteAdapter {
     }
 
     @Override
-    public void modify(Folder spec) throws ModificationFailedException {
+    public void modify(final Folder spec) throws ModificationFailedException {
         store.replace(spec);
     }
 
     @Override
-    public void close(UUID id) throws ModificationFailedException {
-        Optional<Folder> spec = store.loadByUuid(id);
+    public void close(final String tenant, final UUID id) throws ModificationFailedException {
+        Optional<Folder> spec = store.loadByUuid(tenant, id);
 
         if (!spec.isPresent()) {
             throw new NoModifiableDataFoundException(ImmutableObjectIdentity.builder()
                     .kind(Folder.KIND)
                     .version(Folder.VERSION)
                     .uuid(id)
+                    .tenant(tenant)
                     .build()
             );
         }
@@ -97,8 +98,8 @@ public class InfinispanFolderWriteAdapter implements FolderWriteAdapter {
     }
 
     @Override
-    public void delete(UUID id) {
-        store.loadByUuid(id).ifPresent(folder -> store.remove(folder));
+    public void delete(final String tenant, final UUID id) {
+        store.loadByUuid(tenant, id).ifPresent(folder -> store.remove(folder));
     }
 
     @Override

@@ -16,7 +16,7 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.application;
+package de.kaiserpfalzedv.office.folders;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Tag;
@@ -31,19 +31,25 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
+import static javax.ws.rs.core.Response.Status.FORBIDDEN;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
 @Tag("integration")
-public class ServiceTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceTest.class);
+public class FolderWebServiceTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FolderWebServiceTest.class);
+
+    public static final String TENANT = "de.kaiserpfalz-edv";
+    public static final String USER = "scott";
+    public static final String PASSWORD = "jb0ss";
 
     @Test
     public void shouldReturnCorrectFolderWhenGivenTheUuid() {
         given()
                 .when()
-                .pathParam("tenant", "de.kaiserpfalz-edv")
-                .auth().preemptive().basic("scott", "jb0ss")
+                .pathParam("tenant", TENANT)
+                .auth().preemptive().basic(USER, PASSWORD)
                 .get("/folders/{tenant}/?uuid=3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8")
                 .then()
                 .statusCode(200);
@@ -53,32 +59,44 @@ public class ServiceTest {
     public void shouldReturnNotFoundWhenGivenTheWrongUuid() {
         given()
                 .when()
-                .pathParam("tenant", "de.kaiserpfalz-edv")
-                .auth().preemptive().basic("scott", "jb0ss")
+                .pathParam("tenant", TENANT)
+                .auth().preemptive().basic(USER, PASSWORD)
                 .get("/folders/{tenant}/?uuid=00000000-0000-0000-0000-000000000000")
                 .then()
                 .statusCode(404);
     }
 
     @Test
-    public void shouldReturnNotFoundWhenGivenAnUnknownScopeAndKey() {
+    public void shouldReturnNotFoundWhenGivenAnUnknownKey() {
         given()
-                .pathParam("tenant", "no-scope")
+                .pathParam("tenant", TENANT)
                 .pathParam("key", "not-there")
                 .when()
-                .auth().preemptive().basic("scott", "jb0ss")
+                .auth().preemptive().basic(USER, PASSWORD)
                 .get("/folders/{tenant}/{key}")
                 .then()
-                .statusCode(404);
+                .statusCode(NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    public void shouldReturnForbiddenWhenGivenWrongTenant() {
+        given()
+                .pathParam("tenant", "wrong-tenant")
+                .pathParam("key", "not-there")
+                .when()
+                .auth().preemptive().basic(USER, PASSWORD)
+                .get("/folders/{tenant}/{key}")
+                .then()
+                .statusCode(FORBIDDEN.getStatusCode());
     }
 
     @Test
     public void shouldReturnCorrectFolderWhenGivenTheCorrectScopeAndKey() {
         given()
-                .pathParam("tenant", "de.kaiserpfalz-edv")
+                .pathParam("tenant", TENANT)
                 .pathParam("key", "I-19-0001")
                 .when()
-                .auth().preemptive().basic("scott", "jb0ss")
+                .auth().preemptive().basic(USER, PASSWORD)
                 .get("/folders/{tenant}/{key}")
                 .prettyPeek()
                 .then()
@@ -93,9 +111,9 @@ public class ServiceTest {
 
         given()
                 .when()
-                .pathParam("tenant", "de.kaiserpfalz-edv")
+                .pathParam("tenant", TENANT)
                 .header("content-type", MediaType.APPLICATION_JSON)
-                .auth().preemptive().basic("scott", "jb0ss")
+                .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
                 .put("/folders/{tenant}")
                 .then()
@@ -110,9 +128,9 @@ public class ServiceTest {
 
         given()
                 .when()
-                .pathParam("tenant", "de.kaiserpfalz-edv")
+                .pathParam("tenant", TENANT)
                 .header("content-type", MediaType.APPLICATION_JSON)
-                .auth().preemptive().basic("scott", "jb0ss")
+                .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
                 .put("/folders/{tenant}")
                 .then()
@@ -120,10 +138,27 @@ public class ServiceTest {
     }
 
     @Test
+    public void shouldReturnFailureWhenCreatingAFolderWithWrongTenant() throws IOException {
+        Path path = Paths.get("target/test-classes/json/folders/create_doublette.json");
+        String body = new String(Files.readAllBytes(path));
+        assert !body.isEmpty();
+
+        given()
+                .when()
+                .pathParam("tenant", "de.lichti")
+                .header("content-type", MediaType.APPLICATION_JSON)
+                .auth().preemptive().basic(USER, PASSWORD)
+                .body(body)
+                .put("/folders/{tenant}")
+                .then()
+                .statusCode(FORBIDDEN.getStatusCode());
+    }
+
+    @Test
     public void shouldReturnHealthWhenCallingReady() {
         given()
                 .when()
-                .auth().preemptive().basic("scott", "jb0ss")
+                .auth().preemptive().basic(USER, PASSWORD)
                 .get("/health/ready")
                 .then()
                 .statusCode(200);
@@ -133,7 +168,7 @@ public class ServiceTest {
     public void shouldReturnHealthWhenCallingLive() {
         given()
                 .when()
-                .auth().preemptive().basic("scott", "jb0ss")
+                .auth().preemptive().basic(USER, PASSWORD)
                 .get("/health/live")
                 .then()
                 .statusCode(200);

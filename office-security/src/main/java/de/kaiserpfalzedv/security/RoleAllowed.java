@@ -16,12 +16,29 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.office.application;
+package de.kaiserpfalzedv.security;
 
-import io.quarkus.test.junit.NativeImageTest;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-@NativeImageTest
-public class NativeServiceIT extends ServiceTest {
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-    // Execute the same tests but in native mode.
+/**
+ * A custom annotation for marking which tenant based role will be allowed to execute a certain method.
+ *
+ * @author rlichti
+ * @since 2019-12-24T22:43
+ */
+@Documented
+@Retention(RUNTIME)
+@Target({TYPE, METHOD})
+public @interface RoleAllowed {
+    /**
+     * List of roles that are permitted access.
+     */
+    String value();
 }
+

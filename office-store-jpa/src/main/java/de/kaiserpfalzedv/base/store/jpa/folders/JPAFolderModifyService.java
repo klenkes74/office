@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.base.store.jpa.folders;
 
+import de.kaiserpfalzedv.base.WrappingException;
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.cdi.EventLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
@@ -34,6 +35,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -49,24 +51,29 @@ public class JPAFolderModifyService implements FolderCommandService<ModifyFolder
     public void observe(@Observes final ModifyFolder command) {
         FolderSpec spec = command.getSpec();
 
-        if (JPAFolder.findByUuid(spec.getIdentity().getUuid()).count() != 0) {
-            throw new IllegalArgumentException(new UuidAlreadyExistsException(spec.getIdentity()));
+        if (JPAFolder.findByUuid(spec.getIdentity().getTenant(), spec.getIdentity().getUuid()).count() != 0) {
+            throw new WrappingException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
         if (
                 JPAFolder.findByTenantAndKey(
-                        spec.getIdentity().getTenant().orElse("./."),
+                        spec.getIdentity().getTenant(),
                         spec.getIdentity().getName().orElse("./.")
                 ).count() != 0
         ) {
-            throw new IllegalArgumentException(new KeyAlreadyExistsException(spec.getIdentity()));
+            throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
         }
 
 
+        JPAFolderModify jpa;
         try {
-            JPAFolderModify jpa = new JPAFolderModify().fromModel(command);
+            jpa = new JPAFolderModify().fromModel(command);
             jpa.persist();
+        } catch (PersistenceException e) {
+            throw new WrappingException(new CreationFailedException(command.getMetadata().getIdentity(), e));
+        }
 
+        try {
             FolderModified event = ImmutableFolderModified.builder()
                     .metadata(ImmutableMetadata.builder()
                             .identity(jpa.command.toModel())
@@ -76,7 +83,7 @@ public class JPAFolderModifyService implements FolderCommandService<ModifyFolder
                     .build();
             eventSink.fire(event);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(new CreationFailedException(command.getMetadata().getIdentity(), e));
+            throw new WrappingException(new CreationFailedException(command.getMetadata().getIdentity(), e));
         }
     }
 }

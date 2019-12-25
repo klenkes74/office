@@ -6,7 +6,7 @@
       "kind": "de.kaiserpfalzedv.folders.CreateFolder",
       "version": "1.0.0",
       "uuid": "cdf466c6-db5c-47eb-bb2f-ff066e1d08c8",
-      "tenant": "kaiserpfalz-edv.de",
+      "tenant": "de.kaiserpfalz-edv",
       "name": "I'19-5315"
     },
     "workflowdata": {
@@ -28,7 +28,7 @@
       "kind": "de.kaiserpfalzedv.folders.Folder",
       "version": "1.0.0",
       "uuid": "b88f0e4e-74ea-4daf-812b-c798014e991b",
-      "tenant": "kaiserpfalz-edv.de",
+      "tenant": "de.kaiserpfalz-edv",
       "name": "I'19-5315"
     },
     "name": "Softwaretest Akte",

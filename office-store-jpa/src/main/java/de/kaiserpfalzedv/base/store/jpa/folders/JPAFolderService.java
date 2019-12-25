@@ -30,6 +30,7 @@ import de.kaiserpfalzedv.folders.api.FolderResultService;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 
 @JPA
@@ -40,23 +41,27 @@ public class JPAFolderService implements FolderResultService<FolderCreated> {
     public void observe(@Observes final FolderCreated command) {
         FolderSpec spec = command.getSpec();
 
-        if (JPAFolder.findByUuid(spec.getIdentity().getUuid()).count() != 0) {
-            throw new IllegalArgumentException(new UuidAlreadyExistsException(spec.getIdentity()));
+        if (JPAFolder.findByUuid(spec.getIdentity().getTenant(), spec.getIdentity().getUuid()).count() != 0) {
+            throw new WrappingException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
-        if (!spec.getIdentity().getTenant().orElse("./").isEmpty() && spec.getIdentity().getName().isPresent()) {
-            if (JPAFolder.findByTenantAndKey(spec.getIdentity().getTenant().orElse("./."), spec.getIdentity().getName().orElse(null)).count() != 0) {
-                throw new IllegalArgumentException(new KeyAlreadyExistsException(spec.getIdentity()));
+        if (spec.getIdentity().getName().isPresent()) {
+            if (JPAFolder.findByTenantAndKey(spec.getIdentity().getTenant(), spec.getIdentity().getName().orElse(null)).count() != 0) {
+                throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
             }
         }
 
+        JPAFolder jpa;
+        try {
+            jpa = new JPAFolder();
+            jpa.spec = new JPAFolderSpec().fromModel(spec);
+        } catch (IllegalArgumentException e) {
+            throw new WrappingException(new CreationFailedException(command.getMetadata().getIdentity(), e));
+        }
 
         try {
-            JPAFolder jpa = new JPAFolder();
-            jpa.spec = new JPAFolderSpec().fromModel(spec);
-
             jpa.persistAndFlush();
-        } catch (IllegalArgumentException e) {
+        } catch (PersistenceException e) {
             throw new WrappingException(new CreationFailedException(command.getMetadata().getIdentity(), e));
         }
     }

@@ -44,23 +44,23 @@ public class InfinispanFolderReadAdapter implements FolderReadAdapter {
     }
 
     @Override
-    public Optional<Folder> loadById(UUID id) {
-        return store.loadByUuid(id);
+    public Optional<Folder> loadById(final String tenant, final UUID id) {
+        return store.loadByUuid(tenant, id);
     }
 
     @Override
-    public Optional<Folder> loadByScopeAndKey(String scope, String key) {
-        return store.loadByScopeAndKey(scope, key);
+    public Optional<Folder> loadbyKey(final String tenant, final String key) {
+        return store.loadByScopeAndKey(tenant, key);
     }
 
     @Override
-    public ArrayList<Folder> loadByTenant(String scope) {
-        return store.loadByScope(scope);
+    public ArrayList<Folder> loadByTenant(String tenant) {
+        return store.loadByTenant(tenant);
     }
 
     @Override
-    public ArrayList<Folder> loadByTenant(String scope, int index, int size) {
-        ArrayList<Folder> data = store.loadByScope(scope);
+    public ArrayList<Folder> loadByTenant(String tenant, int index, int size) {
+        ArrayList<Folder> data = store.loadByTenant(tenant);
 
         if (index >= data.size()) {
             return new ArrayList<>(0);

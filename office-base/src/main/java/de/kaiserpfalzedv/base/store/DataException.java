@@ -48,7 +48,7 @@ public abstract class DataException extends Exception {
 
     static String formatObjectIdentifier(ObjectIdentity identifier) {
         return " (Object: uuid=" + identifier.getUuid()
-                + (identifier.getTenant().isPresent() ? ", scope='" + identifier.getTenant().get() + "'" : "")
+                + ", tenant='" + identifier.getTenant() + "'"
                 + (identifier.getName().isPresent() ? ", key='" + identifier.getName().get() + "'" : "")
                 + ")";
     }

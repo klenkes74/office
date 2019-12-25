@@ -139,7 +139,7 @@ public class ModifyFolderTest {
         LOGGER.debug("result: {}", result);
 
         assert SERVICE.getSpec().getIdentity().getUuid().equals(result.getIdentity().getUuid());
-        assert Objects.equals(SERVICE.getSpec().getIdentity().getTenant().orElse(null), result.getIdentity().getTenant().orElse(null));
+        assert Objects.equals(SERVICE.getSpec().getIdentity().getTenant(), result.getIdentity().getTenant());
         assert "name".equals(result.getIdentity().getName().orElse(null));
         assert SERVICE.getSpec().getName().equals(result.getName());
         assert SERVICE.getSpec().getDescription().equals(result.getDescription());

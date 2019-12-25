@@ -18,28 +18,29 @@
 
 package de.kaiserpfalzedv.security;
 
+import de.kaiserpfalzedv.base.cdi.CurrentRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 
-/*
- *
- *
+/**
  * @author rlichti
  * @since 2019-12-21 19:45
  */
-@RequestScoped
+@ApplicationScoped
 public class TenantProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(TenantProvider.class);
 
-    private Tenant tenant;
+    private ThreadLocal<Tenant> tenants = new ThreadLocal<>();
 
     @Produces
+    @CurrentRequest
     public Tenant getTenant() {
+        Tenant tenant = tenants.get();
         LOGGER.trace("Providing tenant: {}", tenant);
         return tenant;
     }
@@ -48,13 +49,13 @@ public class TenantProvider {
         MDC.put("tenant", tenant.getTenant());
         LOGGER.debug("Saving tenant to request: {}", tenant);
 
-        this.tenant = tenant;
+        tenants.set(tenant);
     }
 
     public void unsetTenant(@Observes EmptyTenant empty) {
-        LOGGER.debug("Removing tenant from request: {}", tenant);
+        LOGGER.debug("Removing tenant from request: {}", tenants.get());
         MDC.remove("tenant");
 
-        this.tenant = null;
+        tenants.remove();
     }
 }

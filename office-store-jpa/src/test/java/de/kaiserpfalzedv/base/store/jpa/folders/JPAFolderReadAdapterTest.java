@@ -43,7 +43,7 @@ public class JPAFolderReadAdapterTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(JPAFolderReadAdapterTest.class);
 
     private static final UUID ID = UUID.fromString("3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8");
-    private static final String SCOPE = "de.kaiserpfalz-edv";
+    private static final String TENANT = "de.kaiserpfalz-edv";
     private static final String KEY = "I-19-0001";
     private static final String NAME = "Softwaretest Akte 1";
     private static final String DISPLAYNAME = "SW Test 1";
@@ -58,7 +58,7 @@ public class JPAFolderReadAdapterTest {
 
     @Test
     public void shouldRetrieveEmptyOptionalIfStoreIsEmpty() {
-        Optional<Folder> result = readAdapter.loadById(UUID.randomUUID());
+        Optional<Folder> result = readAdapter.loadById(TENANT, UUID.randomUUID());
         LOGGER.trace("result: {}", result);
 
         assert !result.isPresent();
@@ -66,14 +66,14 @@ public class JPAFolderReadAdapterTest {
 
     @Test
     public void shouldRetrieveDataById() {
-        Optional<Folder> result = readAdapter.loadById(ID);
+        Optional<Folder> result = readAdapter.loadById(TENANT, ID);
         LOGGER.trace("result: {}", result);
 
         assert result.isPresent();
         Folder data = result.get();
 
         assert ID.equals(data.getSpec().getIdentity().getUuid());
-        assert SCOPE.equals(data.getSpec().getIdentity().getTenant().orElse(""));
+        assert TENANT.equals(data.getSpec().getIdentity().getTenant());
         assert KEY.equals(data.getSpec().getIdentity().getName().orElse(null));
         assert NAME.equals(data.getSpec().getName());
         assert DISPLAYNAME.equals(data.getSpec().getDisplayname());
@@ -83,7 +83,7 @@ public class JPAFolderReadAdapterTest {
 
     @Test
     public void shouldRetrieveDataWhenLoadingByScope() {
-        Collection<Folder> result = readAdapter.loadByTenant(SCOPE);
+        Collection<Folder> result = readAdapter.loadByTenant(TENANT);
         LOGGER.trace("result: {}", result);
 
         assert result.size() > 0;
@@ -99,7 +99,7 @@ public class JPAFolderReadAdapterTest {
 
     @Test
     public void shouldRetrieveDataWhenLoadedByName() {
-        Optional<Folder> result = readAdapter.loadByScopeAndKey(SCOPE, KEY);
+        Optional<Folder> result = readAdapter.loadbyKey(TENANT, KEY);
         LOGGER.trace("result: {}", result);
 
         assert result.isPresent();
@@ -107,7 +107,7 @@ public class JPAFolderReadAdapterTest {
 
     @Test
     public void shouldRetrieveEmptyWhenInvalidNameIsGiven() {
-        Optional<Folder> result = readAdapter.loadByScopeAndKey("empty", KEY);
+        Optional<Folder> result = readAdapter.loadbyKey("empty", KEY);
         LOGGER.trace("result: {}", result);
 
         assert !result.isPresent();
@@ -116,7 +116,7 @@ public class JPAFolderReadAdapterTest {
     @Test
     @Transactional
     public void shouldRetrieveALotOfFoldersWhenTheyExist() {
-        ArrayList<Folder> result = readAdapter.loadByTenant(SCOPE);
+        ArrayList<Folder> result = readAdapter.loadByTenant(TENANT);
 
         long count = readAdapter.count();
         LOGGER.info("Loaded ({}/{}) entries: {}", result.size(), count, result);

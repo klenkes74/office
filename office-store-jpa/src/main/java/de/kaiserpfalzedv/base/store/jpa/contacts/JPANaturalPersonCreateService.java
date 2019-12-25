@@ -51,12 +51,12 @@ public class JPANaturalPersonCreateService implements NaturalPersonCommandServic
     public void observe(@Observes final CreateNaturalPerson command) {
         NaturalPersonSpec spec = command.getSpec();
 
-        if (JPAFolder.findByUuid(spec.getIdentity().getUuid()).count() != 0) {
+        if (JPAFolder.findByUuid(spec.getIdentity().getTenant(), spec.getIdentity().getUuid()).count() != 0) {
             throw new WrappingException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
-        if (!spec.getIdentity().getTenant().orElse("./").isEmpty() && spec.getIdentity().getName().isPresent()) {
-            if (JPAFolder.findByTenantAndKey(spec.getIdentity().getTenant().orElse("./."), spec.getIdentity().getName().orElse(null)).count() != 0) {
+        if (spec.getIdentity().getName().isPresent()) {
+            if (JPAFolder.findByTenantAndKey(spec.getIdentity().getTenant(), spec.getIdentity().getName().orElse(null)).count() != 0) {
                 throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
             }
         }

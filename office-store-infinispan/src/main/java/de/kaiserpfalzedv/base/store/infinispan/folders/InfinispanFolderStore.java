@@ -76,8 +76,17 @@ public class InfinispanFolderStore {
     }
 
 
-    public Optional<Folder> loadByUuid(final UUID uuid) {
-        return Optional.ofNullable(folders.get(uuid));
+    public Optional<Folder> loadByUuid(final String tenant, final UUID uuid) {
+        Folder result = folders.get(uuid);
+        if (result == null) {
+            return Optional.empty();
+        }
+
+        if (result.getMetadata().getIdentity().getTenant().equals(tenant)) {
+            return Optional.ofNullable(folders.get(uuid));
+        } else {
+            return Optional.empty();
+        }
     }
 
     public Optional<Folder> loadByScopeAndKey(final String scope, final String key) {
@@ -88,20 +97,20 @@ public class InfinispanFolderStore {
         }
     }
 
-    public Optional<Folder> loadByKey(final String key) {
-        return loadByScopeAndKey(DEFAULT_TENANT, key);
+    public Optional<Folder> loadByKey(final String tenant, final String key) {
+        return loadByScopeAndKey(tenant, key);
     }
 
-    public ArrayList<Folder> loadByScope(final String scope) {
-        if (scopeAndKey.containsKey(scope)) {
-            return new ArrayList<>(scopeAndKey.get(scope).values());
+    public ArrayList<Folder> loadByTenant(final String tenant) {
+        if (scopeAndKey.containsKey(tenant)) {
+            return new ArrayList<>(scopeAndKey.get(tenant).values());
         } else {
             return new ArrayList<>(0);
         }
     }
 
     public ArrayList<Folder> loadEntriesWithoutScope() {
-        return loadByScope(DEFAULT_TENANT);
+        return loadByTenant(DEFAULT_TENANT);
     }
 
     public void store(final Folder folder) {
@@ -111,8 +120,8 @@ public class InfinispanFolderStore {
         folders.put(identity.getUuid(), folder);
 
         if (identity.getName().isPresent()) {
-            scopeAndKey.putIfAbsent(identity.getTenant().orElse(DEFAULT_TENANT), new HashMap<>(5));
-            scopeAndKey.get(identity.getTenant().orElse(DEFAULT_TENANT)).put(identity.getName().get(), folder);
+            scopeAndKey.putIfAbsent(identity.getTenant(), new HashMap<>(5));
+            scopeAndKey.get(identity.getTenant()).put(identity.getName().get(), folder);
         }
     }
 
@@ -131,8 +140,8 @@ public class InfinispanFolderStore {
         LOGGER.trace("Deleting Folder: {}", identity);
 
         if (identity.getName().isPresent()
-                && scopeAndKey.containsKey(identity.getTenant().orElse(DEFAULT_TENANT))) {
-            scopeAndKey.get(identity.getTenant().orElse(DEFAULT_TENANT)).remove(identity.getName().get());
+                && scopeAndKey.containsKey(identity.getTenant())) {
+            scopeAndKey.get(identity.getTenant()).remove(identity.getName().get());
         }
 
         folders.remove(identity.getUuid());

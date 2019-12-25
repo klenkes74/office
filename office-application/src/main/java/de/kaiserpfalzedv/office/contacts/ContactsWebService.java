@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.office.contacts;
 
+import de.kaiserpfalzedv.base.WrappingException;
 import de.kaiserpfalzedv.base.cdi.CorrelationLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.contacts.CreateNaturalPerson;
@@ -57,12 +58,15 @@ public class ContactsWebService {
 
     @GET
     @Path("natural/")
-    @RolesAllowed({"user", "admin"})
+    @RolesAllowed({"viewer", "editor", "admin"})
     @Metered(name = "contacts.loadByUuid")
     @Counted(name = "contacts.loadByUuid.count")
     @ConcurrentGauge(name = "contacts.loadByUuid.concurrent")
-    public NaturalPerson getByUuid(@QueryParam("uuid") final UUID uuid) {
-        Optional<NaturalPerson> result = reader.loadById(uuid);
+    public NaturalPerson getByUuid(
+            @PathParam("tenant") final String tenant,
+            @QueryParam("uuid") final UUID uuid
+    ) {
+        Optional<NaturalPerson> result = reader.loadById(tenant, uuid);
 
         if (result.isPresent()) {
             return result.get();
@@ -76,7 +80,7 @@ public class ContactsWebService {
 
     @GET
     @Path("natural/{key}")
-    @RolesAllowed({"user", "admin"})
+    @RolesAllowed({"viewer", "editor", "admin"})
     @Metered(name = "contacts.loadByKey")
     @Counted(name = "contacts.loadByKey.count")
     @ConcurrentGauge(name = "contacts.loadByKey.concurrent")
@@ -84,7 +88,7 @@ public class ContactsWebService {
             @PathParam("tenant") final String tenant,
             @PathParam("key") final String key
     ) {
-        Optional<NaturalPerson> result = reader.loadByScopeAndKey(tenant, key);
+        Optional<NaturalPerson> result = reader.loadbyKey(tenant, key);
 
         if (result.isPresent()) {
             return result.get();
@@ -99,14 +103,14 @@ public class ContactsWebService {
 
     @PUT
     @Path("natural/")
-    @RolesAllowed("user")
+    @RolesAllowed({"editor", "admin"})
     @Metered(name = "contacts.createNaturalPerson")
     @Counted(name = "contacts.createNaturalPerson.count")
     @ConcurrentGauge(name = "contacts.createNaturalPerson.concurrent")
     public void createNaturalPerson(final CreateNaturalPerson command) {
         try {
             naturalPersonCreateEventSink.fire(command);
-        } catch (IllegalArgumentException e) {
+        } catch (WrappingException e) {
             throw new WebApplicationException(
                     e.getCause() != null ? e.getCause().getMessage() : "Can't create new natural person.",
                     Response.Status.CONFLICT

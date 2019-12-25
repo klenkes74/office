@@ -56,13 +56,14 @@ class InfinispanFolderWriteAdapterTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(InfinispanFolderWriteAdapterTest.class);
 
     private static final ZoneOffset EuropeBerlin = ZoneOffset.ofHours(-1);
-    private static final ArrayList<Folder> data = FolderData.generateFolderData("scope", 50);
+    private static final String VALID_TENANT = "tenant";
+    private static final ArrayList<Folder> data = FolderData.generateFolderData(VALID_TENANT, 50);
 
     private InfinispanFolderStore store;
     private Folder validFolder = data.get(0);
     private UUID validUUID = validFolder.getMetadata().getIdentity().getUuid();
     private String[] validScopeAndKey = {
-            validFolder.getMetadata().getIdentity().getTenant().orElse(null),
+            validFolder.getMetadata().getIdentity().getTenant(),
             validFolder.getMetadata().getIdentity().getName().orElse(null)
     };
 
@@ -91,7 +92,7 @@ class InfinispanFolderWriteAdapterTest {
         Folder data = FolderData.generateFolderData("other scope", 1).get(0);
         service.create(data);
 
-        Optional<Folder> result = store.loadByUuid(data.getMetadata().getIdentity().getUuid());
+        Optional<Folder> result = store.loadByUuid("other scope", data.getMetadata().getIdentity().getUuid());
 
         assert result.isPresent();
         assert result.get().getMetadata().getIdentity().getUuid().equals(data.getMetadata().getIdentity().getUuid());
@@ -148,9 +149,9 @@ class InfinispanFolderWriteAdapterTest {
     void shouldCloseFolderWhenAValidFolderIsGiven() throws ModificationFailedException {
         assert !validFolder.getSpec().getClosed().isPresent();
 
-        service.close(validUUID);
+        service.close(VALID_TENANT, validUUID);
 
-        Optional<Folder> result = store.loadByUuid(validUUID);
+        Optional<Folder> result = store.loadByUuid(VALID_TENANT, validUUID);
         LOGGER.debug("result: {}", result);
 
         assert result.isPresent();
@@ -162,10 +163,10 @@ class InfinispanFolderWriteAdapterTest {
     void shouldThrowAnExceptionWhenClosingAnNonexistingFolder() {
         UUID uuid = UUID.randomUUID();
 
-        assert !store.loadByUuid(uuid).isPresent();
+        assert !store.loadByUuid(VALID_TENANT, uuid).isPresent();
 
         try {
-            service.close(uuid);
+            service.close(VALID_TENANT, uuid);
 
             fail("A ModificationFailedException should have been thrown!");
         } catch (ModificationFailedException e) {
@@ -175,9 +176,9 @@ class InfinispanFolderWriteAdapterTest {
 
     @Test
     void shouldDeleteFolderWhenAValidFolderIsGiven() {
-        service.delete(validUUID);
+        service.delete(VALID_TENANT, validUUID);
 
-        Optional<Folder> result = store.loadByUuid(validUUID);
+        Optional<Folder> result = store.loadByUuid(VALID_TENANT, validUUID);
         LOGGER.debug("result: {}", result);
 
         assert !result.isPresent();
@@ -196,7 +197,7 @@ class InfinispanFolderWriteAdapterTest {
 
         service.modify(data);
 
-        Optional<Folder> result = store.loadByUuid(validUUID);
+        Optional<Folder> result = store.loadByUuid(VALID_TENANT, validUUID);
         LOGGER.debug("result: {}", result);
 
         assert result.isPresent();
@@ -218,7 +219,7 @@ class InfinispanFolderWriteAdapterTest {
 
     static private class FolderData {
         @SuppressWarnings("SameParameterValue")
-        static ArrayList<Folder> generateFolderData(final String scope, final int count) {
+        static ArrayList<Folder> generateFolderData(final String tenant, final int count) {
             ArrayList<Folder> result = new ArrayList<>(count);
 
             for (int i = 1; i <= count; i++) {
@@ -267,7 +268,7 @@ class InfinispanFolderWriteAdapterTest {
                         .version(Folder.VERSION)
 
                         .uuid(UUID.randomUUID())
-                        .tenant(Optional.ofNullable(scope))
+                        .tenant(tenant)
                         .name(key)
 
                         .build();

@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -51,12 +50,13 @@ public class ObjectIdentityTest {
                 .kind(KIND)
                 .version(VERSION)
                 .uuid(ID)
+                .tenant(TENANT)
                 .build();
 
         assert KIND.equals(service.getKind());
         assert VERSION.equals(service.getVersion());
         assert ID.equals(service.getUuid());
-        assert !service.getTenant().isPresent();
+        assert !service.getTenant().isEmpty();
         assert !service.getName().isPresent();
     }
 
@@ -73,24 +73,7 @@ public class ObjectIdentityTest {
         assert KIND.equals(service.getKind());
         assert VERSION.equals(service.getVersion());
         assert service.getUuid() != null;
-        assert TENANT.equals(service.getTenant().orElse(null));
-        assert KEY.equals(service.getName().orElse(null));
-    }
-
-    @Test
-    public void shouldWorkWhenthStaticFactoryMethodWithOnlyKey() {
-        ObjectIdentity service = ImmutableObjectIdentity.builder()
-                .kind(KIND)
-                .version(VERSION)
-                .uuid(ID)
-                .tenant(Optional.empty())
-                .name(KEY)
-                .build();
-
-        assert KIND.equals(service.getKind());
-        assert VERSION.equals(service.getVersion());
-        assert service.getUuid() != null;
-        assert !service.getTenant().isPresent();
+        assert TENANT.equals(service.getTenant());
         assert KEY.equals(service.getName().orElse(null));
     }
 

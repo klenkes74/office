@@ -36,8 +36,8 @@ import java.util.UUID;
 @Dependent
 public class JPAFolderReadAdapter implements FolderReadAdapter {
     @Override
-    public Optional<Folder> loadById(UUID uuid) {
-        JPAFolder data = JPAFolder.findByUuid(uuid).firstResult();
+    public Optional<Folder> loadById(final String tenant, final UUID uuid) {
+        JPAFolder data = JPAFolder.findByUuid(tenant, uuid).firstResult();
 
         if (data == null) {
             return Optional.empty();
@@ -47,7 +47,7 @@ public class JPAFolderReadAdapter implements FolderReadAdapter {
     }
 
     @Override
-    public Optional<Folder> loadByScopeAndKey(final String tenant, final String key) {
+    public Optional<Folder> loadbyKey(final String tenant, final String key) {
         JPAFolder data = JPAFolder.findByTenantAndKey(tenant, key).firstResult();
 
         if (data == null) {

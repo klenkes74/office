@@ -16,16 +16,12 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store;
+package de.kaiserpfalzedv.office.folders;
 
-import java.util.UUID;
+import io.quarkus.test.junit.NativeImageTest;
 
-public interface DataWriteAdapter<T> {
-    void create(final T spec) throws UuidAlreadyExistsException, KeyAlreadyExistsException, CreationFailedException;
+@NativeImageTest
+public class NativeFolderWebServiceIT extends FolderWebServiceTest {
 
-    void modify(final T spec) throws ModificationFailedException;
-
-    void close(final String tenant, final UUID id) throws ModificationFailedException;
-
-    void delete(final String tenant, final UUID id) throws DeletionFailedException;
+    // Execute the same tests but in native mode.
 }

@@ -41,8 +41,8 @@ public class JPANaturalPerson extends PanacheEntity implements Serializable {
     @Embedded
     public JPANaturalPersonSpec spec;
 
-    public static PanacheQuery<JPANaturalPerson> findByUuid(final UUID uuid) {
-        return find("spec.identity.uuid", uuid);
+    public static PanacheQuery<JPANaturalPerson> findByUuid(final String tenant, final UUID uuid) {
+        return find("spec.identity.tenant=?1 and spec.identity.uuid=?2", tenant, uuid);
     }
 
     public static PanacheQuery<JPANaturalPerson> findByTenant(final String tenant) {

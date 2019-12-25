@@ -48,7 +48,7 @@ public class JPAIdentity implements Serializable {
     @Transient
     public JPAIdentity fromModel(ObjectIdentity identity) {
         uuid = identity.getUuid();
-        tenant = identity.getTenant().orElse(null);
+        tenant = identity.getTenant();
         key = identity.getName().orElse(null);
 
         return this;

@@ -16,16 +16,25 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store;
+package de.kaiserpfalzedv.base.cdi;
 
-import java.util.UUID;
+import javax.inject.Qualifier;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-public interface DataWriteAdapter<T> {
-    void create(final T spec) throws UuidAlreadyExistsException, KeyAlreadyExistsException, CreationFailedException;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-    void modify(final T spec) throws ModificationFailedException;
+/**
+ * This small annotation is for selecting the current value of the current request. It may be used for different
+ * purposes throughout the system.
+ *
+ * @author rlichti
+ * @since 2019-12-16 14:57
+ */
+@Qualifier
+@Target({TYPE, METHOD, FIELD})
+@Retention(RUNTIME)
+public @interface CurrentRequest {
 
-    void close(final String tenant, final UUID id) throws ModificationFailedException;
-
-    void delete(final String tenant, final UUID id) throws DeletionFailedException;
 }

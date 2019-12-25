@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.base.store.jpa.folders;
 
+import de.kaiserpfalzedv.base.WrappingException;
 import de.kaiserpfalzedv.base.cdi.EventLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.base.store.CreationFailedException;
@@ -32,6 +33,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 
 @JPA
@@ -46,17 +48,22 @@ public class JPAFolderDeleteService implements FolderCommandService<DeleteFolder
 
     @Transactional
     public void observe(@Observes final DeleteFolder command) {
+        JPAFolderDelete jpa;
         try {
-            JPAFolderDelete jpa = new JPAFolderDelete().fromModel(command);
+            jpa = new JPAFolderDelete().fromModel(command);
             jpa.persist();
+        } catch (PersistenceException e) {
+            throw new WrappingException(new CreationFailedException(command.getMetadata().getIdentity(), e));
+        }
 
+        try {
             FolderDeleted event = ImmutableFolderDeleted.builder()
                     .metadata(jpa.toModel().getMetadata())
                     .build();
 
             eventSink.fire(event);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(new CreationFailedException(command.getMetadata().getIdentity(), e));
+            throw new WrappingException(new CreationFailedException(command.getMetadata().getIdentity(), e));
         }
     }
 }

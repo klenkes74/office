@@ -24,13 +24,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface DataReadAdapter<T extends Serializable> {
-    Optional<T> loadById(final UUID id);
+    Optional<T> loadById(final String tenant, final UUID id);
 
-    Optional<T> loadByScopeAndKey(final String scope, final String key);
+    Optional<T> loadbyKey(final String tenant, final String key);
 
-    ArrayList<T> loadByTenant(final String scope);
+    ArrayList<T> loadByTenant(final String tenant);
 
-    ArrayList<T> loadByTenant(final String scope, final int index, final int size);
+    ArrayList<T> loadByTenant(final String tenant, final int index, final int size);
 
     long count();
 }

@@ -39,11 +39,11 @@ public interface ObjectIdentity extends KindHolding, Serializable {
 
     /**
      * The tenant or scope of the object. The tuple (Kind, Scope, Name) has to be unique. The interpretation of this
-     * scope may differ in different subsystems. You may use it for multitenancy.
+     * scope may differ in different subsystems.
      *
-     * @return the scope of this object.
+     * @return the tenant of this object.
      */
-    Optional<String> getTenant();
+    String getTenant();
 
     /**
      * A unique within scope name for the object. The tuple (Kind, Scope, Name) has to be unique.

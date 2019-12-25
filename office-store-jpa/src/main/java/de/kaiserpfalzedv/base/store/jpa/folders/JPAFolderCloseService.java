@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.base.store.jpa.folders;
 
+import de.kaiserpfalzedv.base.WrappingException;
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.cdi.EventLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
@@ -31,6 +32,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -44,10 +46,15 @@ public class JPAFolderCloseService implements FolderCommandService<CloseFolder> 
 
     @Transactional
     public void observe(@Observes final CloseFolder command) {
+        JPAFolderClose jpa;
         try {
-            JPAFolderClose jpa = new JPAFolderClose().fromModel(command);
+            jpa = new JPAFolderClose().fromModel(command);
             jpa.persist();
+        } catch (PersistenceException e) {
+            throw new WrappingException(new CreationFailedException(command.getMetadata().getIdentity(), e));
+        }
 
+        try {
             FolderClosed event = ImmutableFolderClosed.builder()
                     .metadata(ImmutableMetadata.builder()
                             .identity(jpa.command.toModel())
@@ -57,7 +64,7 @@ public class JPAFolderCloseService implements FolderCommandService<CloseFolder> 
                     .build();
             eventSink.fire(event);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(new CreationFailedException(command.getMetadata().getIdentity(), e));
+            throw new WrappingException(new CreationFailedException(command.getMetadata().getIdentity(), e));
         }
     }
 }

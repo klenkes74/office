@@ -43,8 +43,8 @@ public class JPAFolder extends PanacheEntity implements Serializable {
     public JPAFolderSpec spec;
 
 
-    public static PanacheQuery<JPAFolder> findByUuid(final UUID uuid) {
-        return find("spec.identity.uuid", uuid);
+    public static PanacheQuery<JPAFolder> findByUuid(final String tenant, final UUID uuid) {
+        return find("spec.identity.tenant=?1 and spec.identity.uuid=?2", tenant, uuid);
     }
 
     public static PanacheQuery<JPAFolder> findByTenant(final String tenant) {

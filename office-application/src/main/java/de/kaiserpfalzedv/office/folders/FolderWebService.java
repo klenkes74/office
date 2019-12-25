@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.office.folders;
 
+import de.kaiserpfalzedv.base.WrappingException;
 import de.kaiserpfalzedv.base.cdi.CorrelationLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.folders.CreateFolder;
@@ -57,12 +58,15 @@ public class FolderWebService {
 
 
     @GET
-    @RolesAllowed({"user", "admin"})
+    @RolesAllowed({"viewer", "editor", "admin"})
     @Metered(name = "folders.loadByUuid")
     @Counted(name = "folders.loadByUuid.count")
     @ConcurrentGauge(name = "folders.loadByUuid.concurrent")
-    public Folder getByUuid(@QueryParam("uuid") final UUID uuid) {
-        Optional<Folder> result = reader.loadById(uuid);
+    public Folder getByUuid(
+            @PathParam("tenant") final String tenant,
+            @QueryParam("uuid") final UUID uuid
+    ) {
+        Optional<Folder> result = reader.loadById(tenant, uuid);
 
         if (result.isPresent()) {
             return result.get();
@@ -76,7 +80,7 @@ public class FolderWebService {
 
     @GET
     @Path("{key}")
-    @RolesAllowed({"user", "admin"})
+    @RolesAllowed({"viewer", "editor", "admin"})
     @Metered(name = "folders.loadByKey")
     @Counted(name = "folders.loadByKey.count")
     @ConcurrentGauge(name = "folders.loadByKey.concurrent")
@@ -84,7 +88,7 @@ public class FolderWebService {
             @PathParam("tenant") final String tenant,
             @PathParam("key") final String key
     ) {
-        Optional<Folder> result = reader.loadByScopeAndKey(tenant, key);
+        Optional<Folder> result = reader.loadbyKey(tenant, key);
 
         if (result.isPresent()) {
             return result.get();
@@ -98,14 +102,24 @@ public class FolderWebService {
 
 
     @PUT
-    @RolesAllowed("admin")
+    @RolesAllowed({"editor", "admin"})
     @Metered(name = "folders.createFolder")
     @Counted(name = "folders.createFolder.count")
     @ConcurrentGauge(name = "folders.createFolder.concurrent")
-    public void createFolder(final ImmutableCreateFolder command) {
+    public void createFolder(
+            @PathParam("tenant") final String tenant,
+            final ImmutableCreateFolder command
+    ) {
+        if (
+                !tenant.equals(command.getMetadata().getIdentity().getTenant())
+                        || !tenant.equals(command.getSpec().getIdentity().getTenant())
+        ) {
+            throw new ForbiddenException();
+        }
+
         try {
             eventSink.fire(command);
-        } catch (IllegalArgumentException e) {
+        } catch (WrappingException e) {
             throw new WebApplicationException(
                     e.getCause() != null ? e.getCause().getMessage() : "Can't create new folder.",
                     Response.Status.CONFLICT

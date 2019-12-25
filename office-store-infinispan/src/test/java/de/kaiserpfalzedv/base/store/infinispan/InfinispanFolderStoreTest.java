@@ -44,9 +44,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.junit.jupiter.api.Assertions.fail;
 
-/*
- *
- *
+/**
  * @author rlichti
  * @since 2019-12-19 15:05
  */
@@ -54,12 +52,13 @@ class InfinispanFolderStoreTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(InfinispanFolderStoreTest.class);
 
     private static final ZoneOffset EuropeBerlin = ZoneOffset.ofHours(-1);
-    private static final ArrayList<Folder> data = FolderData.generateFolderData("scope", 50);
+    private static final String VALID_TENANT = "tenant";
+    private static final ArrayList<Folder> data = FolderData.generateFolderData(VALID_TENANT, 50);
 
     private InfinispanFolderStore service;
     private UUID validUUID = data.get(0).getMetadata().getIdentity().getUuid();
     private String[] validScopeAndKey = {
-            data.get(0).getMetadata().getIdentity().getTenant().orElse(null),
+            data.get(0).getMetadata().getIdentity().getTenant(),
             data.get(0).getMetadata().getIdentity().getName().orElse(null)
     };
 
@@ -91,19 +90,19 @@ class InfinispanFolderStoreTest {
 
     @Test
     void shouldLoadFolderWhenValidUuidIsGiven() {
-        Optional<Folder> result = service.loadByUuid(validUUID);
+        Optional<Folder> result = service.loadByUuid(VALID_TENANT, validUUID);
         LOGGER.debug("result: {}", result);
 
         assert result.isPresent();
         assert result.get().getMetadata().getIdentity().getUuid().equals(validUUID);
-        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getTenant().orElse(null));
+        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getTenant());
         assert validScopeAndKey[1].equals(result.get().getMetadata().getIdentity().getName().orElse(null));
     }
 
 
     @Test
     void shouldNotLoadFolderWhenRandomUuidIsGiven() {
-        Optional<Folder> result = service.loadByUuid(UUID.randomUUID());
+        Optional<Folder> result = service.loadByUuid(VALID_TENANT, UUID.randomUUID());
         LOGGER.debug("result: {}", result);
 
         assert !result.isPresent();
@@ -116,7 +115,7 @@ class InfinispanFolderStoreTest {
 
         assert result.isPresent();
         assert result.get().getMetadata().getIdentity().getUuid().equals(validUUID);
-        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getTenant().orElse(null));
+        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getTenant());
         assert validScopeAndKey[1].equals(result.get().getMetadata().getIdentity().getName().orElse(null));
     }
 
@@ -132,28 +131,8 @@ class InfinispanFolderStoreTest {
     }
 
     @Test
-    void shouldNotFindAnyEntryWithoutScopeWhenNoScopelessDataIsSaved() {
-        Optional<Folder> result = service.loadByKey("I'19-0050");
-        LOGGER.debug("result: {}", result);
-
-        assert !result.isPresent();
-    }
-
-    @Test
-    void shouldFindAnEntryWithoutScopeWhenScopelessDataIsSaved() {
-        ArrayList<Folder> scopelessData = FolderData.generateFolderData(null, 1);
-        service.store(scopelessData.get(0));
-
-        Optional<Folder> result = service.loadByKey(scopelessData.get(0).getMetadata().getIdentity().getName().orElse(null));
-        LOGGER.debug("result: {}", result);
-
-        assert result.isPresent();
-        assert result.get().getMetadata().getIdentity().getName().equals(scopelessData.get(0).getMetadata().getIdentity().getName());
-    }
-
-    @Test
     void shouldReturn50FoldersWhenScopeIsCorrect() {
-        ArrayList<Folder> result = service.loadByScope("scope");
+        ArrayList<Folder> result = service.loadByTenant(VALID_TENANT);
         LOGGER.debug("result.size: {}", result.size());
 
         assert result.size() == 50;
@@ -161,34 +140,15 @@ class InfinispanFolderStoreTest {
 
     @Test
     void shouldReturnNoFoldersWhenScopeIsInvalid() {
-        ArrayList<Folder> result = service.loadByScope("invalid");
+        ArrayList<Folder> result = service.loadByTenant("invalid");
         LOGGER.debug("result.size: {}", result.size());
 
         assert result.isEmpty();
     }
 
     @Test
-    void shouldLoadNoEntriesWithoutScopeWhenScopelessEntriesDoNotExist() {
-        ArrayList<Folder> result = service.loadEntriesWithoutScope();
-        LOGGER.debug("result count: {}", result.size());
-
-        assert result.isEmpty();
-    }
-
-    @Test
-    void shouldLoadAllEntriesWithoutScopeWhenScopelessEntriesExist() {
-        ArrayList<Folder> scopelessData = FolderData.generateFolderData(null, 10);
-        scopelessData.forEach(service::store);
-
-        ArrayList<Folder> result = service.loadEntriesWithoutScope();
-        LOGGER.debug("result count: {}", result.size());
-
-        assert result.size() == 10;
-    }
-
-    @Test
     void shouldReplaceFolderInStoreWhenOriginalDataExists() throws NoModifiableDataFoundException {
-        Optional<Folder> replaced = service.loadByUuid(validUUID);
+        Optional<Folder> replaced = service.loadByUuid(VALID_TENANT, validUUID);
         assert replaced.isPresent();
 
         OffsetDateTime modified = OffsetDateTime.now();
@@ -204,7 +164,7 @@ class InfinispanFolderStoreTest {
 
         service.replace(data);
 
-        replaced = service.loadByUuid(validUUID);
+        replaced = service.loadByUuid(VALID_TENANT, validUUID);
         LOGGER.debug("result: {}", replaced);
 
         assert replaced.isPresent();
@@ -215,10 +175,10 @@ class InfinispanFolderStoreTest {
     @Test
     void shouldFailDuringReplaceFolderInStoreWhenOriginalDataDoesNotExist() {
         UUID uuid = UUID.randomUUID();
-        Optional<Folder> replaced = service.loadByUuid(uuid);
+        Optional<Folder> replaced = service.loadByUuid(VALID_TENANT, uuid);
         assert !replaced.isPresent();
 
-        Folder data = FolderData.generateFolderData("scope", 1).get(0);
+        Folder data = FolderData.generateFolderData(VALID_TENANT, 1).get(0);
 
         try {
             service.replace(data);
@@ -231,7 +191,7 @@ class InfinispanFolderStoreTest {
 
     @Test
     void shouldRemoveFolderFromStoreWhenStoredFolderIsRemoved() {
-        Optional<Folder> deleted = service.loadByUuid(validUUID);
+        Optional<Folder> deleted = service.loadByUuid(VALID_TENANT, validUUID);
         assert deleted.isPresent();
 
         service.remove(deleted.get());
@@ -257,7 +217,7 @@ class InfinispanFolderStoreTest {
 
 
     static private class FolderData {
-        static ArrayList<Folder> generateFolderData(final String scope, final int count) {
+        static ArrayList<Folder> generateFolderData(final String tenant, final int count) {
             ArrayList<Folder> result = new ArrayList<>(count);
 
             for (int i = 1; i <= count; i++) {
@@ -306,7 +266,7 @@ class InfinispanFolderStoreTest {
                         .version(Folder.VERSION)
 
                         .uuid(UUID.randomUUID())
-                        .tenant(Optional.ofNullable(scope))
+                        .tenant(tenant)
                         .name(key)
 
                         .build();

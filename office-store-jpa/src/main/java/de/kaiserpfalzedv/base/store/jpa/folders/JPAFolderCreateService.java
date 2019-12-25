@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.base.store.jpa.folders;
 
+import de.kaiserpfalzedv.base.WrappingException;
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.cdi.EventLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
@@ -36,6 +37,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -53,25 +55,29 @@ public class JPAFolderCreateService implements FolderCommandService<CreateFolder
     public void observe(@Observes final CreateFolder command) {
         FolderSpec spec = command.getSpec();
 
-        if (JPAFolder.findByUuid(spec.getIdentity().getUuid()).count() != 0) {
-            throw new IllegalArgumentException(new UuidAlreadyExistsException(spec.getIdentity()));
+        if (JPAFolder.findByUuid(spec.getIdentity().getTenant(), spec.getIdentity().getUuid()).count() != 0) {
+            throw new WrappingException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
-        if (!spec.getIdentity().getTenant().orElse("./").isEmpty() && spec.getIdentity().getName().isPresent()) {
+        if (spec.getIdentity().getName().isPresent()) {
             if (JPAFolder.findByTenantAndKey(
-                    spec.getIdentity().getTenant().orElse("./."),
+                    spec.getIdentity().getTenant(),
                     spec.getIdentity().getName().orElse(null)
             ).count() != 0
             ) {
-                throw new IllegalArgumentException(new KeyAlreadyExistsException(spec.getIdentity()));
+                throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
             }
         }
 
+        JPAFolderCreate jpa;
+        try {
+            jpa = new JPAFolderCreate().fromModel(command);
+            jpa.persist();
+        } catch (PersistenceException e) {
+            throw new WrappingException(new CreationFailedException(command.getMetadata().getIdentity(), e));
+        }
 
         try {
-            JPAFolderCreate jpa = new JPAFolderCreate().fromModel(command);
-            jpa.persist();
-
             FolderCreated event = ImmutableFolderCreated.builder()
                     .metadata(ImmutableMetadata.builder()
                             .identity(jpa.command.toModel())
@@ -82,7 +88,7 @@ public class JPAFolderCreateService implements FolderCommandService<CreateFolder
                     .build();
             eventSource.fire(event);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(new CreationFailedException(command.getMetadata().getIdentity(), e));
+            throw new WrappingException(new CreationFailedException(command.getMetadata().getIdentity(), e));
         }
     }
 }

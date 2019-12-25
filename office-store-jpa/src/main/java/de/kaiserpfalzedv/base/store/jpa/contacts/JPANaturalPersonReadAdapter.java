@@ -36,8 +36,8 @@ import java.util.UUID;
 @Dependent
 public class JPANaturalPersonReadAdapter implements NaturalPersonReadAdapter {
     @Override
-    public Optional<NaturalPerson> loadById(UUID uuid) {
-        JPANaturalPerson data = JPANaturalPerson.findByUuid(uuid).firstResult();
+    public Optional<NaturalPerson> loadById(final String tenant, final UUID uuid) {
+        JPANaturalPerson data = JPANaturalPerson.findByUuid(tenant, uuid).firstResult();
 
         if (data == null) {
             return Optional.empty();
@@ -47,7 +47,7 @@ public class JPANaturalPersonReadAdapter implements NaturalPersonReadAdapter {
     }
 
     @Override
-    public Optional<NaturalPerson> loadByScopeAndKey(final String tenant, final String key) {
+    public Optional<NaturalPerson> loadbyKey(final String tenant, final String key) {
         JPANaturalPerson data = JPANaturalPerson.findByTenantAndKey(tenant, key).firstResult();
 
         if (data == null) {

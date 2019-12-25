@@ -53,12 +53,13 @@ class InfinispanFolderReadAdapterTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(InfinispanFolderReadAdapterTest.class);
 
     private static final ZoneOffset EuropeBerlin = ZoneOffset.ofHours(-1);
-    private static final ArrayList<Folder> data = FolderData.generateFolderData("scope", 50);
+    private static final String VALID_TENANT = "tenant";
+    private static final ArrayList<Folder> data = FolderData.generateFolderData(VALID_TENANT, 50);
 
     private InfinispanFolderStore store;
     private UUID validUUID = data.get(0).getMetadata().getIdentity().getUuid();
     private String[] validScopeAndKey = {
-            data.get(0).getMetadata().getIdentity().getTenant().orElse(null),
+            data.get(0).getMetadata().getIdentity().getTenant(),
             data.get(0).getMetadata().getIdentity().getName().orElse(null)
     };
 
@@ -84,19 +85,19 @@ class InfinispanFolderReadAdapterTest {
 
     @Test
     void shouldLoadFolderWhenValidUuidIsGiven() {
-        Optional<Folder> result = service.loadById(validUUID);
+        Optional<Folder> result = service.loadById(VALID_TENANT, validUUID);
         LOGGER.debug("result: {}", result);
 
         assert result.isPresent();
         assert result.get().getMetadata().getIdentity().getUuid().equals(validUUID);
-        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getTenant().orElse(null));
+        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getTenant());
         assert validScopeAndKey[1].equals(result.get().getMetadata().getIdentity().getName().orElse(null));
     }
 
 
     @Test
     void shouldNotLoadFolderWhenRandomUuidIsGiven() {
-        Optional<Folder> result = service.loadById(UUID.randomUUID());
+        Optional<Folder> result = service.loadById(VALID_TENANT, UUID.randomUUID());
         LOGGER.debug("result: {}", result);
 
         assert !result.isPresent();
@@ -104,29 +105,18 @@ class InfinispanFolderReadAdapterTest {
 
     @Test
     void shouldLoadFolderWithValidScopeAndKey() {
-        Optional<Folder> result = service.loadByScopeAndKey(validScopeAndKey[0], validScopeAndKey[1]);
+        Optional<Folder> result = service.loadbyKey(validScopeAndKey[0], validScopeAndKey[1]);
         LOGGER.debug("result: {}", result);
 
         assert result.isPresent();
         assert result.get().getMetadata().getIdentity().getUuid().equals(validUUID);
-        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getTenant().orElse(null));
+        assert validScopeAndKey[0].equals(result.get().getMetadata().getIdentity().getTenant());
         assert validScopeAndKey[1].equals(result.get().getMetadata().getIdentity().getName().orElse(null));
     }
 
     @Test
-    void shouldNotLoadFolderWithValidRandomScopeAndKey() {
-        Optional<Folder> result = service.loadByScopeAndKey(
-                Integer.valueOf(FolderData.random(1000, 2000)).toString(),
-                Integer.valueOf(FolderData.random(10000, 99999)).toString()
-        );
-        LOGGER.debug("result: {}", result);
-
-        assert !result.isPresent();
-    }
-
-    @Test
     void shouldReturn10FoldersWhenScopeIsCorrect() {
-        ArrayList<Folder> result = service.loadByTenant("scope");
+        ArrayList<Folder> result = service.loadByTenant(VALID_TENANT);
         LOGGER.debug("result.size: {}", result.size());
 
         assert result.size() == 50;
@@ -134,7 +124,7 @@ class InfinispanFolderReadAdapterTest {
 
     @Test
     void shouldReturn10FoldersWhenScopeIsCorrectAndThePageIsGiven() {
-        ArrayList<Folder> result = service.loadByTenant("scope", 0, 10);
+        ArrayList<Folder> result = service.loadByTenant(VALID_TENANT, 0, 10);
         LOGGER.debug("result.size: {}", result.size());
 
         assert result.size() == 10;
@@ -142,7 +132,7 @@ class InfinispanFolderReadAdapterTest {
 
     @Test
     void shouldReturn5FoldersWhenScopeIsCorrectAndThePageIsGivenButLastPageIsSmaller() {
-        ArrayList<Folder> result = service.loadByTenant("scope", 44, 10);
+        ArrayList<Folder> result = service.loadByTenant(VALID_TENANT, 44, 10);
         LOGGER.debug("result.size: {}", result.size());
 
         assert result.size() == 5;
@@ -150,7 +140,7 @@ class InfinispanFolderReadAdapterTest {
 
     @Test
     void shouldReturnEmptyArrayWhenScopeIsCorrectAndThePageIsGivenButAfterTheLastPage() {
-        ArrayList<Folder> result = service.loadByTenant("scope", 51, 10);
+        ArrayList<Folder> result = service.loadByTenant(VALID_TENANT, 51, 10);
         LOGGER.debug("result.size: {}", result.size());
 
         assert result.isEmpty();
@@ -183,7 +173,7 @@ class InfinispanFolderReadAdapterTest {
 
     static private class FolderData {
         @SuppressWarnings("SameParameterValue")
-        static ArrayList<Folder> generateFolderData(final String scope, final int count) {
+        static ArrayList<Folder> generateFolderData(final String tenant, final int count) {
             ArrayList<Folder> result = new ArrayList<>(count);
 
             for (int i = 1; i <= count; i++) {
@@ -232,7 +222,7 @@ class InfinispanFolderReadAdapterTest {
                         .version(Folder.VERSION)
 
                         .uuid(UUID.randomUUID())
-                        .tenant(Optional.ofNullable(scope))
+                        .tenant(tenant)
                         .name(key)
 
                         .build();
