@@ -20,7 +20,6 @@ package de.kaiserpfalzedv.base.store.jpa;
 
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.base.api.ObjectIdentity;
-import de.kaiserpfalzedv.folders.Folder;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -55,10 +54,10 @@ public class JPAIdentity implements Serializable {
     }
 
     @Transient
-    public ObjectIdentity toModel() {
+    public ObjectIdentity toModel(final String kind, final String version) {
         return ImmutableObjectIdentity.builder()
-                .kind(Folder.KIND)
-                .version(Folder.VERSION)
+                .kind(kind)
+                .version(version)
 
                 .uuid(uuid)
                 .tenant(tenant)

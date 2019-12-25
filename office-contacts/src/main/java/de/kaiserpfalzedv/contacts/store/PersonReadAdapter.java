@@ -16,30 +16,14 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.contacts;
+package de.kaiserpfalzedv.contacts.store;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.immutables.value.Value;
+import de.kaiserpfalzedv.base.store.DataReadAdapter;
+import de.kaiserpfalzedv.contacts.Person;
 
 /**
- * @author rlichti@kaiserpfalz-edv.de
- * @since 2019-12-15T10:20Z
+ * @author rlichti
+ * @since 2019-20-25T10:19
  */
-@Value.Immutable
-@JsonSerialize(as = ImmutableNaturalPerson.class)
-@JsonDeserialize(builder = ImmutableNaturalPerson.Builder.class)
-public interface NaturalPerson extends Person<NaturalPerson, NaturalPersonSpec> {
-    String KIND = "de.kaiserpfalzedv.contacts.NaturalPerson";
-    String VERSION = "1.0.0";
-
-    @Value.Default
-    default String getKind() {
-        return KIND;
-    }
-
-    @Value.Default
-    default String getVersion() {
-        return VERSION;
-    }
+public interface PersonReadAdapter extends DataReadAdapter<Person> {
 }

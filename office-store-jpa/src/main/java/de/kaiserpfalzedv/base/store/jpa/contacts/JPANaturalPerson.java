@@ -22,7 +22,6 @@ import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.contacts.ImmutableNaturalPerson;
 import de.kaiserpfalzedv.contacts.NaturalPerson;
 import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import javax.persistence.Embedded;
@@ -37,20 +36,21 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "NATURAL_PERSONS", schema = "BASE")
-public class JPANaturalPerson extends PanacheEntity implements Serializable {
+public class JPANaturalPerson extends JPAPerson<JPANaturalPerson, JPANaturalPersonSpec, NaturalPerson, NaturalPersonSpec>
+        implements Serializable {
     @Embedded
     public JPANaturalPersonSpec spec;
 
     public static PanacheQuery<JPANaturalPerson> findByUuid(final String tenant, final UUID uuid) {
-        return find("spec.identity.tenant=?1 and spec.identity.uuid=?2", tenant, uuid);
+        return find("identity.tenant=?1 and identity.uuid=?2", tenant, uuid);
     }
 
     public static PanacheQuery<JPANaturalPerson> findByTenant(final String tenant) {
-        return find("spec.identity.tenant=?1", tenant);
+        return find("identity.tenant=?1", tenant);
     }
 
     public static PanacheQuery<JPANaturalPerson> findByTenantAndKey(final String tenant, final String key) {
-        return find("spec.identity.tenant=?1 and spec.identity.key=?2", tenant, key);
+        return find("identity.tenant=?1 and identity.key=?2", tenant, key);
     }
 
 
@@ -63,7 +63,7 @@ public class JPANaturalPerson extends PanacheEntity implements Serializable {
                 .kind(NaturalPerson.KIND)
                 .version(NaturalPerson.VERSION)
                 .metadata(ImmutableMetadata.builder()
-                        .identity(spec.identity.toModel())
+                        .identity(identity.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
                         .build()
                 )
                 .spec(spec.toModel())
@@ -74,5 +74,15 @@ public class JPANaturalPerson extends PanacheEntity implements Serializable {
         spec = new JPANaturalPersonSpec().fromModel(model);
 
         return this;
+    }
+
+    @Override
+    public String getKind() {
+        return NaturalPerson.KIND;
+    }
+
+    @Override
+    public String getVersion() {
+        return NaturalPerson.VERSION;
     }
 }

@@ -16,63 +16,53 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store.jpa.folders;
+package de.kaiserpfalzedv.base.store.jpa.contacts;
 
 import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
-import de.kaiserpfalzedv.folders.Folder;
-import de.kaiserpfalzedv.folders.FolderSpec;
-import de.kaiserpfalzedv.folders.ImmutableFolderSpec;
+import de.kaiserpfalzedv.contacts.ImmutablePersonSpec;
+import de.kaiserpfalzedv.contacts.PersonSpec;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
+/**
+ * @author rlichti
+ * @since 2019-12-22 12:20
+ */
 @Embeddable
-public class JPAFolderSpec implements Serializable {
+public class JPAPersonSpec<T extends JPAPersonSpec, S extends PersonSpec> implements Serializable {
     @Embedded
     public JPAIdentity identity;
 
-    @Column(name = "_NAME", nullable = false)
-    public String name;
     @Column(name = "_DISPLAYNAME")
     public String displayname;
-
-    @Column(name = "_DESCRIPTION")
-    public String description;
-    @Column(name = "_CLOSED")
-    public OffsetDateTime closed;
 
     @Column(name = "_CREATED", nullable = false)
     public OffsetDateTime created;
     @Column(name = "_MODIFIED", nullable = false)
     public OffsetDateTime modified;
 
-    public JPAFolderSpec fromModel(final FolderSpec data) {
-        identity = new JPAIdentity().fromModel(data.getIdentity());
 
-        displayname = data.getDisplayname();
-        name = data.getName();
-        description = data.getDescription().orElse(null);
-        closed = data.getClosed().orElse(null);
+    public T fromModel(S model) {
+        identity = new JPAIdentity().fromModel(model.getIdentity());
+        displayname = model.getDisplayname();
+        created = model.getCreated();
+        modified = model.getModified();
 
-        created = data.getCreated();
-        modified = data.getModified();
-
-        return this;
+        //noinspection unchecked
+        return (T) this;
     }
 
-    public FolderSpec toModel() {
-        return ImmutableFolderSpec.builder()
-                .identity(identity.toModel(Folder.KIND, Folder.VERSION))
-
+    public S toModel() {
+        //noinspection unchecked
+        return (S) ImmutablePersonSpec.builder()
+                .kind("undefined")
+                .version("0.0.0")
+                .identity(identity.toModel("undefined", "0.0.0"))
                 .displayname(displayname)
-                .name(name)
-                .description(Optional.ofNullable(description))
-                .closed(Optional.ofNullable(closed))
-
                 .created(created)
                 .modified(modified)
                 .build();

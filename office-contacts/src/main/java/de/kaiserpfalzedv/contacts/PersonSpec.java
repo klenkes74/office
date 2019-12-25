@@ -20,26 +20,19 @@ package de.kaiserpfalzedv.contacts;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.base.api.IdentityHolding;
+import de.kaiserpfalzedv.base.api.KindHolding;
+import de.kaiserpfalzedv.base.api.Spec;
 import org.immutables.value.Value;
+
+import java.io.Serializable;
 
 /**
  * @author rlichti@kaiserpfalz-edv.de
  * @since 2019-12-15T10:20Z
  */
 @Value.Immutable
-@JsonSerialize(as = ImmutableNaturalPerson.class)
-@JsonDeserialize(builder = ImmutableNaturalPerson.Builder.class)
-public interface NaturalPerson extends Person<NaturalPerson, NaturalPersonSpec> {
-    String KIND = "de.kaiserpfalzedv.contacts.NaturalPerson";
-    String VERSION = "1.0.0";
-
-    @Value.Default
-    default String getKind() {
-        return KIND;
-    }
-
-    @Value.Default
-    default String getVersion() {
-        return VERSION;
-    }
+@JsonSerialize(as = ImmutablePersonSpec.class)
+@JsonDeserialize(builder = ImmutablePersonSpec.Builder.class)
+public interface PersonSpec<T extends PersonSpec> extends Spec<Serializable>, IdentityHolding, KindHolding {
 }

@@ -68,7 +68,7 @@ public class JPAFolder extends PanacheEntity implements Serializable {
                 .version(Folder.VERSION)
 
                 .metadata(ImmutableMetadata.builder()
-                        .identity(spec.identity.toModel())
+                        .identity(spec.identity.toModel(Folder.KIND, Folder.VERSION))
                         .build()
                 )
 

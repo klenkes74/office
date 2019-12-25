@@ -22,6 +22,7 @@ import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
 import de.kaiserpfalzedv.base.store.jpa.JPAWorkflowData;
 import de.kaiserpfalzedv.folders.CreateFolder;
+import de.kaiserpfalzedv.folders.Folder;
 import de.kaiserpfalzedv.folders.ImmutableCreateFolder;
 import de.kaiserpfalzedv.folders.ModifyFolder;
 
@@ -49,7 +50,7 @@ public class JPAFolderCreate extends JPAFolderChangeWithSpec<CreateFolder> {
                 .kind(ModifyFolder.KIND)
                 .version(ModifyFolder.VERSION)
                 .metadata(ImmutableMetadata.builder()
-                        .identity(command.toModel())
+                        .identity(command.toModel(Folder.KIND, Folder.VERSION))
                         .workflowdata(Optional.ofNullable(workflow.toModel()))
                         .build()
                 )

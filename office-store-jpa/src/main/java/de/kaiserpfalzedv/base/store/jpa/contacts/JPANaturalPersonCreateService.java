@@ -26,10 +26,7 @@ import de.kaiserpfalzedv.base.store.CreationFailedException;
 import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
 import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
 import de.kaiserpfalzedv.base.store.jpa.folders.JPAFolder;
-import de.kaiserpfalzedv.contacts.CreateNaturalPerson;
-import de.kaiserpfalzedv.contacts.ImmutableNaturalPersonCreated;
-import de.kaiserpfalzedv.contacts.NaturalPersonCreated;
-import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
+import de.kaiserpfalzedv.contacts.*;
 import de.kaiserpfalzedv.contacts.api.NaturalPersonCommandService;
 
 import javax.enterprise.context.Dependent;
@@ -68,7 +65,7 @@ public class JPANaturalPersonCreateService implements NaturalPersonCommandServic
 
             NaturalPersonCreated event = ImmutableNaturalPersonCreated.builder()
                     .metadata(ImmutableMetadata.builder()
-                            .identity(jpa.command.toModel())
+                            .identity(jpa.command.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
                             .workflowdata(Optional.ofNullable(jpa.workflow.toModel()))
                             .build()
                     )

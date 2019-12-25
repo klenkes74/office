@@ -24,6 +24,7 @@ import de.kaiserpfalzedv.base.cdi.EventLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.base.store.CreationFailedException;
 import de.kaiserpfalzedv.folders.CloseFolder;
+import de.kaiserpfalzedv.folders.Folder;
 import de.kaiserpfalzedv.folders.FolderClosed;
 import de.kaiserpfalzedv.folders.ImmutableFolderClosed;
 import de.kaiserpfalzedv.folders.api.FolderCommandService;
@@ -57,7 +58,7 @@ public class JPAFolderCloseService implements FolderCommandService<CloseFolder> 
         try {
             FolderClosed event = ImmutableFolderClosed.builder()
                     .metadata(ImmutableMetadata.builder()
-                            .identity(jpa.command.toModel())
+                            .identity(jpa.command.toModel(Folder.KIND, Folder.VERSION))
                             .workflowdata(Optional.ofNullable(jpa.workflow.toModel()))
                             .build()
                     )
