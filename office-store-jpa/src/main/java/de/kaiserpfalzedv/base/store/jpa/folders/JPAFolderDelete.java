@@ -28,7 +28,6 @@ import de.kaiserpfalzedv.folders.ImmutableDeleteFolder;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
 @Entity
 @DiscriminatorValue(DeleteFolder.KIND)
@@ -49,7 +48,7 @@ public class JPAFolderDelete extends JPAFolderChange<DeleteFolder> {
                 .version(DeleteFolder.VERSION)
                 .metadata(ImmutableMetadata.builder()
                         .identity(command.toModel(Folder.KIND, Folder.VERSION))
-                        .workflowdata(Optional.ofNullable(workflow.toModel()))
+                        .workflowdata(workflow.toModel())
                         .build()
                 )
                 .build();

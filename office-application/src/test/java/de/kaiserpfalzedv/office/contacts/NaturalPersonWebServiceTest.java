@@ -173,6 +173,18 @@ public class NaturalPersonWebServiceTest {
     }
 
     @Test
+    public void shouldDeletePersonWhenCorrectUuidIsGiven() {
+        given()
+                .when()
+                .pathParam("tenant", TENANT)
+                .header("content-type", MediaType.APPLICATION_JSON)
+                .auth().preemptive().basic(USER, PASSWORD)
+                .delete("/contacts/{tenant}/natural/?uuid=41d56361-c099-4a55-82cc-3c25680b7df6")
+                .then()
+                .statusCode(allOf(greaterThanOrEqualTo(200), lessThan(300)));
+    }
+
+    @Test
     public void shouldReturnHealthWhenCallingReady() {
         given()
                 .when()

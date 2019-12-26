@@ -21,17 +21,18 @@ package de.kaiserpfalzedv.base.store.jpa.contacts;
 import de.kaiserpfalzedv.base.WrappingException;
 import de.kaiserpfalzedv.base.cdi.EventLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
-import de.kaiserpfalzedv.base.store.CreationFailedException;
-import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
-import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
-import de.kaiserpfalzedv.base.store.jpa.folders.JPAFolder;
+import de.kaiserpfalzedv.base.store.*;
 import de.kaiserpfalzedv.contacts.NaturalPersonCreated;
+import de.kaiserpfalzedv.contacts.NaturalPersonDeleted;
 import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
 import de.kaiserpfalzedv.contacts.api.NaturalPersonResultService;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 @JPA
 @EventLogged
@@ -41,12 +42,12 @@ public class JPANaturalPersonService implements NaturalPersonResultService<Natur
     public void observe(@Observes final NaturalPersonCreated event) {
         NaturalPersonSpec spec = event.getSpec();
 
-        if (JPAFolder.findByUuid(spec.getIdentity().getTenant(), spec.getIdentity().getUuid()).count() != 0) {
+        if (JPANaturalPerson.findByUuid(spec.getIdentity().getTenant(), spec.getIdentity().getUuid()).count() != 0) {
             throw new WrappingException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
         if (spec.getIdentity().getName().isPresent()) {
-            if (JPAFolder.findByTenantAndKey(spec.getIdentity().getTenant(), spec.getIdentity().getName().orElse(null)).count() != 0) {
+            if (JPANaturalPerson.findByTenantAndKey(spec.getIdentity().getTenant(), spec.getIdentity().getName().orElse(null)).count() != 0) {
                 throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
             }
         }
@@ -56,6 +57,24 @@ public class JPANaturalPersonService implements NaturalPersonResultService<Natur
             jpa.persist();
         } catch (IllegalArgumentException e) {
             throw new WrappingException(new CreationFailedException(event.getMetadata().getIdentity(), e));
+        }
+    }
+
+    @Transactional
+    public void observe(@Observes final NaturalPersonDeleted event) {
+        String tenant = event.getMetadata().getIdentity().getTenant();
+        UUID uuid = event.getMetadata().getIdentity().getUuid();
+
+        PanacheQuery<JPANaturalPerson> query = JPANaturalPerson.findByUuid(tenant, uuid);
+        if (query.count() != 1) {
+            throw new WrappingException(new NoModifiableDataFoundException(event.getMetadata().getIdentity()));
+        }
+
+        try {
+            JPANaturalPerson jpa = query.firstResult();
+            jpa.delete();
+        } catch (PersistenceException e) {
+            throw new WrappingException(new DeletionFailedException(event.getMetadata().getIdentity(), e));
         }
     }
 }

@@ -16,21 +16,31 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store;
+package de.kaiserpfalzedv.contacts;
 
-import de.kaiserpfalzedv.base.api.ObjectIdentity;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.contacts.api.NaturalPersonResult;
+import org.immutables.value.Value;
 
-@SuppressWarnings("CdiInjectionPointsInspection")
-public class DeletionFailedException extends DataException {
-    public DeletionFailedException(final ObjectIdentity identifier, final String message, final Throwable cause) {
-        super(identifier, message, cause);
+/**
+ * @author rlichti@kaiserpfalz-edv.de
+ * @since 2019-12-26T23:17
+ */
+@Value.Immutable
+@JsonSerialize(as = ImmutableNaturalPersonDeleted.class)
+@JsonDeserialize(builder = ImmutableNaturalPersonDeleted.Builder.class)
+public interface NaturalPersonDeleted extends NaturalPersonResult {
+    String KIND = "de.kaiserpfalzedv.contacts.NaturalPersonDeleted";
+    String VERSION = "1.0.0";
+
+    @Override
+    default String getKind() {
+        return KIND;
     }
 
-    public DeletionFailedException(final ObjectIdentity identifier, final Throwable cause) {
-        super(identifier, cause.getMessage(), cause);
-    }
-
-    public DeletionFailedException(final ObjectIdentity identifier, final String message) {
-        super(identifier, message);
+    @Override
+    default String getVersion() {
+        return VERSION;
     }
 }

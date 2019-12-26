@@ -28,7 +28,6 @@ import de.kaiserpfalzedv.folders.ImmutableCloseFolder;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
 @Entity
 @DiscriminatorValue(CloseFolder.KIND)
@@ -49,7 +48,7 @@ public class JPAFolderClose extends JPAFolderChange<CloseFolder> {
                 .version(CloseFolder.VERSION)
                 .metadata(ImmutableMetadata.builder()
                         .identity(command.toModel(Folder.KIND, Folder.VERSION))
-                        .workflowdata(Optional.ofNullable(workflow.toModel()))
+                        .workflowdata(workflow.toModel())
                         .build()
                 )
                 .build();

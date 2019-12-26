@@ -33,7 +33,6 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @JPA
 @EventLogged
@@ -65,7 +64,7 @@ public class JPANaturalPersonCreateService implements NaturalPersonCommandServic
             NaturalPersonCreated event = ImmutableNaturalPersonCreated.builder()
                     .metadata(ImmutableMetadata.builder()
                             .identity(jpa.command.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
-                            .workflowdata(Optional.ofNullable(jpa.workflow.toModel()))
+                            .workflowdata(jpa.workflow.toModel())
                             .build()
                     )
 
