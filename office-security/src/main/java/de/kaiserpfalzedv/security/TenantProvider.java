@@ -23,15 +23,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
+import javax.inject.Singleton;
+import java.util.Optional;
 
 /**
  * @author rlichti
  * @since 2019-12-21 19:45
  */
-@ApplicationScoped
+@Singleton
 public class TenantProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(TenantProvider.class);
 
@@ -39,21 +40,22 @@ public class TenantProvider {
 
     @Produces
     @CurrentRequest
-    public Tenant getTenant() {
+    public Optional<Tenant> getTenant() {
         Tenant tenant = tenants.get();
+
         LOGGER.trace("Providing tenant: {}", tenant);
-        return tenant;
+        return Optional.of(tenant);
     }
 
     public void setTenant(@Observes Tenant tenant) {
         MDC.put("tenant", tenant.getTenant());
-        LOGGER.debug("Saving tenant to request: {}", tenant);
+        LOGGER.debug("Saving tenant to thread: {}", tenant);
 
         tenants.set(tenant);
     }
 
     public void unsetTenant(@Observes EmptyTenant empty) {
-        LOGGER.debug("Removing tenant from request: {}", tenants.get());
+        LOGGER.debug("Removing tenant from thread: {}", tenants.get());
         MDC.remove("tenant");
 
         tenants.remove();
