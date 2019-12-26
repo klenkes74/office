@@ -48,7 +48,7 @@ public class CreateNaturalPersonTest {
     private static final OffsetDateTime CREATED = OffsetDateTime.now();
     private static final OffsetDateTime MODIFIED = CREATED;
 
-    private static final NaturalPersonSpec CONTACT_SPEC = new NaturalPersonSpec() {
+    private static final NaturalPersonData CONTACT_DATA = new NaturalPersonData() {
         @Override
         public Optional<String> getGivennamePrefix() {
             return Optional.empty();
@@ -98,12 +98,19 @@ public class CreateNaturalPersonTest {
         public Optional<String> getHeraldicPostfixTitle() {
             return Optional.empty();
         }
+    };
+
+    private static final NaturalPersonSpec CONTACT_SPEC = new NaturalPersonSpec() {
+        @Override
+        public NaturalPersonData getData() {
+            return CONTACT_DATA;
+        }
 
         @Override
         public ObjectIdentity getIdentity() {
             return ImmutableObjectIdentity.builder()
-                    .kind(NaturalPersonSpec.KIND)
-                    .version(NaturalPersonSpec.VERSION)
+                    .kind(NaturalPerson.KIND)
+                    .version(NaturalPerson.VERSION)
                     .uuid(ID)
                     .tenant(TENANT)
                     .name(KEY)
@@ -129,6 +136,11 @@ public class CreateNaturalPersonTest {
 
     private static final CreateNaturalPerson SERVICE = new CreateNaturalPerson() {
         @Override
+        public NaturalPersonSpec getSpec() {
+            return CONTACT_SPEC;
+        }
+
+        @Override
         public Metadata getMetadata() {
             return ImmutableMetadata.builder()
                     .identity(ImmutableObjectIdentity.builder()
@@ -140,11 +152,6 @@ public class CreateNaturalPersonTest {
                             .build()
                     )
                     .build();
-        }
-
-        @Override
-        public NaturalPersonSpec getSpec() {
-            return CONTACT_SPEC;
         }
     };
 

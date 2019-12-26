@@ -18,14 +18,10 @@
 
 package de.kaiserpfalzedv.base.store.jpa.contacts;
 
-import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
-import de.kaiserpfalzedv.contacts.ImmutableNaturalPersonSpec;
-import de.kaiserpfalzedv.contacts.NaturalPerson;
-import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
+import de.kaiserpfalzedv.contacts.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.io.Serializable;
 import java.util.Optional;
 
 /**
@@ -33,7 +29,7 @@ import java.util.Optional;
  * @since 2019-12-22 12:20
  */
 @Embeddable
-public class JPANaturalPersonSpec extends JPAPersonSpec<JPANaturalPersonSpec, NaturalPersonSpec> implements Serializable {
+public class JPANaturalPersonData extends JPAPersonData {
     @Column(name = "_GIVENNAME_PREFIX")
     public String givennamePrefix;
     @Column(name = "_GIVENNAME")
@@ -58,12 +54,8 @@ public class JPANaturalPersonSpec extends JPAPersonSpec<JPANaturalPersonSpec, Na
     @Column(name = "_HERALDIC_TITLE_POSTFIX")
     public String heraldicPostfixTitle;
 
-    public JPANaturalPersonSpec fromModel(NaturalPersonSpec model) {
-        identity = new JPAIdentity().fromModel(model.getIdentity());
-
-        displayname = model.getDisplayname();
-        created = model.getCreated();
-        modified = model.getModified();
+    public JPANaturalPersonData fromModel(NaturalPersonSpec spec) {
+        NaturalPersonData model = spec.getData();
 
         givennamePrefix = model.getGivennamePrefix().orElse(null);
         givenname = model.getGivenname();
@@ -82,31 +74,30 @@ public class JPANaturalPersonSpec extends JPAPersonSpec<JPANaturalPersonSpec, Na
         return this;
     }
 
-    public NaturalPersonSpec toModel() {
+    public NaturalPersonSpec toModel(JPAPersonSpec spec) {
         return ImmutableNaturalPersonSpec.builder()
-                .kind(NaturalPersonSpec.KIND)
-                .version(NaturalPersonSpec.VERSION)
+                .identity(spec.identity.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
+                .displayname(spec.displayname)
+                .created(spec.created)
+                .modified(spec.modified)
 
-                .identity(identity.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
+                .data(ImmutableNaturalPersonData.builder()
+                        .givennamePrefix(Optional.ofNullable(givennamePrefix))
+                        .givenname(givenname)
+                        .givennamePostfix(Optional.ofNullable(givennamePostfix))
 
-                .displayname(displayname)
+                        .surnamePrefix(Optional.ofNullable(surnamePrefix))
+                        .surname(surname)
+                        .surnamePostfix(Optional.ofNullable(surnamePostfix))
 
-                .givennamePrefix(Optional.ofNullable(givennamePrefix))
-                .givenname(givenname)
-                .givennamePostfix(Optional.ofNullable(givennamePostfix))
+                        .honorificPrefixTitle(Optional.ofNullable(honorificPrefixTitle))
+                        .honorificPostfixTitle(Optional.ofNullable(honorificPostfixTitle))
 
-                .surnamePrefix(Optional.ofNullable(surnamePrefix))
-                .surname(surname)
-                .surnamePostfix(Optional.ofNullable(surnamePostfix))
+                        .heraldicPrefixTitle(Optional.ofNullable(heraldicPrefixTitle))
+                        .heraldicPostfixTitle(Optional.ofNullable(heraldicPostfixTitle))
 
-                .honorificPrefixTitle(Optional.ofNullable(honorificPrefixTitle))
-                .honorificPostfixTitle(Optional.ofNullable(honorificPostfixTitle))
-
-                .heraldicPrefixTitle(Optional.ofNullable(heraldicPrefixTitle))
-                .heraldicPostfixTitle(Optional.ofNullable(heraldicPostfixTitle))
-
-                .created(created)
-                .modified(modified)
+                        .build()
+                )
 
                 .build();
     }

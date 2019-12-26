@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.contacts.api;
 
+import de.kaiserpfalzedv.base.actions.commands.Command;
 import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
 
 
@@ -25,5 +26,5 @@ import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
  * @author rlichti
  * @since 22.12.2019 11:06
  */
-public interface NaturalPersonCommand extends PersonCommand<NaturalPersonSpec> {
+public interface NaturalPersonCommand extends Command<NaturalPersonSpec> {
 }

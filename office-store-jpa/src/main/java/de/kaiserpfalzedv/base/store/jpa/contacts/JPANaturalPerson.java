@@ -36,42 +36,42 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "NATURAL_PERSONS", schema = "BASE")
-public class JPANaturalPerson extends JPAPerson<JPANaturalPerson, JPANaturalPersonSpec, NaturalPerson, NaturalPersonSpec>
+public class JPANaturalPerson extends JPAPerson<JPANaturalPerson, NaturalPerson, NaturalPersonSpec>
         implements Serializable {
     @Embedded
-    public JPANaturalPersonSpec spec;
+    JPANaturalPersonData data;
+
 
     public static PanacheQuery<JPANaturalPerson> findByUuid(final String tenant, final UUID uuid) {
-        return find("identity.tenant=?1 and identity.uuid=?2", tenant, uuid);
+        return find("spec.identity.tenant=?1 and spec.identity.uuid=?2", tenant, uuid);
     }
 
     public static PanacheQuery<JPANaturalPerson> findByTenant(final String tenant) {
-        return find("identity.tenant=?1", tenant);
+        return find("spec.identity.tenant=?1", tenant);
     }
 
     public static PanacheQuery<JPANaturalPerson> findByTenantAndKey(final String tenant, final String key) {
-        return find("identity.tenant=?1 and identity.key=?2", tenant, key);
+        return find("spec.identity.tenant=?1 and spec.identity.key=?2", tenant, key);
     }
 
 
     public NaturalPerson toModel() {
-        if (spec == null) {
-            throw new IllegalStateException("JPANaturalPerson: spec is not initialized.");
-        }
-
         return ImmutableNaturalPerson.builder()
                 .kind(NaturalPerson.KIND)
                 .version(NaturalPerson.VERSION)
+
                 .metadata(ImmutableMetadata.builder()
-                        .identity(identity.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
+                        .identity(spec.identity.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
                         .build()
                 )
-                .spec(spec.toModel())
+
+                .spec(data.toModel(spec))
                 .build();
     }
 
     public JPANaturalPerson fromModel(final NaturalPersonSpec model) {
-        spec = new JPANaturalPersonSpec().fromModel(model);
+        spec = new JPAPersonSpec().fromModel(model);
+        data = new JPANaturalPersonData().fromModel(model);
 
         return this;
     }

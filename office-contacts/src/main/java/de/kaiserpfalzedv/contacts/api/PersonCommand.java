@@ -19,16 +19,12 @@
 package de.kaiserpfalzedv.contacts.api;
 
 import de.kaiserpfalzedv.base.actions.commands.Command;
-import de.kaiserpfalzedv.base.api.IdentityHolding;
-import de.kaiserpfalzedv.base.api.KindHolding;
-import de.kaiserpfalzedv.base.api.Spec;
-
-import java.io.Serializable;
+import de.kaiserpfalzedv.contacts.PersonSpec;
 
 
 /**
  * @author rlichti
  * @since 22.12.2019 11:06
  */
-public interface PersonCommand<T extends Spec<Serializable> & IdentityHolding & KindHolding> extends Command<T> {
+public interface PersonCommand extends Command<PersonSpec> {
 }

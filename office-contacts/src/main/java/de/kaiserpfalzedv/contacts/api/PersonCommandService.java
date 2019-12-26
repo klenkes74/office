@@ -25,5 +25,5 @@ import de.kaiserpfalzedv.base.actions.CommandService;
  * @author rlichti
  * @since 22.12.2019 11:06
  */
-public interface PersonCommandService<T extends PersonCommand> extends CommandService<T> {
+public interface PersonCommandService extends CommandService<PersonCommand> {
 }

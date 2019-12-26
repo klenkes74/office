@@ -27,5 +27,8 @@ import javax.persistence.Entity;
 @Entity
 public abstract class JPANaturalPersonChangeWithSpec<T extends NaturalPersonCommandWithSpec> extends JPANaturalPersonChange<T> {
     @Embedded
-    public JPANaturalPersonSpec spec;
+    public JPAPersonSpec spec;
+
+    @Embedded
+    public JPANaturalPersonData data;
 }

@@ -29,7 +29,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @JsonSerialize(as = ImmutableNaturalPerson.class)
 @JsonDeserialize(builder = ImmutableNaturalPerson.Builder.class)
-public interface NaturalPerson extends Person<NaturalPerson, NaturalPersonSpec> {
+public interface NaturalPerson extends BasePerson<NaturalPerson, NaturalPersonSpec> {
     String KIND = "de.kaiserpfalzedv.contacts.NaturalPerson";
     String VERSION = "1.0.0";
 
@@ -42,4 +42,7 @@ public interface NaturalPerson extends Person<NaturalPerson, NaturalPersonSpec> 
     default String getVersion() {
         return VERSION;
     }
+
+    @Override
+    NaturalPersonSpec getSpec();
 }

@@ -19,7 +19,9 @@
 package de.kaiserpfalzedv.base.store.jpa.contacts;
 
 import de.kaiserpfalzedv.base.cdi.JPA;
+import de.kaiserpfalzedv.contacts.BasePerson;
 import de.kaiserpfalzedv.contacts.Person;
+import de.kaiserpfalzedv.contacts.PersonSpec;
 import de.kaiserpfalzedv.contacts.store.PersonReadAdapter;
 
 import javax.enterprise.context.Dependent;
@@ -36,8 +38,8 @@ import java.util.UUID;
 @Dependent
 public class JPAPersonReadAdapter implements PersonReadAdapter {
     @Override
-    public Optional<Person> loadById(final String tenant, final UUID uuid) {
-        JPAPerson data = JPAPerson.findByUuid(tenant, uuid).firstResult();
+    public Optional<BasePerson> loadById(final String tenant, final UUID uuid) {
+        JPAPerson<JPAPerson, Person, PersonSpec> data = JPAPerson.findByUuid(tenant, uuid).firstResult();
 
         if (data == null) {
             return Optional.empty();
@@ -47,8 +49,8 @@ public class JPAPersonReadAdapter implements PersonReadAdapter {
     }
 
     @Override
-    public Optional<Person> loadbyKey(final String tenant, final String key) {
-        JPAPerson data = JPAPerson.findByTenantAndKey(tenant, key).firstResult();
+    public Optional<BasePerson> loadbyKey(final String tenant, final String key) {
+        JPAPerson<JPAPerson, Person, PersonSpec> data = JPAPerson.findByTenantAndKey(tenant, key).firstResult();
 
         if (data == null) {
             return Optional.empty();
@@ -58,20 +60,20 @@ public class JPAPersonReadAdapter implements PersonReadAdapter {
     }
 
     @Override
-    public ArrayList<Person> loadByTenant(final String tenant) {
-        List<JPAPerson> data = JPAPerson.findByTenant(tenant).list();
+    public ArrayList<BasePerson> loadByTenant(final String tenant) {
+        List<JPAPerson<JPAPerson, Person, PersonSpec>> data = JPAPerson.findByTenant(tenant).list();
 
-        ArrayList<Person> result = new ArrayList<>(data.size());
+        ArrayList<BasePerson> result = new ArrayList<>(data.size());
         data.forEach(d -> result.add(d.toModel()));
 
         return result;
     }
 
     @Override
-    public ArrayList<Person> loadByTenant(final String tenant, final int index, final int size) {
-        List<JPAPerson> data = JPAPerson.findByTenant(tenant).page(index, size).list();
+    public ArrayList<BasePerson> loadByTenant(final String tenant, final int index, final int size) {
+        List<JPAPerson<JPAPerson, Person, PersonSpec>> data = JPAPerson.findByTenant(tenant).page(index, size).list();
 
-        ArrayList<Person> result = new ArrayList<>(data.size());
+        ArrayList<BasePerson> result = new ArrayList<>(data.size());
         data.forEach(d -> result.add(d.toModel()));
 
         return result;

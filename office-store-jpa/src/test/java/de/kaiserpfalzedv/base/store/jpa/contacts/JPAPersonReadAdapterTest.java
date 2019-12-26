@@ -20,7 +20,7 @@ package de.kaiserpfalzedv.base.store.jpa.contacts;
 
 
 import de.kaiserpfalzedv.base.cdi.JPA;
-import de.kaiserpfalzedv.contacts.Person;
+import de.kaiserpfalzedv.contacts.BasePerson;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -56,7 +56,7 @@ public class JPAPersonReadAdapterTest {
 
     @Test
     public void shouldRetrieveEmptyOptionalIfStoreIsEmpty() {
-        Optional<Person> result = readAdapter.loadById(TENANT, UUID.randomUUID());
+        Optional<BasePerson> result = readAdapter.loadById(TENANT, UUID.randomUUID());
         LOGGER.trace("result: {}", result);
 
         assert !result.isPresent();
@@ -64,11 +64,11 @@ public class JPAPersonReadAdapterTest {
 
     @Test
     public void shouldRetrieveDataById() {
-        Optional<Person> result = readAdapter.loadById(TENANT, ID);
+        Optional<BasePerson> result = readAdapter.loadById(TENANT, ID);
         LOGGER.trace("result: {}", result);
 
         assert result.isPresent();
-        Person data = result.get();
+        BasePerson data = result.get();
 
         assert ID.equals(data.getMetadata().getIdentity().getUuid());
         assert TENANT.equals(data.getMetadata().getIdentity().getTenant());
@@ -80,7 +80,7 @@ public class JPAPersonReadAdapterTest {
 
     @Test
     public void shouldRetrieveDataWhenLoadingByScope() {
-        Collection<Person> result = readAdapter.loadByTenant(TENANT);
+        Collection<BasePerson> result = readAdapter.loadByTenant(TENANT);
         LOGGER.trace("result: {}", result);
 
         assert result.size() > 0;
@@ -88,7 +88,7 @@ public class JPAPersonReadAdapterTest {
 
     @Test
     public void shouldRetrieveEmptySetWhenInvalidScopeIsQueried() {
-        Collection<Person> result = readAdapter.loadByTenant("empty");
+        Collection<BasePerson> result = readAdapter.loadByTenant("empty");
         LOGGER.trace("result: {}", result);
 
         assert result.isEmpty();
@@ -96,7 +96,7 @@ public class JPAPersonReadAdapterTest {
 
     @Test
     public void shouldRetrieveDataWhenLoadedByName() {
-        Optional<Person> result = readAdapter.loadbyKey(TENANT, KEY);
+        Optional<BasePerson> result = readAdapter.loadbyKey(TENANT, KEY);
         LOGGER.trace("result: {}", result);
 
         assert result.isPresent();
@@ -104,7 +104,7 @@ public class JPAPersonReadAdapterTest {
 
     @Test
     public void shouldRetrieveEmptyWhenInvalidNameIsGiven() {
-        Optional<Person> result = readAdapter.loadbyKey("empty", KEY);
+        Optional<BasePerson> result = readAdapter.loadbyKey("empty", KEY);
         LOGGER.trace("result: {}", result);
 
         assert !result.isPresent();
@@ -113,7 +113,7 @@ public class JPAPersonReadAdapterTest {
     @Test
     @Transactional
     public void shouldRetrieveALotOfFoldersWhenTheyExist() {
-        ArrayList<Person> result = readAdapter.loadByTenant(TENANT);
+        ArrayList<BasePerson> result = readAdapter.loadByTenant(TENANT);
 
         long count = readAdapter.count();
         LOGGER.info("Loaded ({}/{}) entries: {}", result.size(), count, result);

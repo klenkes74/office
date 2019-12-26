@@ -70,7 +70,7 @@ public class JPANaturalPersonCreateService implements NaturalPersonCommandServic
                             .build()
                     )
 
-                    .spec(jpa.spec.toModel())
+                    .spec(jpa.data.toModel(jpa.spec))
 
                     .build();
 

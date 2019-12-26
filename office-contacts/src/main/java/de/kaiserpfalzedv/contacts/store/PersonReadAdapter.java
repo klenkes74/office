@@ -19,11 +19,11 @@
 package de.kaiserpfalzedv.contacts.store;
 
 import de.kaiserpfalzedv.base.store.DataReadAdapter;
-import de.kaiserpfalzedv.contacts.Person;
+import de.kaiserpfalzedv.contacts.BasePerson;
 
 /**
  * @author rlichti
  * @since 2019-20-25T10:19
  */
-public interface PersonReadAdapter extends DataReadAdapter<Person> {
+public interface PersonReadAdapter extends DataReadAdapter<BasePerson> {
 }

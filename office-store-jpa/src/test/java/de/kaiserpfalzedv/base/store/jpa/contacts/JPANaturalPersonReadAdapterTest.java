@@ -77,9 +77,9 @@ public class JPANaturalPersonReadAdapterTest {
         assert TENANT.equals(data.getSpec().getIdentity().getTenant());
         assert KEY.equals(data.getSpec().getIdentity().getName().orElse(null));
         assert DISPLAYNAME.equals(data.getSpec().getDisplayname());
-        assert GIVENNAME.equals(data.getSpec().getGivenname());
-        assert SURNAME.equals(data.getSpec().getSurname());
-        assert HERALDIC_PREFIX.equals(data.getSpec().getHeraldicPrefixTitle().orElse(null));
+        assert GIVENNAME.equals(data.getSpec().getData().getGivenname());
+        assert SURNAME.equals(data.getSpec().getData().getSurname());
+        assert HERALDIC_PREFIX.equals(data.getSpec().getData().getHeraldicPrefixTitle().orElse(null));
         assert CREATED.isEqual(data.getSpec().getCreated());
         assert MODIFIED.isEqual(data.getSpec().getModified());
     }

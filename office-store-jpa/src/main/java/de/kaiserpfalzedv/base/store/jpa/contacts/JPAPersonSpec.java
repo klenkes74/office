@@ -19,12 +19,14 @@
 package de.kaiserpfalzedv.base.store.jpa.contacts;
 
 import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
+import de.kaiserpfalzedv.contacts.BasePersonSpec;
 import de.kaiserpfalzedv.contacts.ImmutablePersonSpec;
-import de.kaiserpfalzedv.contacts.PersonSpec;
+import de.kaiserpfalzedv.contacts.Person;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
@@ -33,7 +35,8 @@ import java.time.OffsetDateTime;
  * @since 2019-12-22 12:20
  */
 @Embeddable
-public class JPAPersonSpec<T extends JPAPersonSpec, S extends PersonSpec> implements Serializable {
+@MappedSuperclass
+public class JPAPersonSpec<T extends JPAPersonSpec, S extends BasePersonSpec, D extends JPAPersonData> implements Serializable {
     @Embedded
     public JPAIdentity identity;
 
@@ -44,7 +47,6 @@ public class JPAPersonSpec<T extends JPAPersonSpec, S extends PersonSpec> implem
     public OffsetDateTime created;
     @Column(name = "_MODIFIED", nullable = false)
     public OffsetDateTime modified;
-
 
     public T fromModel(S model) {
         identity = new JPAIdentity().fromModel(model.getIdentity());
@@ -59,12 +61,13 @@ public class JPAPersonSpec<T extends JPAPersonSpec, S extends PersonSpec> implem
     public S toModel() {
         //noinspection unchecked
         return (S) ImmutablePersonSpec.builder()
-                .kind("undefined")
-                .version("0.0.0")
-                .identity(identity.toModel("undefined", "0.0.0"))
+                .identity(identity.toModel(Person.KIND, Person.VERSION))
+
                 .displayname(displayname)
+
                 .created(created)
                 .modified(modified)
+
                 .build();
     }
 }
