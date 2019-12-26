@@ -34,24 +34,6 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-/*
- * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
- *
- *  This file is part of Kaiserpfalz EDV-Service Office.
- *
- *  This is free software: you can redistribute it and/or modify it under the terms of
- *  the GNU Lesser General Public License as published by the Free Software
- *  Foundation, either version 3 of the License.
- *
- *  This file is distributed in the hope that it will be useful, but WITHOUT ANY
- *  WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- *  License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License along
- *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
- */
-
 -- Hibernate Internal Objects
 DROP SEQUENCE PUBLIC.HIBERNATE_SEQUENCE;
 CREATE SEQUENCE PUBLIC.HIBERNATE_SEQUENCE START 21;
@@ -104,8 +86,7 @@ VALUES (10, 'a292b515-c84f-4777-981a-376e614f4fed', 'de.kaiserpfalz-edv', 'D1000
         parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'));
 INSERT INTO BASE.NATURAL_PERSONS (id, _UUID, _TENANT, _KEY, _DISPLAYNAME, _GIVENNAME, _SURNAME, _CREATED, _MODIFIED)
 VALUES (11, '2ddbb50a-7536-48d3-81d8-6bfa46c9ebaa', 'de.kaiserpfalz-edv', 'D10001', 'Roland T. Lichti',
-        'Roland Thomas', 'Lichti',
-        parsedatetime('2018-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
+        'Roland Thomas', 'Lichti', parsedatetime('2018-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
         parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'));
 INSERT INTO BASE.NATURAL_PERSONS (id, _UUID, _TENANT, _KEY, _DISPLAYNAME, _GIVENNAME, _SURNAME, _CREATED, _MODIFIED)
 VALUES (12, 'eca15740-e2fd-4a36-9590-d44127ee6c12', 'de.kaiserpfalz-edv', 'D10002', 'Roland T. Lichti',

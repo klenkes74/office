@@ -1,0 +1,45 @@
+{
+  "kind": "de.kaiserpfalzedv.contacts.CreateNaturalPerson",
+  "version": "1.0.0",
+  "metadata": {
+    "identity": {
+      "kind": "de.kaiserpfalzedv.contacts.CreateNaturalPerson",
+      "version": "1.0.0",
+      "uuid": "004006ae-2953-4af3-9e38-ed5ca24176bf",
+      "tenant": "de.kaiserpfalz-edv",
+      "name": "D20000"
+    },
+    "workflowdata": {
+      "request": "854e9276-8f3d-4daa-b146-b7a9fe26c085",
+      "correlation": "16124fd7-393b-4642-8959-14f0ecbb962f",
+      "sequence": 2,
+      "timestamp": "2019-12-11T12:00:00-01:00",
+      "definition": {
+        "kind": "de.lichti.wf.CreateNewCustomer",
+        "version": "2.5.1",
+        "uuid": "99e40891-d8b3-4d18-bcb5-1c83bdc618d3",
+        "tenant": "lichti.de",
+        "name": "CreateNewCustomer"
+      }
+    }
+  },
+  "spec": {
+    "identity": {
+      "kind": "de.kaiserpfalzedv.contacts.NaturalPerson",
+      "version": "1.0.0",
+      "uuid": "5e71f32f-83bf-41f6-b3f5-ef9f64bdc718",
+      "tenant": "de.kaiserpfalz-edv",
+      "name": "D20000"
+    },
+    "displayname": "Roland T. Lichti",
+    "created": "2019-12-11T12:00:00-01:00",
+    "modified": "2019-12-22T15:00:00-01:00",
+    "data": {
+      "givenname": "Roland T.",
+      "surname": "Lichti",
+      "surnamePostfix": "Jr.",
+      "heraldicPrefixTitle": "Kardinal",
+      "heraldicPostfixTitle": "Rev. ULC"
+    }
+  }
+}
