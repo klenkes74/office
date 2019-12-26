@@ -23,7 +23,6 @@ import io.quarkus.security.UnauthorizedException;
 import io.quarkus.security.identity.SecurityIdentity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import javax.annotation.Priority;
 import javax.annotation.security.RolesAllowed;
@@ -51,6 +50,9 @@ public class MultitenantRoleInterceptor implements Serializable {
 
     @Inject
     SecurityIdentity securityIdentity;
+
+    @Inject
+    TenantProvider tenantProvider;
 
 
     @AroundInvoke
@@ -89,7 +91,6 @@ public class MultitenantRoleInterceptor implements Serializable {
     }
 
     private String getTenant() {
-        // FIXME 2019-12-25 rlichti Don't use slf4j MDC for getting the tenant!
-        return MDC.get("tenant");
+        return tenantProvider.getTenant().orElse(new Slf4jMDCTenant()).getTenant();
     }
 }
