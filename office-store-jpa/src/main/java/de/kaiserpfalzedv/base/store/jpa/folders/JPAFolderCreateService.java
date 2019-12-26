@@ -36,7 +36,6 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @JPA
 @EventLogged
@@ -78,7 +77,7 @@ public class JPAFolderCreateService implements FolderCommandService<CreateFolder
             FolderCreated event = ImmutableFolderCreated.builder()
                     .metadata(ImmutableMetadata.builder()
                             .identity(jpa.command.toModel(Folder.KIND, Folder.VERSION))
-                            .workflowdata(Optional.ofNullable(jpa.workflow.toModel()))
+                            .workflowdata(jpa.workflow.toModel())
                             .build()
                     )
                     .spec(jpa.spec.toModel())

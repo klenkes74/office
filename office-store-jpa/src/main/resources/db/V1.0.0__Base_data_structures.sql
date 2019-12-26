@@ -24,7 +24,7 @@ CREATE TABLE BASE.FOLDERS
 
     _UUID        CHAR(36)     NOT NULL UNIQUE,
     _TENANT      VARCHAR(256) NOT NULL DEFAULT './.',
-    _KEY         VARCHAR(50)  NOT NULL,
+    _KEY         VARCHAR(50),
 
     _NAME        VARCHAR(100) NOT NULL,
     _DISPLAYNAME VARCHAR(100),
@@ -45,19 +45,19 @@ CREATE TABLE BASE.FOLDERS_CHANGES
     _COMMAND_KEY                VARCHAR(50),
     _COMMAND_CREATED            TIMESTAMP    NOT NULL,
 
-    _WORKFLOW_KIND              VARCHAR(256) NOT NULL DEFAULT 'UNDEFINED',
-    _WORKFLOW_VERSION           VARCHAR(20)  NOT NULL DEFAULT '1.0.0',
+    _WORKFLOW_KIND              VARCHAR(256),
+    _WORKFLOW_VERSION           VARCHAR(20),
     _WORKFLOW_REQUEST           char(36),
     _WORKFLOW_CORRELATION       char(36),
     _WORKFLOW_SEQUENCE          INTEGER,
     _WORKFLOW_TIMESTAMP         TIMESTAMP,
     _WORKFLOW_DEFINITION_UUID   char(36),
-    _WORKFLOW_DEFINITION_TENANT VARCHAR(256) NOT NULL DEFAULT './,',
+    _WORKFLOW_DEFINITION_TENANT VARCHAR(256),
     _WORKFLOW_DEFINITION_KEY    VARCHAR(50),
 
     _UUID                       CHAR(36)     NOT NULL UNIQUE,
     _TENANT                     VARCHAR(256) NOT NULL DEFAULT './.',
-    _KEY                        VARCHAR(50)  NOT NULL,
+    _KEY                        VARCHAR(50),
 
     -- JPAFolderCreate
     _NAME                       VARCHAR(100),
@@ -65,8 +65,8 @@ CREATE TABLE BASE.FOLDERS_CHANGES
     _DESCRIPTION                VARCHAR(2048),
     _CLOSED                     TIMESTAMP,
 
-    _CREATED                    TIMESTAMP    NOT NULL,
-    _MODIFIED                   TIMESTAMP    NOT NULL
+    _CREATED                    TIMESTAMP,
+    _MODIFIED                   TIMESTAMP
 );
 
 
@@ -77,7 +77,7 @@ CREATE TABLE BASE.PERSONS
 
     _UUID        CHAR(36)     NOT NULL UNIQUE,
     _TENANT      VARCHAR(256) NOT NULL DEFAULT './.',
-    _KEY         VARCHAR(50)  NOT NULL,
+    _KEY         VARCHAR(50),
 
     _DISPLAYNAME VARCHAR(100) NOT NULL,
     _CREATED     TIMESTAMP    NOT NULL,
@@ -91,16 +91,16 @@ CREATE TABLE BASE.NATURAL_PERSONS
 
     _UUID                    CHAR(36)     NOT NULL UNIQUE,
     _TENANT                  VARCHAR(256) NOT NULL DEFAULT './.',
-    _KEY                     VARCHAR(50)  NOT NULL,
+    _KEY                     VARCHAR(50),
 
-    _DISPLAYNAME             VARCHAR(100),
+    _DISPLAYNAME             VARCHAR(100) NOT NULL,
 
     _GIVENNAME_PREFIX        VARCHAR(100),
-    _GIVENNAME               VARCHAR(100) NOT NULL,
+    _GIVENNAME               VARCHAR(100),
     _GIVENNAME_POSTFIX       VARCHAR(100),
 
     _SURNAME_PREFIX          VARCHAR(100),
-    _SURNAME                 VARCHAR(100) NOT NULL,
+    _SURNAME                 VARCHAR(100),
     _SURNAME_POSTFIX         VARCHAR(100),
 
     _HONORIFIC_TITLE_PREFIX  VARCHAR(100),
@@ -123,29 +123,29 @@ CREATE TABLE BASE.NATURAL_PERSONS_CHANGES
     _COMMAND_KEY                VARCHAR(50),
     _COMMAND_CREATED            TIMESTAMP    NOT NULL,
 
-    _WORKFLOW_KIND              VARCHAR(256) NOT NULL DEFAULT 'UNDEFINED',
-    _WORKFLOW_VERSION           VARCHAR(20)  NOT NULL DEFAULT '1.0.0',
+    _WORKFLOW_KIND              VARCHAR(256),
+    _WORKFLOW_VERSION           VARCHAR(20),
     _WORKFLOW_REQUEST           char(36),
     _WORKFLOW_CORRELATION       char(36),
     _WORKFLOW_SEQUENCE          INTEGER,
-    _WORKFLOW_TIMESTAMP         TIMESTAMP    NOT NULL,
+    _WORKFLOW_TIMESTAMP         TIMESTAMP,
     _WORKFLOW_DEFINITION_UUID   char(36),
-    _WORKFLOW_DEFINITION_TENANT VARCHAR(256) NOT NULL DEFAULT './,',
+    _WORKFLOW_DEFINITION_TENANT VARCHAR(256),
     _WORKFLOW_DEFINITION_KEY    VARCHAR(50),
 
-    _UUID                       CHAR(36)     NOT NULL UNIQUE,
+    _UUID                       CHAR(36)     NOT NULL,
     _TENANT                     VARCHAR(256) NOT NULL DEFAULT './.',
-    _KEY                        VARCHAR(50)  NOT NULL,
+    _KEY                        VARCHAR(50),
 
     -- JPAContactCreate
     _DISPLAYNAME                VARCHAR(100),
 
     _GIVENNAME_PREFIX           VARCHAR(100),
-    _GIVENNAME                  VARCHAR(100) NOT NULL,
+    _GIVENNAME                  VARCHAR(100),
     _GIVENNAME_POSTFIX          VARCHAR(100),
 
     _SURNAME_PREFIX             VARCHAR(100),
-    _SURNAME                    VARCHAR(100) NOT NULL,
+    _SURNAME                    VARCHAR(100),
     _SURNAME_POSTFIX            VARCHAR(100),
 
     _HONORIFIC_TITLE_PREFIX     VARCHAR(100),
@@ -154,6 +154,6 @@ CREATE TABLE BASE.NATURAL_PERSONS_CHANGES
     _HERALDIC_TITLE_PREFIX      VARCHAR(100),
     _HERALDIC_TITLE_POSTFIX     VARCHAR(100),
 
-    _CREATED                    TIMESTAMP    NOT NULL,
-    _MODIFIED                   TIMESTAMP    NOT NULL
+    _CREATED                    TIMESTAMP,
+    _MODIFIED                   TIMESTAMP
 );

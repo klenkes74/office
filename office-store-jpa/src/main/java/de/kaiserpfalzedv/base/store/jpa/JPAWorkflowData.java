@@ -78,15 +78,20 @@ public class JPAWorkflowData implements Serializable {
             timestamp = wf.getTimestamp();
         }
 
+        workflow = new JPAIdentity();
+        workflow.tenant = workflow.key = kind = version = "./."; // fill NOT NULL columns.
+        workflow.uuid = UUID.randomUUID();
+        timestamp = OffsetDateTime.now();
+
         return this;
     }
 
     @Transient
-    public WorkflowData toModel() {
+    public Optional<WorkflowData> toModel() {
         if (correlation == null)
-            return null;
+            return Optional.empty();
 
-        return ImmutableWorkflowData.builder()
+        return Optional.of(ImmutableWorkflowData.builder()
                 .definition(workflow.toModel(kind, version))
 
                 .correlation(correlation)
@@ -94,6 +99,7 @@ public class JPAWorkflowData implements Serializable {
                 .sequence(Optional.ofNullable(sequence))
                 .timestamp(timestamp)
 
-                .build();
+                .build()
+        );
     }
 }

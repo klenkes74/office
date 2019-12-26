@@ -29,7 +29,6 @@ import de.kaiserpfalzedv.folders.ModifyFolder;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
 @Entity
 @DiscriminatorValue(CreateFolder.KIND)
@@ -51,7 +50,7 @@ public class JPAFolderCreate extends JPAFolderChangeWithSpec<CreateFolder> {
                 .version(ModifyFolder.VERSION)
                 .metadata(ImmutableMetadata.builder()
                         .identity(command.toModel(Folder.KIND, Folder.VERSION))
-                        .workflowdata(Optional.ofNullable(workflow.toModel()))
+                        .workflowdata(workflow.toModel())
                         .build()
                 )
                 .spec(spec.toModel())

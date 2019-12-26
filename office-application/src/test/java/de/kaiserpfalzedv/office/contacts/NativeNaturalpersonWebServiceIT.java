@@ -16,21 +16,15 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store;
+package de.kaiserpfalzedv.office.contacts;
 
-import de.kaiserpfalzedv.base.api.ObjectIdentity;
+import io.quarkus.test.junit.NativeImageTest;
 
-@SuppressWarnings("CdiInjectionPointsInspection")
-public class DeletionFailedException extends DataException {
-    public DeletionFailedException(final ObjectIdentity identifier, final String message, final Throwable cause) {
-        super(identifier, message, cause);
-    }
 
-    public DeletionFailedException(final ObjectIdentity identifier, final Throwable cause) {
-        super(identifier, cause.getMessage(), cause);
-    }
-
-    public DeletionFailedException(final ObjectIdentity identifier, final String message) {
-        super(identifier, message);
-    }
+/**
+ * @author rlichti
+ * @since 2019-12-26T23:23
+ */
+@NativeImageTest
+public class NativeNaturalpersonWebServiceIT extends NaturalPersonWebServiceTest {
 }

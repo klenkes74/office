@@ -138,10 +138,12 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-vault</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-reactive-messaging-amqp</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-openapi</artifactId>

@@ -26,6 +26,7 @@ import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.UUID;
 
 /*
@@ -61,7 +62,7 @@ public class JPAIdentity implements Serializable {
 
                 .uuid(uuid)
                 .tenant(tenant)
-                .name(key)
+                .name(Optional.ofNullable(key))
 
                 .build();
     }

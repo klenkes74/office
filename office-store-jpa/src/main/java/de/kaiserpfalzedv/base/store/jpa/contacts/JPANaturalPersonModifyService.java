@@ -23,8 +23,7 @@ import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.cdi.EventLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.base.store.CreationFailedException;
-import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
-import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
+import de.kaiserpfalzedv.base.store.NoModifiableDataFoundException;
 import de.kaiserpfalzedv.contacts.*;
 import de.kaiserpfalzedv.contacts.api.NaturalPersonCommandService;
 
@@ -37,31 +36,24 @@ import javax.transaction.Transactional;
 @JPA
 @EventLogged
 @Dependent
-public class JPANaturalPersonCreateService implements NaturalPersonCommandService<CreateNaturalPerson> {
+public class JPANaturalPersonModifyService implements NaturalPersonCommandService<ModifyNaturalPerson> {
     @Inject
-    Event<NaturalPersonCreated> eventSink;
+    Event<NaturalPersonModified> eventSink;
 
 
     @Transactional
-    public void observe(@Observes final CreateNaturalPerson command) {
+    public void observe(@Observes final ModifyNaturalPerson command) {
         NaturalPersonSpec spec = command.getSpec();
 
-        if (JPANaturalPerson.findByUuid(spec.getIdentity().getTenant(), spec.getIdentity().getUuid()).count() != 0) {
-            throw new WrappingException(new UuidAlreadyExistsException(spec.getIdentity()));
+        if (JPANaturalPerson.findByUuid(spec.getIdentity().getTenant(), spec.getIdentity().getUuid()).count() != 1) {
+            throw new WrappingException(new NoModifiableDataFoundException(spec.getIdentity()));
         }
-
-        if (spec.getIdentity().getName().isPresent()) {
-            if (JPANaturalPerson.findByTenantAndKey(spec.getIdentity().getTenant(), spec.getIdentity().getName().orElse(null)).count() != 0) {
-                throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
-            }
-        }
-
 
         try {
-            JPANaturalPersonCreate jpa = new JPANaturalPersonCreate().fromModel(command);
+            JPANaturalPersonModify jpa = new JPANaturalPersonModify().fromModel(command);
             jpa.persist();
 
-            NaturalPersonCreated event = ImmutableNaturalPersonCreated.builder()
+            NaturalPersonModified event = ImmutableNaturalPersonModified.builder()
                     .metadata(ImmutableMetadata.builder()
                             .identity(jpa.command.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
                             .workflowdata(jpa.workflow.toModel())

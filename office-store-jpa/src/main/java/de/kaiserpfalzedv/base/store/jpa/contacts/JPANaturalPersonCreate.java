@@ -28,7 +28,6 @@ import de.kaiserpfalzedv.contacts.NaturalPerson;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
 /**
  * @author rlichti
@@ -56,7 +55,7 @@ public class JPANaturalPersonCreate extends JPANaturalPersonChangeWithSpec<Creat
 
                 .metadata(ImmutableMetadata.builder()
                         .identity(command.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
-                        .workflowdata(Optional.ofNullable(workflow.toModel()))
+                        .workflowdata(workflow.toModel())
                         .build()
                 )
 

@@ -23,9 +23,11 @@ import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.cdi.EventLogged;
 import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.base.store.CreationFailedException;
-import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
-import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
-import de.kaiserpfalzedv.contacts.*;
+import de.kaiserpfalzedv.base.store.NoModifiableDataFoundException;
+import de.kaiserpfalzedv.contacts.DeleteNaturalPerson;
+import de.kaiserpfalzedv.contacts.ImmutableNaturalPersonDeleted;
+import de.kaiserpfalzedv.contacts.NaturalPerson;
+import de.kaiserpfalzedv.contacts.NaturalPersonDeleted;
 import de.kaiserpfalzedv.contacts.api.NaturalPersonCommandService;
 
 import javax.enterprise.context.Dependent;
@@ -37,38 +39,27 @@ import javax.transaction.Transactional;
 @JPA
 @EventLogged
 @Dependent
-public class JPANaturalPersonCreateService implements NaturalPersonCommandService<CreateNaturalPerson> {
+public class JPANaturalPersonDeleteService implements NaturalPersonCommandService<DeleteNaturalPerson> {
     @Inject
-    Event<NaturalPersonCreated> eventSink;
+    Event<NaturalPersonDeleted> eventSink;
 
 
     @Transactional
-    public void observe(@Observes final CreateNaturalPerson command) {
-        NaturalPersonSpec spec = command.getSpec();
-
-        if (JPANaturalPerson.findByUuid(spec.getIdentity().getTenant(), spec.getIdentity().getUuid()).count() != 0) {
-            throw new WrappingException(new UuidAlreadyExistsException(spec.getIdentity()));
+    public void observe(@Observes final DeleteNaturalPerson command) {
+        if (JPANaturalPerson.findByUuid(command.getMetadata().getIdentity().getTenant(), command.getMetadata().getIdentity().getUuid()).count() != 1) {
+            throw new WrappingException(new NoModifiableDataFoundException(command.getMetadata().getIdentity()));
         }
-
-        if (spec.getIdentity().getName().isPresent()) {
-            if (JPANaturalPerson.findByTenantAndKey(spec.getIdentity().getTenant(), spec.getIdentity().getName().orElse(null)).count() != 0) {
-                throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
-            }
-        }
-
 
         try {
-            JPANaturalPersonCreate jpa = new JPANaturalPersonCreate().fromModel(command);
+            JPANaturalPersonDelete jpa = new JPANaturalPersonDelete().fromModel(command);
             jpa.persist();
 
-            NaturalPersonCreated event = ImmutableNaturalPersonCreated.builder()
+            ImmutableNaturalPersonDeleted event = ImmutableNaturalPersonDeleted.builder()
                     .metadata(ImmutableMetadata.builder()
                             .identity(jpa.command.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
                             .workflowdata(jpa.workflow.toModel())
                             .build()
                     )
-
-                    .spec(jpa.data.toModel(jpa.spec))
 
                     .build();
 
