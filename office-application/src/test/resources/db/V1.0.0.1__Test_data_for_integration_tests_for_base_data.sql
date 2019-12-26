@@ -16,23 +16,41 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
---
--- Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
---
---  This file is part of Kaiserpfalz EDV-Service Office.
---
---  This is free software: you can redistribute it and/or modify it under the terms of
---  the GNU Lesser General Public License as published by the Free Software
---  Foundation, either version 3 of the License.
---
---  This file is distributed in the hope that it will be useful, but WITHOUT ANY
---  WARRANTY; without even the implied warranty of MERCHANTABILITY or
---  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
---  License for more details.
---
---  You should have received a copy of the GNU Lesser General Public License along
---  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
---
+/*
+ * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+ *
+ *  This file is part of Kaiserpfalz EDV-Service Office.
+ *
+ *  This is free software: you can redistribute it and/or modify it under the terms of
+ *  the GNU Lesser General Public License as published by the Free Software
+ *  Foundation, either version 3 of the License.
+ *
+ *  This file is distributed in the hope that it will be useful, but WITHOUT ANY
+ *  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ *  License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License along
+ *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ */
+
+/*
+ * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+ *
+ *  This file is part of Kaiserpfalz EDV-Service Office.
+ *
+ *  This is free software: you can redistribute it and/or modify it under the terms of
+ *  the GNU Lesser General Public License as published by the Free Software
+ *  Foundation, either version 3 of the License.
+ *
+ *  This file is distributed in the hope that it will be useful, but WITHOUT ANY
+ *  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ *  License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License along
+ *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ */
 
 -- Hibernate Internal Objects
 DROP SEQUENCE PUBLIC.HIBERNATE_SEQUENCE;
@@ -80,7 +98,6 @@ VALUES (9, '5446dbbe-44ec-44b9-b021-d22040848f22', 'de.lichti', 'KD-2019-M-135',
         null, null, parsedatetime('2019-01-10 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
         parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'));
 
-
 INSERT INTO BASE.NATURAL_PERSONS (id, _UUID, _TENANT, _KEY, _DISPLAYNAME, _GIVENNAME, _SURNAME, _CREATED, _MODIFIED)
 VALUES (10, 'a292b515-c84f-4777-981a-376e614f4fed', 'de.kaiserpfalz-edv', 'D10000', 'Roland T. Lichti',
         'Roland Thomas', 'Lichti', parsedatetime('2019-01-10 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
@@ -108,20 +125,25 @@ VALUES (15, '762a14bc-0f6a-4e01-8ea4-9dfad33cdec8', 'de.kaiserpfalz-edv', 'D1000
         parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'));
 INSERT INTO BASE.NATURAL_PERSONS (id, _UUID, _TENANT, _KEY, _DISPLAYNAME, _GIVENNAME, _SURNAME, _CREATED, _MODIFIED)
 VALUES (16, 'ac87cab2-6453-48ec-9201-96440668cc44', 'de.kaiserpfalz-edv', 'D10006', 'Roland T. Lichti',
-        'Roland Thomas', 'Lichti', parsedatetime('2018-05-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
+        'Roland Thomas', 'Lichti',
+        parsedatetime('2018-05-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
         parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'));
-INSERT INTO BASE.NATURAL_PERSONS (id, _UUID, _TENANT, _KEY, _DISPLAYNAME, _GIVENNAME, _SURNAME, _CREATED, _MODIFIED,
+INSERT INTO BASE.NATURAL_PERSONS (id, _UUID, _TENANT, _KEY, _DISPLAYNAME,
+                                  _GIVENNAME, _SURNAME,
+                                  _CREATED, _MODIFIED,
                                   _GIVENNAME_POSTFIX, _SURNAME_PREFIX)
-VALUES (17, 'e099521e-0c71-452c-8740-27e59e7b2d2b', 'de.kaiserpfalz-edv', 'D10007', 'Roland T. Lichti',
-        'Roland Thomas', 'Lichti', parsedatetime('2018-03-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
-        parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'), 'Jr.', 'auf und zu');
+VALUES (17, 'e099521e-0c71-452c-8740-27e59e7b2d2b', 'de.kaiserpfalz-edv', 'D10007', 'Roland T. Jr. auf und zu Lichti',
+        'Roland Thomas', 'Lichti',
+        parsedatetime('2018-03-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
+        parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
+        'Jr.', 'auf und zu');
 INSERT INTO BASE.NATURAL_PERSONS (id, _UUID, _TENANT, _KEY, _DISPLAYNAME, _GIVENNAME, _SURNAME, _CREATED, _MODIFIED,
                                   _HONORIFIC_TITLE_POSTFIX)
-VALUES (18, '6b5697c9-e40c-4606-8a63-a7a02908cb0c', 'de.kaiserpfalz-edv', 'D10008', 'Roland T. Lichti',
+VALUES (18, '6b5697c9-e40c-4606-8a63-a7a02908cb0c', 'de.kaiserpfalz-edv', 'D10008', 'Roland T. Lichti no PD',
         'Roland Thomas', 'Lichti', parsedatetime('2018-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
         parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'), 'no PD');
 INSERT INTO BASE.NATURAL_PERSONS (id, _UUID, _TENANT, _KEY, _DISPLAYNAME, _GIVENNAME, _SURNAME, _CREATED, _MODIFIED,
                                   _HERALDIC_TITLE_PREFIX)
-VALUES (19, 'f422fcf1-ebe1-4b1e-adc2-0a0cfdeb0d81', 'de.kaiserpfalz-edv', 'D10009', 'Roland T. Lichti',
+VALUES (19, 'f422fcf1-ebe1-4b1e-adc2-0a0cfdeb0d81', 'de.kaiserpfalz-edv', 'D10009', 'Kardinal Roland T. Lichti',
         'Roland Thomas', 'Lichti', parsedatetime('2019-01-06 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
         parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'), 'Kardinal');
