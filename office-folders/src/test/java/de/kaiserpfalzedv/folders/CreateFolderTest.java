@@ -53,8 +53,8 @@ public class CreateFolderTest {
         @Override
         public ObjectIdentity getIdentity() {
             return ImmutableObjectIdentity.builder()
-                    .kind(KIND)
-                    .version(VERSION)
+                    .kind(Folder.KIND)
+                    .version(Folder.VERSION)
                     .uuid(ID)
                     .tenant(SCOPE)
                     .name(KEY)

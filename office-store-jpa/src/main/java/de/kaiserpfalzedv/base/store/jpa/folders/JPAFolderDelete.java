@@ -22,6 +22,7 @@ import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
 import de.kaiserpfalzedv.base.store.jpa.JPAWorkflowData;
 import de.kaiserpfalzedv.folders.DeleteFolder;
+import de.kaiserpfalzedv.folders.Folder;
 import de.kaiserpfalzedv.folders.ImmutableDeleteFolder;
 
 import javax.persistence.DiscriminatorValue;
@@ -47,7 +48,7 @@ public class JPAFolderDelete extends JPAFolderChange<DeleteFolder> {
                 .kind(DeleteFolder.KIND)
                 .version(DeleteFolder.VERSION)
                 .metadata(ImmutableMetadata.builder()
-                        .identity(command.toModel())
+                        .identity(command.toModel(Folder.KIND, Folder.VERSION))
                         .workflowdata(Optional.ofNullable(workflow.toModel()))
                         .build()
                 )

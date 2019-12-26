@@ -22,7 +22,6 @@ import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.contacts.ImmutableNaturalPerson;
 import de.kaiserpfalzedv.contacts.NaturalPerson;
 import de.kaiserpfalzedv.contacts.NaturalPersonSpec;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import javax.persistence.Embedded;
@@ -37,9 +36,11 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "NATURAL_PERSONS", schema = "BASE")
-public class JPANaturalPerson extends PanacheEntity implements Serializable {
+public class JPANaturalPerson extends JPAPerson<JPANaturalPerson, NaturalPerson, NaturalPersonSpec>
+        implements Serializable {
     @Embedded
-    public JPANaturalPersonSpec spec;
+    JPANaturalPersonData data;
+
 
     public static PanacheQuery<JPANaturalPerson> findByUuid(final String tenant, final UUID uuid) {
         return find("spec.identity.tenant=?1 and spec.identity.uuid=?2", tenant, uuid);
@@ -55,24 +56,33 @@ public class JPANaturalPerson extends PanacheEntity implements Serializable {
 
 
     public NaturalPerson toModel() {
-        if (spec == null) {
-            throw new IllegalStateException("JPANaturalPerson: spec is not initialized.");
-        }
-
         return ImmutableNaturalPerson.builder()
                 .kind(NaturalPerson.KIND)
                 .version(NaturalPerson.VERSION)
+
                 .metadata(ImmutableMetadata.builder()
-                        .identity(spec.identity.toModel())
+                        .identity(spec.identity.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
                         .build()
                 )
-                .spec(spec.toModel())
+
+                .spec(data.toModel(spec))
                 .build();
     }
 
     public JPANaturalPerson fromModel(final NaturalPersonSpec model) {
-        spec = new JPANaturalPersonSpec().fromModel(model);
+        spec = new JPAPersonSpec().fromModel(model);
+        data = new JPANaturalPersonData().fromModel(model);
 
         return this;
+    }
+
+    @Override
+    public String getKind() {
+        return NaturalPerson.KIND;
+    }
+
+    @Override
+    public String getVersion() {
+        return NaturalPerson.VERSION;
     }
 }

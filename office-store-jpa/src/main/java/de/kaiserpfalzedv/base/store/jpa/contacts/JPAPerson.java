@@ -16,64 +16,64 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store.jpa.folders;
+package de.kaiserpfalzedv.base.store.jpa.contacts;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
-import de.kaiserpfalzedv.folders.Folder;
-import de.kaiserpfalzedv.folders.ImmutableFolder;
+import de.kaiserpfalzedv.base.api.KindHolding;
+import de.kaiserpfalzedv.contacts.*;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.io.Serializable;
+import javax.persistence.*;
 import java.util.UUID;
 
-/*
- *
- *
+
+/**
  * @author rlichti
- * @since 2019-12-17 09:47
+ * @since 2019-12-25T10:00
  */
 @Entity
-@Table(name = "FOLDERS", schema = "BASE")
-public class JPAFolder extends PanacheEntity implements Serializable {
+@Table(schema = "BASE", name = "PERSONS")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class JPAPerson<T extends JPAPerson, P extends BasePerson, S extends BasePersonSpec> extends PanacheEntity implements KindHolding {
     @Embedded
-    public JPAFolderSpec spec;
+    public JPAPersonSpec<JPAPersonSpec, PersonSpec, JPAPersonData> spec;
 
 
-    public static PanacheQuery<JPAFolder> findByUuid(final String tenant, final UUID uuid) {
+    public static <T extends JPAPerson> PanacheQuery<T> findByUuid(final String tenant, final UUID uuid) {
         return find("spec.identity.tenant=?1 and spec.identity.uuid=?2", tenant, uuid);
     }
 
-    public static PanacheQuery<JPAFolder> findByTenant(final String tenant) {
+    public static <T extends JPAPerson> PanacheQuery<T> findByTenant(final String tenant) {
         return find("spec.identity.tenant=?1", tenant);
     }
 
-    public static PanacheQuery<JPAFolder> findByTenantAndKey(final String tenant, final String key) {
+    public static <T extends JPAPerson> PanacheQuery<T> findByTenantAndKey(final String tenant, final String key) {
         return find("spec.identity.tenant=?1 and spec.identity.key=?2", tenant, key);
     }
 
-
-    public JPAFolder fromModel(final Folder folder) {
-        spec = new JPAFolderSpec().fromModel(folder.getSpec());
-
-        return this;
-    }
-
-    public Folder toModel() {
-        return ImmutableFolder.builder()
-                .kind(Folder.KIND)
-                .version(Folder.VERSION)
+    public P toModel() {
+        //noinspection unchecked
+        return (P) ImmutablePerson.builder()
+                .kind(getKind())
+                .version(getVersion())
 
                 .metadata(ImmutableMetadata.builder()
-                        .identity(spec.identity.toModel(Folder.KIND, Folder.VERSION))
-                        .build()
-                )
+                        .identity(spec.identity.toModel(getKind(), getVersion()))
+                        .build())
 
                 .spec(spec.toModel())
 
                 .build();
+    }
+
+    @Override
+    public String getKind() {
+        return Person.KIND;
+    }
+
+    @Override
+    public String getVersion() {
+        return Person.VERSION;
     }
 }

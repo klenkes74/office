@@ -87,7 +87,7 @@ public class JPAWorkflowData implements Serializable {
             return null;
 
         return ImmutableWorkflowData.builder()
-                .definition(workflow.toModel())
+                .definition(workflow.toModel(kind, version))
 
                 .correlation(correlation)
                 .request(request)

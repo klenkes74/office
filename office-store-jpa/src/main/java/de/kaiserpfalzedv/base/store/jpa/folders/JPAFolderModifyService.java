@@ -25,10 +25,7 @@ import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.base.store.CreationFailedException;
 import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
 import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
-import de.kaiserpfalzedv.folders.FolderModified;
-import de.kaiserpfalzedv.folders.FolderSpec;
-import de.kaiserpfalzedv.folders.ImmutableFolderModified;
-import de.kaiserpfalzedv.folders.ModifyFolder;
+import de.kaiserpfalzedv.folders.*;
 import de.kaiserpfalzedv.folders.api.FolderCommandService;
 
 import javax.enterprise.context.Dependent;
@@ -76,7 +73,7 @@ public class JPAFolderModifyService implements FolderCommandService<ModifyFolder
         try {
             FolderModified event = ImmutableFolderModified.builder()
                     .metadata(ImmutableMetadata.builder()
-                            .identity(jpa.command.toModel())
+                            .identity(jpa.command.toModel(Folder.KIND, Folder.VERSION))
                             .workflowdata(Optional.ofNullable(jpa.workflow.toModel()))
                             .build()
                     )

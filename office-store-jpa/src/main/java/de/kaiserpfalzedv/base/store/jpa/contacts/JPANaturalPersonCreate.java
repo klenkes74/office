@@ -23,6 +23,7 @@ import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
 import de.kaiserpfalzedv.base.store.jpa.JPAWorkflowData;
 import de.kaiserpfalzedv.contacts.CreateNaturalPerson;
 import de.kaiserpfalzedv.contacts.ImmutableCreateNaturalPerson;
+import de.kaiserpfalzedv.contacts.NaturalPerson;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -40,7 +41,8 @@ public class JPANaturalPersonCreate extends JPANaturalPersonChangeWithSpec<Creat
     public JPANaturalPersonCreate fromModel(CreateNaturalPerson event) {
         command = new JPAIdentity().fromModel(event.getMetadata().getIdentity());
         workflow = new JPAWorkflowData().fromModel(event.getMetadata().getWorkflowdata());
-        spec = new JPANaturalPersonSpec().fromModel(event.getSpec());
+        spec = new JPAPersonSpec().fromModel(event.getSpec());
+        data = new JPANaturalPersonData().fromModel(event.getSpec());
         created = OffsetDateTime.now();
 
         return this;
@@ -53,12 +55,12 @@ public class JPANaturalPersonCreate extends JPANaturalPersonChangeWithSpec<Creat
                 .version(CreateNaturalPerson.VERSION)
 
                 .metadata(ImmutableMetadata.builder()
-                        .identity(command.toModel())
+                        .identity(command.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
                         .workflowdata(Optional.ofNullable(workflow.toModel()))
                         .build()
                 )
 
-                .spec(spec.toModel())
+                .spec(data.toModel(spec))
 
                 .build();
     }

@@ -16,14 +16,30 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.contacts.api;
+package de.kaiserpfalzedv.contacts;
 
-
-import de.kaiserpfalzedv.base.actions.CommandService;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.immutables.value.Value;
 
 /**
- * @author rlichti
- * @since 22.12.2019 11:06
+ * @author rlichti@kaiserpfalz-edv.de
+ * @since 2019-12-26T01:19
  */
-public interface NaturalPersonCommandService<T extends NaturalPersonCommand> extends CommandService<T> {
+@Value.Immutable
+@JsonSerialize(as = ImmutablePerson.class)
+@JsonDeserialize(builder = ImmutablePerson.Builder.class)
+public interface Person extends BasePerson<Person, PersonSpec> {
+    String KIND = "de.kaiserpfalzedv.contacts.Person";
+    String VERSION = "1.0.0";
+
+    @Value.Default
+    default String getKind() {
+        return KIND;
+    }
+
+    @Value.Default
+    default String getVersion() {
+        return VERSION;
+    }
 }

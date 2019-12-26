@@ -16,14 +16,13 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.contacts.api;
+package de.kaiserpfalzedv.contacts;
 
-
-import de.kaiserpfalzedv.base.actions.CommandService;
+import java.io.Serializable;
 
 /**
  * @author rlichti
- * @since 22.12.2019 11:06
+ * @since 2019-12-26T00:40
  */
-public interface NaturalPersonCommandService<T extends NaturalPersonCommand> extends CommandService<T> {
+public interface PersonData extends Serializable {
 }

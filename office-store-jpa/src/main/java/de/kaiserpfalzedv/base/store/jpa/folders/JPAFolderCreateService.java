@@ -25,10 +25,7 @@ import de.kaiserpfalzedv.base.cdi.JPA;
 import de.kaiserpfalzedv.base.store.CreationFailedException;
 import de.kaiserpfalzedv.base.store.KeyAlreadyExistsException;
 import de.kaiserpfalzedv.base.store.UuidAlreadyExistsException;
-import de.kaiserpfalzedv.folders.CreateFolder;
-import de.kaiserpfalzedv.folders.FolderCreated;
-import de.kaiserpfalzedv.folders.FolderSpec;
-import de.kaiserpfalzedv.folders.ImmutableFolderCreated;
+import de.kaiserpfalzedv.folders.*;
 import de.kaiserpfalzedv.folders.api.FolderCommandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +77,7 @@ public class JPAFolderCreateService implements FolderCommandService<CreateFolder
         try {
             FolderCreated event = ImmutableFolderCreated.builder()
                     .metadata(ImmutableMetadata.builder()
-                            .identity(jpa.command.toModel())
+                            .identity(jpa.command.toModel(Folder.KIND, Folder.VERSION))
                             .workflowdata(Optional.ofNullable(jpa.workflow.toModel()))
                             .build()
                     )

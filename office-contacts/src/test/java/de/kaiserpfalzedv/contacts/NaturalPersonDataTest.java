@@ -36,8 +36,8 @@ import java.util.UUID;
  * @author rlichti
  * @since 2019-12-14 11:28
  */
-public class NaturalPersonSpecTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NaturalPersonSpecTest.class);
+public class NaturalPersonDataTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NaturalPersonDataTest.class);
 
     static private final UUID ID = UUID.randomUUID();
     private static final String TENANT = "tenant";
@@ -46,7 +46,7 @@ public class NaturalPersonSpecTest {
     private static final OffsetDateTime CREATED = OffsetDateTime.now();
     private static final OffsetDateTime MODIFIED = CREATED;
 
-    private static final NaturalPersonSpec SERVICE = new NaturalPersonSpec() {
+    private static final NaturalPersonData CONTACT_DATA = new NaturalPersonData() {
         @Override
         public Optional<String> getGivennamePrefix() {
             return Optional.empty();
@@ -96,12 +96,19 @@ public class NaturalPersonSpecTest {
         public Optional<String> getHeraldicPostfixTitle() {
             return Optional.empty();
         }
+    };
+
+    private static final NaturalPersonSpec SERVICE = new NaturalPersonSpec() {
+        @Override
+        public NaturalPersonData getData() {
+            return CONTACT_DATA;
+        }
 
         @Override
         public ObjectIdentity getIdentity() {
             return ImmutableObjectIdentity.builder()
-                    .kind(NaturalPersonSpec.KIND)
-                    .version(NaturalPersonSpec.VERSION)
+                    .kind(NaturalPerson.KIND)
+                    .version(NaturalPerson.VERSION)
                     .uuid(ID)
                     .tenant(TENANT)
                     .name(KEY)
@@ -127,21 +134,21 @@ public class NaturalPersonSpecTest {
 
     @Test
     public void shouldReturnCorrectKindOfFolder() {
-        assert NaturalPersonSpec.KIND.equals(SERVICE.getKind());
+        assert NaturalPerson.KIND.equals(SERVICE.getKind());
     }
 
     @Test
     public void shouldReturnCorrectVersionOfFolder() {
-        assert NaturalPersonSpec.VERSION.equals(SERVICE.getVersion());
+        assert NaturalPerson.VERSION.equals(SERVICE.getVersion());
     }
 
     @BeforeAll
     public static void logStart() {
-        LOGGER.trace("Started tests for: {}", NaturalPersonSpec.class.getCanonicalName());
+        LOGGER.trace("Started tests for: {}", NaturalPersonData.class.getCanonicalName());
     }
 
     @AfterAll
     public static void logEnd() {
-        LOGGER.trace("Ended tests for: {}", NaturalPersonSpec.class.getCanonicalName());
+        LOGGER.trace("Ended tests for: {}", NaturalPersonData.class.getCanonicalName());
     }
 }

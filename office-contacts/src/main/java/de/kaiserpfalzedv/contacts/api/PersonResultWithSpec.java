@@ -18,19 +18,13 @@
 
 package de.kaiserpfalzedv.contacts.api;
 
-import de.kaiserpfalzedv.base.api.IdentityHolding;
-import de.kaiserpfalzedv.base.api.KindHolding;
-import de.kaiserpfalzedv.base.api.Spec;
 import de.kaiserpfalzedv.base.api.SpecHolding;
-
-import java.io.Serializable;
+import de.kaiserpfalzedv.contacts.PersonSpec;
 
 
 /**
- * @param <T> The contact command type this is the result for.
  * @author rlichti
  * @since 2019-12-22 11:36
  */
-public interface PersonResultWithSpec<T extends PersonCommandWithSpec<? extends Serializable>, S extends Spec<Serializable> & IdentityHolding & KindHolding>
-        extends NaturalPersonResult, SpecHolding<S> {
+public interface PersonResultWithSpec extends PersonResult, SpecHolding<PersonSpec> {
 }

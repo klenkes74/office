@@ -16,14 +16,15 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.contacts.api;
+package de.kaiserpfalzedv.contacts;
 
-
-import de.kaiserpfalzedv.base.actions.CommandService;
+import de.kaiserpfalzedv.base.SingleObject;
+import de.kaiserpfalzedv.base.api.SpecHolding;
 
 /**
- * @author rlichti
- * @since 22.12.2019 11:06
+ * @author rlichti@kaiserpfalz-edv.de
+ * @since 2019-12-15T10:20Z
  */
-public interface NaturalPersonCommandService<T extends NaturalPersonCommand> extends CommandService<T> {
+public interface BasePerson<T extends BasePerson, S extends BasePersonSpec> extends SingleObject<S>, SpecHolding<S> {
+    S getSpec();
 }

@@ -25,5 +25,5 @@ import de.kaiserpfalzedv.base.actions.ResultService;
  * @author rlichti
  * @since 2019-12-22 11:45
  */
-public interface PersonResultService<T extends PersonResult> extends ResultService<T> {
+public interface PersonResultService extends ResultService<PersonResult> {
 }

@@ -53,8 +53,8 @@ public class CloseFolderTest {
         @Override
         public ObjectIdentity getIdentity() {
             return ImmutableObjectIdentity.builder()
-                    .kind(KIND)
-                    .version(VERSION)
+                    .kind(Folder.KIND)
+                    .version(Folder.VERSION)
                     .uuid(ID)
                     .tenant(SCOPE)
                     .name(KEY)
