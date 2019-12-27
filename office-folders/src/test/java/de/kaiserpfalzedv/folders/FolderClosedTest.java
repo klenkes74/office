@@ -18,11 +18,16 @@
 
 package de.kaiserpfalzedv.folders;
 
+import de.kaiserpfalzedv.base.api.ImmutableMetadata;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static de.kaiserpfalzedv.folders.TestDefaultFolder.FOLDER_IDENTITY;
+import static de.kaiserpfalzedv.folders.TestDefaultFolder.FOLDER_METADATA;
 
 /*
  *
@@ -33,7 +38,14 @@ import org.slf4j.LoggerFactory;
 public class FolderClosedTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderClosedTest.class);
 
-    private static final FolderClosed SERVICE = (FolderClosed) () -> null;
+    private static final FolderClosed SERVICE = ImmutableFolderClosed.builder()
+            .metadata(ImmutableMetadata.copyOf(FOLDER_METADATA)
+                    .withIdentity(ImmutableObjectIdentity.copyOf(FOLDER_IDENTITY)
+                            .withKind(FolderClosed.KIND)
+                            .withVersion(FolderClosed.VERSION)
+                    )
+            )
+            .build();
 
     @Test
     public void shouldReturnCorrectKindOfFolder() {

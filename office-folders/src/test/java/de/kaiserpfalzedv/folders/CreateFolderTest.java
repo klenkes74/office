@@ -20,99 +20,30 @@ package de.kaiserpfalzedv.folders;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
-import de.kaiserpfalzedv.base.api.Metadata;
-import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.OffsetDateTime;
-import java.util.Optional;
-import java.util.UUID;
+import static de.kaiserpfalzedv.folders.TestDefaultFolder.FOLDER_SPEC;
 
-/*
- *
- *
+/**
  * @author rlichti
  * @since 2019-12-14 10:42
  */
 public class CreateFolderTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(CreateFolderTest.class);
 
-    static private final UUID ID = UUID.randomUUID();
-    private static final String SCOPE = "scope";
-    private static final String KEY = "key";
-    private static final String NAME = "name";
-    private static final String DISPLAYNAME = "displayname";
-    private static final OffsetDateTime CREATED = OffsetDateTime.now();
-    private static final OffsetDateTime MODIFIED = CREATED;
-
-    private static final FolderSpec FOLDER = new FolderSpec() {
-        @Override
-        public ObjectIdentity getIdentity() {
-            return ImmutableObjectIdentity.builder()
-                    .kind(Folder.KIND)
-                    .version(Folder.VERSION)
-                    .uuid(ID)
-                    .tenant(SCOPE)
-                    .name(KEY)
-                    .build();
-        }
-
-        @Override
-        public String getName() {
-            return NAME;
-        }
-
-        @Override
-        public String getDisplayname() {
-            return DISPLAYNAME;
-        }
-
-        @Override
-        public Optional<String> getDescription() {
-            return Optional.empty();
-        }
-
-        @Override
-        public Optional<OffsetDateTime> getClosed() {
-            return Optional.empty();
-        }
-
-        @Override
-        public OffsetDateTime getCreated() {
-            return CREATED;
-        }
-
-        @Override
-        public OffsetDateTime getModified() {
-            return MODIFIED;
-        }
-    };
-
-
-    private static final CreateFolder SERVICE = new CreateFolder() {
-        @Override
-        public Metadata getMetadata() {
-            return ImmutableMetadata.builder()
-                    .identity(ImmutableObjectIdentity.builder()
-                            .kind(KIND)
-                            .version(VERSION)
-                            .uuid(ID)
-                            .tenant(SCOPE)
-                            .name(KEY)
-                            .build()
+    private static final CreateFolder SERVICE = ImmutableCreateFolder.builder()
+            .metadata(ImmutableMetadata.builder()
+                    .identity(ImmutableObjectIdentity.copyOf(TestDefaultFolder.FOLDER_IDENTITY)
+                            .withKind(CreateFolder.KIND)
+                            .withVersion(CreateFolder.VERSION)
                     )
-                    .build();
-        }
-
-        @Override
-        public FolderSpec getSpec() {
-            return FOLDER;
-        }
-    };
+                    .build())
+            .spec(FOLDER_SPEC)
+            .build();
 
 
     @Test
@@ -127,7 +58,7 @@ public class CreateFolderTest {
 
     @Test
     public void shouldApplyTheCommandCorrectly() {
-        assert FOLDER.getDisplayname().equals(SERVICE.apply(FOLDER).getDisplayname());
+        assert FOLDER_SPEC.getDisplayname().equals(SERVICE.apply(FOLDER_SPEC).getDisplayname());
     }
 
     @BeforeAll

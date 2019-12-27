@@ -30,8 +30,21 @@ import java.io.Serializable;
  */
 public interface SingleObject<T extends Serializable & Comparable<SingleObject<T>>> extends BaseObject<T>, SpecHolding<T>, Comparable<SingleObject<?>> {
     @Override
-    @Value.Default
+    @Value.Lazy
     default int compareTo(@NotNull SingleObject other) {
         return getMetadata().getIdentity().compareTo(other.getMetadata().getIdentity());
     }
+
+    @Override
+    @Value.Lazy
+    default String getKind() {
+        return getMetadata().getIdentity().getKind();
+    }
+
+    @Override
+    @Value.Lazy
+    default String getVersion() {
+        return getMetadata().getIdentity().getVersion();
+    }
+
 }

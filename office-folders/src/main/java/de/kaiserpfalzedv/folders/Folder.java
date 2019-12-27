@@ -49,6 +49,11 @@ public interface Folder extends ObjectList<ObjectReference> {
         return VERSION;
     }
 
+    @Value.Default
+    default boolean isClosed() {
+        return getEnvelope().isClosed();
+    }
+
     @Value.Redacted
     @Override
     ConcurrentSkipListSet<ObjectReference> getSpec();

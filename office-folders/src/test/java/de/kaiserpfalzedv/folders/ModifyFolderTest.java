@@ -20,18 +20,15 @@ package de.kaiserpfalzedv.folders;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
-import de.kaiserpfalzedv.base.api.Metadata;
-import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.OffsetDateTime;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+
+import static de.kaiserpfalzedv.folders.TestDefaultFolder.*;
 
 /*
  *
@@ -42,78 +39,16 @@ import java.util.UUID;
 public class ModifyFolderTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ModifyFolderTest.class);
 
-    static private final UUID ID = UUID.randomUUID();
-    private static final String SCOPE = "scope";
-    private static final String KEY = "key";
-    private static final String NAME = "name";
-    private static final String DISPLAYNAME = "displayname";
-    private static final OffsetDateTime CREATED = OffsetDateTime.now();
-    private static final OffsetDateTime MODIFIED = CREATED;
 
-    private static final FolderSpec FOLDER = new FolderSpec() {
-        @Override
-        public ObjectIdentity getIdentity() {
-            return ImmutableObjectIdentity.builder()
-                    .kind(Folder.KIND)
-                    .version(Folder.VERSION)
-                    .uuid(ID)
-                    .tenant(SCOPE)
-                    .name(KEY)
-                    .build();
-        }
-
-        @Override
-        public String getName() {
-            return NAME;
-        }
-
-        @Override
-        public String getDisplayname() {
-            return DISPLAYNAME;
-        }
-
-        @Override
-        public Optional<String> getDescription() {
-            return Optional.empty();
-        }
-
-        @Override
-        public Optional<OffsetDateTime> getClosed() {
-            return Optional.empty();
-        }
-
-        @Override
-        public OffsetDateTime getCreated() {
-            return CREATED;
-        }
-
-        @Override
-        public OffsetDateTime getModified() {
-            return MODIFIED;
-        }
-    };
-
-
-    private static final ModifyFolder SERVICE = new ModifyFolder() {
-        @Override
-        public Metadata getMetadata() {
-            return ImmutableMetadata.builder()
-                    .identity(ImmutableObjectIdentity.builder()
-                            .kind(KIND)
-                            .version(VERSION)
-                            .uuid(ID)
-                            .tenant(SCOPE)
-                            .name(KEY)
-                            .build()
+    private static final ModifyFolder SERVICE = ImmutableModifyFolder.builder()
+            .metadata(ImmutableMetadata.builder()
+                    .identity(ImmutableObjectIdentity.copyOf(TestDefaultFolder.FOLDER_IDENTITY)
+                            .withKind(ModifyFolder.KIND)
+                            .withVersion(ModifyFolder.VERSION)
                     )
-                    .build();
-        }
-
-        @Override
-        public FolderSpec getSpec() {
-            return FOLDER;
-        }
-    };
+                    .build())
+            .spec(FOLDER_SPEC)
+            .build();
 
 
     @Test
@@ -128,11 +63,9 @@ public class ModifyFolderTest {
 
     @Test
     public void shouldApplyTheCommandCorrectly() {
-        FolderSpec newSpec = ImmutableFolderSpec.builder()
-                .from(FOLDER)
-                .name("old name")
-                .displayname("old shortname")
-                .build();
+        FolderSpec newSpec = ImmutableFolderSpec.copyOf(FOLDER_SPEC)
+                .withName("old name")
+                .withDisplayname("old shortname");
 
         LOGGER.trace("input: {}", SERVICE);
         FolderSpec result = SERVICE.apply(newSpec);
@@ -140,7 +73,8 @@ public class ModifyFolderTest {
 
         assert SERVICE.getSpec().getIdentity().getUuid().equals(result.getIdentity().getUuid());
         assert Objects.equals(SERVICE.getSpec().getIdentity().getTenant(), result.getIdentity().getTenant());
-        assert "name".equals(result.getIdentity().getName().orElse(null));
+        assert FOLDER_DISPLAYNAME.equals(result.getDisplayname());
+        assert FOLDER_NAME.equals(result.getIdentity().getName().orElse(null));
         assert SERVICE.getSpec().getName().equals(result.getName());
         assert SERVICE.getSpec().getDescription().equals(result.getDescription());
         assert SERVICE.getSpec().getModified().equals(result.getModified());

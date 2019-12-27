@@ -18,12 +18,15 @@
 
 package de.kaiserpfalzedv.folders;
 
-import de.kaiserpfalzedv.base.api.Metadata;
+import de.kaiserpfalzedv.base.api.ImmutableMetadata;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static de.kaiserpfalzedv.folders.TestDefaultFolder.*;
 
 /*
  *
@@ -34,17 +37,15 @@ import org.slf4j.LoggerFactory;
 public class FolderCreatedTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderCreatedTest.class);
 
-    private static final FolderCreated SERVICE = new FolderCreated() {
-        @Override
-        public Metadata getMetadata() {
-            return null;
-        }
-
-        @Override
-        public FolderSpec getSpec() {
-            return null;
-        }
-    };
+    private static final FolderCreated SERVICE = ImmutableFolderCreated.builder()
+            .metadata(ImmutableMetadata.copyOf(FOLDER_METADATA)
+                    .withIdentity(ImmutableObjectIdentity.copyOf(FOLDER_IDENTITY)
+                            .withKind(FolderCreated.KIND)
+                            .withVersion(FolderCreated.VERSION)
+                    )
+            )
+            .spec(FOLDER_SPEC)
+            .build();
 
     @Test
     public void shouldReturnCorrectKindOfFolder() {

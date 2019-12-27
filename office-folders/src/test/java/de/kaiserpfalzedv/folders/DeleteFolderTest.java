@@ -18,74 +18,34 @@
 
 package de.kaiserpfalzedv.folders;
 
-import de.kaiserpfalzedv.base.api.Metadata;
-import de.kaiserpfalzedv.base.api.ObjectIdentity;
+import de.kaiserpfalzedv.base.api.ImmutableMetadata;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.OffsetDateTime;
-import java.util.Optional;
-import java.util.UUID;
+import static de.kaiserpfalzedv.folders.TestDefaultFolder.FOLDER_SPEC;
 
-/*
- *
- *
+/**
  * @author rlichti
  * @since 2019-12-14 10:42
  */
 public class DeleteFolderTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(DeleteFolderTest.class);
 
-    static private final UUID ID = UUID.randomUUID();
-    static private final String DISPLAYNAME = "displayname";
+    private static final DeleteFolder SERVICE = ImmutableDeleteFolder.builder()
+            .kind(DeleteFolder.KIND)
+            .version(DeleteFolder.VERSION)
+            .metadata(ImmutableMetadata.copyOf(TestDefaultFolder.FOLDER_METADATA)
+                    .withIdentity(ImmutableObjectIdentity.copyOf(TestDefaultFolder.FOLDER_IDENTITY)
+                            .withKind(DeleteFolder.KIND)
+                            .withVersion(DeleteFolder.VERSION)
+                    )
+            )
+            .build();
 
-    private static final DeleteFolder SERVICE = new DeleteFolder() {
-        @Override
-        public Metadata getMetadata() {
-            return null;
-        }
-    };
-
-
-    private static final FolderSpec FOLDER = new FolderSpec() {
-        @Override
-        public ObjectIdentity getIdentity() {
-            return null;
-        }
-
-        @Override
-        public String getName() {
-            return null;
-        }
-
-        @Override
-        public String getDisplayname() {
-            return DISPLAYNAME;
-        }
-
-        @Override
-        public Optional<String> getDescription() {
-            return Optional.empty();
-        }
-
-        @Override
-        public Optional<OffsetDateTime> getClosed() {
-            return Optional.empty();
-        }
-
-        @Override
-        public OffsetDateTime getCreated() {
-            return null;
-        }
-
-        @Override
-        public OffsetDateTime getModified() {
-            return null;
-        }
-    };
 
     @Test
     public void shouldReturnCorrectKindOfFolder() {
@@ -99,7 +59,7 @@ public class DeleteFolderTest {
 
     @Test
     public void shouldApplyTheCommandCorrectly() {
-        assert FOLDER.equals(SERVICE.apply(FOLDER));
+        assert FOLDER_SPEC.equals(SERVICE.apply(FOLDER_SPEC));
     }
 
     @BeforeAll

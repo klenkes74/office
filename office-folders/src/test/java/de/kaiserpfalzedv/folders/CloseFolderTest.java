@@ -21,7 +21,6 @@ package de.kaiserpfalzedv.folders;
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.base.api.ImmutableWorkflowData;
-import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -40,66 +38,10 @@ import java.util.UUID;
 public class CloseFolderTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(CloseFolderTest.class);
 
-    private static final UUID ID = UUID.randomUUID();
-    private static final String SCOPE = "scope";
-    private static final String KEY = "key";
-    private static final String NAME = "name";
-    private static final String DISPLAYNAME = "displayname";
-    private static final OffsetDateTime CREATED = OffsetDateTime.now();
-    private static final OffsetDateTime MODIFIED = CREATED;
-
-
-    private static final FolderSpec FOLDER = new FolderSpec() {
-        @Override
-        public ObjectIdentity getIdentity() {
-            return ImmutableObjectIdentity.builder()
-                    .kind(Folder.KIND)
-                    .version(Folder.VERSION)
-                    .uuid(ID)
-                    .tenant(SCOPE)
-                    .name(KEY)
-                    .build();
-        }
-
-        @Override
-        public String getName() {
-            return NAME;
-        }
-
-        @Override
-        public String getDisplayname() {
-            return DISPLAYNAME;
-        }
-
-        @Override
-        public Optional<String> getDescription() {
-            return Optional.empty();
-        }
-
-        @Override
-        public Optional<OffsetDateTime> getClosed() {
-            return Optional.empty();
-        }
-
-        @Override
-        public OffsetDateTime getCreated() {
-            return CREATED;
-        }
-
-        @Override
-        public OffsetDateTime getModified() {
-            return MODIFIED;
-        }
-    };
-
     private static final CloseFolder SERVICE = (CloseFolder) () -> ImmutableMetadata.builder()
-            .identity(ImmutableObjectIdentity.builder()
-                    .kind(CloseFolder.KIND)
-                    .version(CloseFolder.VERSION)
-                    .uuid(ID)
-                    .tenant(SCOPE)
-                    .name(KEY)
-                    .build()
+            .identity(ImmutableObjectIdentity.copyOf(TestDefaultFolder.FOLDER_IDENTITY)
+                    .withKind(CloseFolder.KIND)
+                    .withVersion(CloseFolder.VERSION)
             )
             .build();
 
@@ -115,9 +57,10 @@ public class CloseFolderTest {
 
     @Test
     public void shouldApplyTheCommandCorrectlyWhenNoWorkflowDataIsGiven() {
-        FolderSpec result = SERVICE.apply(FOLDER);
+        FolderSpec result = SERVICE.apply(TestDefaultFolder.FOLDER_SPEC);
         LOGGER.trace("result: {}", result);
 
+        assert result.isClosed();
     }
 
     @Test
@@ -146,10 +89,10 @@ public class CloseFolderTest {
                 )
                 .build();
 
-        FolderSpec result = service.apply(FOLDER);
+        FolderSpec result = service.apply(TestDefaultFolder.FOLDER_SPEC);
         LOGGER.trace("result: {}", result);
 
-        assert result.getClosed().orElse(OffsetDateTime.now()).isEqual(modificationTime);
+        assert result.isClosed();
     }
 
     @BeforeAll

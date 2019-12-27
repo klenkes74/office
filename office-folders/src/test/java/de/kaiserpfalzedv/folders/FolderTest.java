@@ -37,7 +37,6 @@ public class FolderTest {
 
     private static final Folder SERVICE = TestDefaultFolder.FOLDER;
 
-
     @Test
     public void shouldReturnCorrectKindOfFolder() {
         assert Folder.KIND.equals(SERVICE.getKind());
