@@ -216,6 +216,16 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jackson</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jboss.logging</groupId>
+                    <artifactId>jboss-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.slf4j</groupId>
+                    <artifactId>slf4j-jboss-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -791,50 +801,128 @@
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-resteasy-jackson</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-rest-client</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>commons-logging-jboss-logging</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.jboss.logmanager</groupId>
+                            <artifactId>jboss-logmanager-embedded</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.jboss.slf4j</groupId>
+                            <artifactId>slf4j-jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-smallrye-health</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-scheduler</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-elytron-security</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-vault</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-smallrye-reactive-messaging-amqp</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-smallrye-openapi</artifactId>
                     <version>1.0.1.Final</version>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
 
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-junit5</artifactId>
                     <scope>test</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>io.rest-assured</groupId>
                     <artifactId>rest-assured</artifactId>
                     <scope>test</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
             </dependencies>
 

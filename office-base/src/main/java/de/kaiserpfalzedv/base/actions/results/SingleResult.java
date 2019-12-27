@@ -27,5 +27,5 @@ import java.io.Serializable;
  * @author rlichti
  * @since 2019-12-15
  */
-public interface SingleResult<T extends Serializable> extends SingleObject<T> {
+public interface SingleResult<T extends Serializable & Comparable<SingleObject<T>>> extends SingleObject<T> {
 }

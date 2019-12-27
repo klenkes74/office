@@ -20,8 +20,11 @@ package de.kaiserpfalzedv.folders;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.base.SingleObject;
+import de.kaiserpfalzedv.base.ObjectList;
+import de.kaiserpfalzedv.base.ObjectReference;
 import org.immutables.value.Value;
+
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * @author rlichti@kaiserpfalz-edv.de
@@ -30,17 +33,25 @@ import org.immutables.value.Value;
 @Value.Immutable
 @JsonSerialize(as = ImmutableFolder.class)
 @JsonDeserialize(builder = ImmutableFolder.Builder.class)
-public interface Folder extends SingleObject<FolderSpec> {
+public interface Folder extends ObjectList<ObjectReference> {
     String KIND = "de.kaiserpfalzedv.folders.Folder";
     String VERSION = "1.0.0";
 
+    @Override
     @Value.Default
     default String getKind() {
         return KIND;
     }
 
+    @Override
     @Value.Default
     default String getVersion() {
         return VERSION;
     }
+
+    @Value.Redacted
+    @Override
+    ConcurrentSkipListSet<ObjectReference> getSpec();
+
+    FolderSpec getEnvelope();
 }

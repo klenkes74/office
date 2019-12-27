@@ -20,17 +20,15 @@ package de.kaiserpfalzedv.base;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.Serializable;
-import java.util.concurrent.ConcurrentSkipListSet;
-
 @Value.Immutable
-@JsonSerialize(as = ImmutableObjectList.class)
-@JsonDeserialize(builder = ImmutableObjectList.Builder.class)
-public interface ObjectList<T extends BaseObject<? extends Serializable> & Comparable<T>> extends BaseObject<ConcurrentSkipListSet<T>>, Comparable<ObjectList<?>> {
-    String KIND = "de.kaiserpfalz.base.ObjectList";
+@JsonSerialize(as = ImmutableObjectReference.class)
+@JsonDeserialize(builder = ImmutableObjectReference.Builder.class)
+public interface ObjectReference extends BaseObject<ObjectIdentity>, Comparable<ObjectReference> {
+    String KIND = "de.kaiserpfalz.base.ObjectReference";
     String VERSION = "1.0.0";
 
     @Value.Default
@@ -44,13 +42,8 @@ public interface ObjectList<T extends BaseObject<? extends Serializable> & Compa
     }
 
     @Value.Default
-    default ConcurrentSkipListSet<T> getSpec() {
-        return new ConcurrentSkipListSet<T>();
-    }
-
-    @Value.Default
     @Override
-    default int compareTo(@NotNull ObjectList<?> other) {
+    default int compareTo(@NotNull ObjectReference other) {
         return getMetadata().getIdentity().compareTo(other.getMetadata().getIdentity());
     }
 }

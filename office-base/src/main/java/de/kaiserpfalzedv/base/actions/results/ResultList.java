@@ -18,8 +18,8 @@
 
 package de.kaiserpfalzedv.base.actions.results;
 
+import de.kaiserpfalzedv.base.BaseObject;
 import de.kaiserpfalzedv.base.ObjectList;
-import de.kaiserpfalzedv.base.SingleObject;
 
 import java.io.Serializable;
 
@@ -28,5 +28,5 @@ import java.io.Serializable;
  * @author rlichti
  * @since 2019-12-15
  */
-public interface ResultList<T extends SingleObject<? extends Serializable>> extends ObjectList<T> {
+public interface ResultList<T extends BaseObject<? extends Serializable> & Comparable<T>> extends ObjectList<T> {
 }

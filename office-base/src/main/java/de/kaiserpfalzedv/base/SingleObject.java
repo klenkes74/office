@@ -19,6 +19,8 @@
 package de.kaiserpfalzedv.base;
 
 import de.kaiserpfalzedv.base.api.SpecHolding;
+import org.immutables.value.Value;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -26,5 +28,10 @@ import java.io.Serializable;
  * @author rlichti
  * @since 2019-12-08
  */
-public interface SingleObject<T extends Serializable> extends BaseObject<T>, SpecHolding<T> {
+public interface SingleObject<T extends Serializable & Comparable<SingleObject<T>>> extends BaseObject<T>, SpecHolding<T>, Comparable<SingleObject<?>> {
+    @Override
+    @Value.Default
+    default int compareTo(@NotNull SingleObject other) {
+        return getMetadata().getIdentity().compareTo(other.getMetadata().getIdentity());
+    }
 }

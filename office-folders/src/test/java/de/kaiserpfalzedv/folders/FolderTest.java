@@ -18,7 +18,8 @@
 
 package de.kaiserpfalzedv.folders;
 
-import de.kaiserpfalzedv.base.api.Metadata;
+import de.kaiserpfalzedv.base.api.ImmutableMetadata;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -34,17 +35,8 @@ import org.slf4j.LoggerFactory;
 public class FolderTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderTest.class);
 
-    private static final Folder SERVICE = new Folder() {
-        @Override
-        public Metadata getMetadata() {
-            return null;
-        }
+    private static final Folder SERVICE = TestDefaultFolder.FOLDER;
 
-        @Override
-        public FolderSpec getSpec() {
-            return null;
-        }
-    };
 
     @Test
     public void shouldReturnCorrectKindOfFolder() {
@@ -54,6 +46,68 @@ public class FolderTest {
     @Test
     public void shouldReturnCorrectVersionOfFolder() {
         assert Folder.VERSION.equals(SERVICE.getVersion());
+    }
+
+    @Test
+    public void shouldReturnCorrectComparisonBetweenFoldersWhenTenantsMatchAndKeysDontMatchAndOtherIsSmaller() {
+        Folder other = ImmutableFolder.copyOf(SERVICE)
+                .withMetadata(ImmutableMetadata.copyOf(SERVICE.getMetadata())
+                        .withIdentity(ImmutableObjectIdentity.copyOf(SERVICE.getMetadata().getIdentity())
+                                .withName("akey")
+                        )
+                );
+        LOGGER.debug("Comparing {} and {} result: {}", SERVICE, other, SERVICE.compareTo(other));
+
+        assert SERVICE.compareTo(other) > 0;
+    }
+
+    @Test
+    public void shouldReturnCorrectComparisonBetweenFoldersWhenTenantsAndKeysMatch() {
+        Folder other = ImmutableFolder.copyOf(SERVICE);
+        LOGGER.debug("Comparing {} and {} result: {}", SERVICE, other, SERVICE.compareTo(other));
+
+        assert SERVICE.compareTo(other) == 0;
+    }
+
+    @Test
+    public void shouldReturnCorrectComparisonBetweenFoldersWhenTenantsMatchAndKeysDontMatchAndOtherIsBigger() {
+        Folder other = ImmutableFolder.copyOf(SERVICE)
+                .withMetadata(ImmutableMetadata.copyOf(SERVICE.getMetadata())
+                        .withIdentity(ImmutableObjectIdentity.copyOf(SERVICE.getMetadata().getIdentity())
+                                .withName("natural-key")
+                        )
+                );
+        LOGGER.debug("Comparing {} and {} result: {}", SERVICE, other, SERVICE.compareTo(other));
+
+        assert SERVICE.compareTo(other) < 0;
+    }
+
+    @Test
+    public void shouldReturnCorrectComparisonBetweenFoldersWhenTenantsDontMatchAndOtherIsSmaller() {
+        Folder other = ImmutableFolder.copyOf(SERVICE)
+                .withMetadata(ImmutableMetadata.copyOf(SERVICE.getMetadata())
+                        .withIdentity(ImmutableObjectIdentity.copyOf(SERVICE.getMetadata().getIdentity())
+                                .withName("natural-key")
+                                .withTenant("akey")
+                        )
+                );
+        LOGGER.debug("Comparing {} and {} result: {}", SERVICE, other, SERVICE.compareTo(other));
+
+        assert SERVICE.compareTo(other) > 0;
+    }
+
+    @Test
+    public void shouldReturnCorrectComparisonBetweenFoldersWhenTenantsDontMatchAndOtherIsBigger() {
+        Folder other = ImmutableFolder.copyOf(SERVICE)
+                .withMetadata(ImmutableMetadata.copyOf(SERVICE.getMetadata())
+                        .withIdentity(ImmutableObjectIdentity.copyOf(SERVICE.getMetadata().getIdentity())
+                                .withName("akey")
+                                .withTenant("very-large-tenant")
+                        )
+                );
+        LOGGER.debug("Comparing {} and {} result: {}", SERVICE, other, SERVICE.compareTo(other));
+
+        assert SERVICE.compareTo(other) < 0;
     }
 
     @BeforeAll
