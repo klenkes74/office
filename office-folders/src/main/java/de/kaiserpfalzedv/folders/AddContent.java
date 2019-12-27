@@ -16,41 +16,47 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base;
+package de.kaiserpfalzedv.folders;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.base.ObjectReference;
+import de.kaiserpfalzedv.folders.api.FolderCommand;
 import org.immutables.value.Value;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.Serializable;
 import java.util.concurrent.ConcurrentSkipListSet;
 
+/**
+ * The action to add new content to a folder.
+ *
+ * @author rlichti@kaiserpfalz-edv.de
+ * @since 2019-12-27T12:50Z
+ */
 @Value.Immutable
-@JsonSerialize(as = ImmutableObjectList.class)
-@JsonDeserialize(builder = ImmutableObjectList.Builder.class)
-public interface ObjectList<T extends BaseObject<? extends Serializable> & Comparable<T>> extends BaseObject<ConcurrentSkipListSet<T>>, Comparable<ObjectList<?>> {
-    String KIND = "de.kaiserpfalz.base.ObjectList";
+@JsonSerialize(as = ImmutableAddContent.class)
+@JsonDeserialize(builder = ImmutableAddContent.Builder.class)
+public interface AddContent extends FolderCommand {
+    String KIND = "de.kaiserpfalzedv.folders.AddContent";
     String VERSION = "1.0.0";
 
+    @Override
     @Value.Default
     default String getKind() {
         return KIND;
     }
 
+    @Override
     @Value.Default
     default String getVersion() {
         return VERSION;
     }
 
-    @Value.Default
-    default ConcurrentSkipListSet<T> getSpec() {
-        return new ConcurrentSkipListSet<T>();
-    }
+    @Value.Redacted
+    ConcurrentSkipListSet<ObjectReference> getData();
 
-    @Value.Default
     @Override
-    default int compareTo(@NotNull ObjectList<?> other) {
-        return getMetadata().getIdentity().compareTo(other.getMetadata().getIdentity());
+    @Value.Default
+    default FolderSpec apply(final FolderSpec orig) {
+        return orig;
     }
 }

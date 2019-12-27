@@ -18,13 +18,13 @@
 
 package de.kaiserpfalzedv.contacts;
 
-import de.kaiserpfalzedv.base.SingleObject;
+import de.kaiserpfalzedv.base.BaseObject;
 import de.kaiserpfalzedv.base.api.SpecHolding;
 
 /**
  * @author rlichti@kaiserpfalz-edv.de
  * @since 2019-12-15T10:20Z
  */
-public interface BasePerson<T extends BasePerson, S extends BasePersonSpec> extends SingleObject<S>, SpecHolding<S> {
+public interface BasePerson<T extends BasePerson, S extends BasePersonSpec> extends BaseObject<S>, SpecHolding<S> {
     S getSpec();
 }

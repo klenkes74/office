@@ -33,7 +33,7 @@ Issue report checklist:
  * Good summary
  * Well-documented
  * Minimal example
- * Use the [template](ISSUE_TEMPLATE.md)
+ * Use the bug issue type and fill the template
 
 
 ### Issue handling process

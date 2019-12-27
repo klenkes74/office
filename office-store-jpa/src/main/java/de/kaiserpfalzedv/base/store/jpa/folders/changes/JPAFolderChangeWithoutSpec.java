@@ -16,16 +16,17 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.actions.results;
+package de.kaiserpfalzedv.base.store.jpa.folders.changes;
 
-import de.kaiserpfalzedv.base.SingleObject;
+import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
+import de.kaiserpfalzedv.folders.api.FolderCommand;
 
-import java.io.Serializable;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
 
-/**
- * @param <T> A single result. The spec may be empty.
- * @author rlichti
- * @since 2019-12-15
- */
-public interface SingleResult<T extends Serializable & Comparable<SingleObject<T>>> extends SingleObject<T> {
+
+@Entity
+public abstract class JPAFolderChangeWithoutSpec<T extends FolderCommand> extends JPAFolderChange<T> {
+    @Embedded
+    public JPAIdentity identity;
 }

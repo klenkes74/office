@@ -16,37 +16,76 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-/*
- * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
- *
- *  This file is part of Kaiserpfalz EDV-Service Office.
- *
- *  This is free software: you can redistribute it and/or modify it under the terms of
- *  the GNU Lesser General Public License as published by the Free Software
- *  Foundation, either version 3 of the License.
- *
- *  This file is distributed in the hope that it will be useful, but WITHOUT ANY
- *  WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- *  License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License along
- *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
- */
-
 -- Hibernate Internal Objects
 DROP SEQUENCE PUBLIC.HIBERNATE_SEQUENCE;
 CREATE SEQUENCE PUBLIC.HIBERNATE_SEQUENCE START 21;
 
-INSERT INTO BASE.FOLDERS (id, _UUID, _TENANT, _KEY, _NAME, _DISPLAYNAME, _DESCRIPTION, _CLOSED, _CREATED, _MODIFIED)
-VALUES (1, '3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8', 'de.kaiserpfalz-edv', 'I-19-0001', 'Softwaretest Akte 1',
-        'SW Test 1', 'Einfache Akte für Softwaretests', null,
+-- This one is checked for modifications and content management
+INSERT INTO BASE.FOLDERS (id, _UUID, _TENANT, _KEY,
+                          _DISPLAYNAME, _CREATED, _MODIFIED,
+                          _NAME, _DESCRIPTION, _CLOSED)
+VALUES (1, '3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8', 'de.kaiserpfalz-edv', 'I-19-0001',
+        'SW Test 1', parsedatetime('2018-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
+        parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
+        'Softwaretest Akte 1', 'Einfache Akte für Softwaretests', null);
+INSERT INTO BASE.OBJECT_REFERENCES (id, _KIND, _VERSION, _FOLDER_ID, _UUID, _TENANT, _KEY)
+VALUES (1, 'test', '0.0.0', 1, 'bbb4f55b-fe65-4361-b00a-d797f63a38e9', 'de.kaiserpfalz-edv', 'Test-Reference 1');
+INSERT INTO BASE.OBJECT_REFERENCES (id, _KIND, _VERSION, _FOLDER_ID, _UUID, _TENANT, _KEY)
+VALUES (2, 'test', '0.0.0', 1, 'a8ac8007-4cff-41c2-8cd8-62f31899d664', 'de.kaiserpfalz-edv', 'Test-Reference 2');
+INSERT INTO BASE.OBJECT_REFERENCES (id, _KIND, _VERSION, _FOLDER_ID, _UUID, _TENANT, _KEY)
+VALUES (3, 'test', '0.0.0', 1, 'bf18e36a-47b7-496e-9f43-a2dbb7d3f211', 'de.kaiserpfalz-edv', 'Test-Reference 3');
+
+INSERT INTO BASE.FOLDERS_CHANGES(id, _ACTION,
+                                 _COMMAND_UUID, _COMMAND_TENANT, _COMMAND_KEY,
+                                 _COMMAND_CREATED,
+                                 _WORKFLOW_KIND, _WORKFLOW_VERSION,
+                                 _WORKFLOW_DEFINITION_UUID, _WORKFLOW_DEFINITION_TENANT, _WORKFLOW_DEFINITION_KEY,
+                                 _WORKFLOW_CORRELATION, _WORKFLOW_REQUEST, _WORKFLOW_SEQUENCE,
+                                 _WORKFLOW_TIMESTAMP,
+                                 _UUID, _TENANT, _KEY,
+                                 _DISPLAYNAME, _CREATED, _MODIFIED,
+                                 _NAME, _DESCRIPTION, _CLOSED)
+VALUES (1, 'de.kaiserpfalzedv.folders.CreateFolder',
+        '9b8e5377-98c4-4622-957b-1555453e87b8', 'de.kaiserpfalz-edv', 'Create I-19-0001',
         parsedatetime('2018-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
-        parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'));
+        'Create Testdata', '1.0.0',
+        '4b2074c3-bced-40ce-a46b-ab1bdeaa2209', 'de.kaiserpfalz-edv', 'Create Testdata',
+        'ef920d61-2b16-4255-b0aa-5b6cbfd3e819', 'af7141e3-0023-4bb7-95d3-1fa31548511d', 1,
+        parsedatetime('2018-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
+        '3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8', 'de.kaiserpfalz-edv', 'I-19-0001',
+        'SW Test 1', parsedatetime('2018-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
+        parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
+        'Softwaretest Akte 1', 'Einfache Akte für Softwaretests', null);
+INSERT INTO BASE.FOLDERS_CHANGES(id, _ACTION,
+                                 _COMMAND_UUID, _COMMAND_TENANT, _COMMAND_KEY,
+                                 _COMMAND_CREATED,
+                                 _WORKFLOW_KIND, _WORKFLOW_VERSION,
+                                 _WORKFLOW_DEFINITION_UUID, _WORKFLOW_DEFINITION_TENANT, _WORKFLOW_DEFINITION_KEY,
+                                 _WORKFLOW_CORRELATION, _WORKFLOW_REQUEST, _WORKFLOW_SEQUENCE,
+                                 _WORKFLOW_TIMESTAMP,
+                                 _UUID, _TENANT, _KEY)
+VALUES (2, 'de.kaiserpfalzedv.folders.AddContent',
+        'aff5e3f6-7ae8-4220-badf-4e326c1bc0bd', 'de.kaiserpfalz-edv', 'Add Content I-19-0001',
+        parsedatetime('2018-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
+        'Create Testdata', '1.0.0',
+        '4b2074c3-bced-40ce-a46b-ab1bdeaa2209', 'de.kaiserpfalz-edv', 'Create Testdata',
+        'ef920d61-2b16-4255-b0aa-5b6cbfd3e819', 'fccbb00f-2ced-44e9-af0f-c7a0fc29ad45', 2,
+        parsedatetime('2018-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
+        '3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8', 'de.kaiserpfalz-edv', 'I-19-0001');
+INSERT INTO BASE.OBJECT_REFERENCE_CHANGES(id, _KIND, _VERSION, _FOLDER_ID, _UUID, _TENANT, _KEY)
+VALUES (1, 'test', '0.0.0', 2, 'bbb4f55b-fe65-4361-b00a-d797f63a38e9', 'de.kaiserpfalz-edv', 'Test-Reference 1');
+INSERT INTO BASE.OBJECT_REFERENCE_CHANGES(id, _KIND, _VERSION, _FOLDER_ID, _UUID, _TENANT, _KEY)
+VALUES (2, 'test', '0.0.0', 2, 'a8ac8007-4cff-41c2-8cd8-62f31899d664', 'de.kaiserpfalz-edv', 'Test-Reference 2');
+INSERT INTO BASE.OBJECT_REFERENCE_CHANGES(id, _KIND, _VERSION, _FOLDER_ID, _UUID, _TENANT, _KEY)
+VALUES (3, 'test', '0.0.0', 2, 'bf18e36a-47b7-496e-9f43-a2dbb7d3f211', 'de.kaiserpfalz-edv', 'Test-Reference 3');
+
+
+-- Will be deleted by tests.
 INSERT INTO BASE.FOLDERS (id, _UUID, _TENANT, _KEY, _NAME, _DISPLAYNAME, _DESCRIPTION, _CLOSED, _CREATED, _MODIFIED)
 VALUES (2, '066ed1a6-a699-49e4-a756-b17816ecf7e8', 'de.kaiserpfalz-edv', 'I-19-0002', 'Softwaretest Akte 2',
         'SW Test 2', null, null, parsedatetime('2018-10-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),
         parsedatetime('2019-12-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'));
+-- Display name will change
 INSERT INTO BASE.FOLDERS (id, _UUID, _TENANT, _KEY, _NAME, _DISPLAYNAME, _DESCRIPTION, _CLOSED, _CREATED, _MODIFIED)
 VALUES (3, '76351c86-e920-4ae0-9591-115ea7d4f1ad', 'de.kaiserpfalz-edv', 'I-19-0003', 'Softwaretest Akte 3',
         'SW Test 3', null, null, parsedatetime('2018-11-17 18:12:00', 'yyyy-MM-dd hh:mm:ss'),

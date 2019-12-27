@@ -18,7 +18,6 @@
 
 package de.kaiserpfalzedv.base.actions.commands;
 
-import de.kaiserpfalzedv.base.api.KindHolding;
 import de.kaiserpfalzedv.base.api.MetadataHolding;
 import de.kaiserpfalzedv.base.api.Spec;
 
@@ -29,6 +28,6 @@ import java.io.Serializable;
  * @author rlichti
  * @since 2019-12-15
  */
-public interface Command<T extends Spec<? extends Serializable>> extends KindHolding, MetadataHolding {
+public interface Command<T extends Spec<? extends Serializable>> extends MetadataHolding {
     T apply(final T orig) throws CommandException;
 }
