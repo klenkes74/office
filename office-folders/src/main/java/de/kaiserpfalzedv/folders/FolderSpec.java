@@ -43,4 +43,9 @@ public interface FolderSpec extends Spec<FolderSpec>, Serializable {
     Optional<String> getDescription();
 
     Optional<OffsetDateTime> getClosed();
+
+    @Value.Lazy
+    default boolean isClosed() {
+        return getClosed().isPresent() && getClosed().get().isBefore(OffsetDateTime.now().plusNanos(1));
+    }
 }

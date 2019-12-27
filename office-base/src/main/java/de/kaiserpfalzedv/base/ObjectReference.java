@@ -18,33 +18,32 @@
 
 package de.kaiserpfalzedv.base;
 
-import de.kaiserpfalzedv.base.api.SpecHolding;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.base.api.ObjectIdentity;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.Serializable;
+@Value.Immutable
+@JsonSerialize(as = ImmutableObjectReference.class)
+@JsonDeserialize(builder = ImmutableObjectReference.Builder.class)
+public interface ObjectReference extends BaseObject<ObjectIdentity>, Comparable<ObjectReference> {
+    String KIND = "de.kaiserpfalz.base.ObjectReference";
+    String VERSION = "1.0.0";
 
-/**
- * @author rlichti
- * @since 2019-12-08
- */
-public interface SingleObject<T extends Serializable & Comparable<SingleObject<T>>> extends BaseObject<T>, SpecHolding<T>, Comparable<SingleObject<?>> {
+    @Value.Default
+    default String getKind() {
+        return KIND;
+    }
+
+    @Value.Default
+    default String getVersion() {
+        return VERSION;
+    }
+
+    @Value.Default
     @Override
-    @Value.Lazy
-    default int compareTo(@NotNull SingleObject other) {
+    default int compareTo(@NotNull ObjectReference other) {
         return getMetadata().getIdentity().compareTo(other.getMetadata().getIdentity());
     }
-
-    @Override
-    @Value.Lazy
-    default String getKind() {
-        return getMetadata().getIdentity().getKind();
-    }
-
-    @Override
-    @Value.Lazy
-    default String getVersion() {
-        return getMetadata().getIdentity().getVersion();
-    }
-
 }

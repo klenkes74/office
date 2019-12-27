@@ -54,10 +54,6 @@
             <groupId>de.kaiserpfalzedv.office</groupId>
             <artifactId>office-store-jpa</artifactId>
         </dependency>
-        <dependency>
-            <groupId>de.kaiserpfalzedv.office</groupId>
-            <artifactId>office-store-infinispan</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>io.quarkus</groupId>

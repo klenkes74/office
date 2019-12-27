@@ -16,52 +16,45 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store.jpa.contacts;
+package de.kaiserpfalzedv.base.store.jpa.folders.changes;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
 import de.kaiserpfalzedv.base.store.jpa.JPAWorkflowData;
-import de.kaiserpfalzedv.contacts.ImmutableModifyNaturalPerson;
-import de.kaiserpfalzedv.contacts.ModifyNaturalPerson;
-import de.kaiserpfalzedv.contacts.NaturalPerson;
+import de.kaiserpfalzedv.base.store.jpa.folders.data.JPAFolderSpec;
+import de.kaiserpfalzedv.folders.CreateFolder;
+import de.kaiserpfalzedv.folders.Folder;
+import de.kaiserpfalzedv.folders.ImmutableCreateFolder;
+import de.kaiserpfalzedv.folders.ModifyFolder;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.time.OffsetDateTime;
 
-/**
- * @author rlichti
- * @since 2019-20-22 13:40
- */
 @Entity
-@DiscriminatorValue(ModifyNaturalPerson.KIND)
-public class JPANaturalPersonModify extends JPANaturalPersonChangeWithSpec<ModifyNaturalPerson> {
-    @SuppressWarnings({"unchecked", "rawtypes"})
+@DiscriminatorValue(CreateFolder.KIND)
+public class JPAFolderCreate extends JPAFolderChangeWithSpec<CreateFolder> {
     @Override
-    public JPANaturalPersonModify fromModel(final ModifyNaturalPerson event) {
+    public JPAFolderCreate fromModel(final CreateFolder event) {
         command = new JPAIdentity().fromModel(event.getMetadata().getIdentity());
         workflow = new JPAWorkflowData().fromModel(event.getMetadata().getWorkflowdata());
-        spec = new JPAPersonSpec().fromModel(event.getSpec());
-        data = new JPANaturalPersonData().fromModel(event.getSpec());
+        spec = new JPAFolderSpec().fromModel(event.getSpec());
         created = OffsetDateTime.now();
 
         return this;
     }
 
     @Override
-    public ModifyNaturalPerson toModel() {
-        return ImmutableModifyNaturalPerson.builder()
-                .kind(ModifyNaturalPerson.KIND)
-                .version(ModifyNaturalPerson.VERSION)
-
+    public CreateFolder toModel() {
+        return ImmutableCreateFolder.builder()
+                .kind(ModifyFolder.KIND)
+                .version(ModifyFolder.VERSION)
                 .metadata(ImmutableMetadata.builder()
-                        .identity(command.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
+                        .identity(command.toModel(Folder.KIND, Folder.VERSION))
                         .workflowdata(workflow.toModel())
                         .build()
                 )
-
-                .spec(data.toModel(spec))
-
+                .spec(spec.toModel())
                 .build();
     }
 }

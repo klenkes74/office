@@ -16,35 +16,35 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base;
+package de.kaiserpfalzedv.folders;
 
-import de.kaiserpfalzedv.base.api.SpecHolding;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.base.ObjectReference;
+import de.kaiserpfalzedv.folders.api.FolderResult;
 import org.immutables.value.Value;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.Serializable;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
- * @author rlichti
- * @since 2019-12-08
+ * @author rlichti@kaiserpfalz-edv.de
+ * @since 2019-12-27T12:50Z
  */
-public interface SingleObject<T extends Serializable & Comparable<SingleObject<T>>> extends BaseObject<T>, SpecHolding<T>, Comparable<SingleObject<?>> {
-    @Override
-    @Value.Lazy
-    default int compareTo(@NotNull SingleObject other) {
-        return getMetadata().getIdentity().compareTo(other.getMetadata().getIdentity());
-    }
+@Value.Immutable
+@JsonSerialize(as = ImmutableContentAdded.class)
+@JsonDeserialize(builder = ImmutableContentAdded.Builder.class)
+public interface ContentAdded extends FolderResult {
+    String KIND = "de.kaiserpfalzedv.folders.ContentAdded";
+    String VERSION = "1.0.0";
 
-    @Override
-    @Value.Lazy
     default String getKind() {
-        return getMetadata().getIdentity().getKind();
+        return KIND;
     }
 
-    @Override
-    @Value.Lazy
     default String getVersion() {
-        return getMetadata().getIdentity().getVersion();
+        return VERSION;
     }
 
+    @Value.Redacted
+    ConcurrentSkipListSet<ObjectReference> getData();
 }

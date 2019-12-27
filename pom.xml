@@ -35,7 +35,6 @@
         <module>office-folders</module>
         <module>office-contacts</module>
         <module>office-store-jpa</module>
-        <module>office-store-infinispan</module>
         <module>office-application</module>
     </modules>
 </project>

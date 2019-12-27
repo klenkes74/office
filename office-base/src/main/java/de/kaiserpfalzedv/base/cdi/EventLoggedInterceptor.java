@@ -47,7 +47,7 @@ public class EventLoggedInterceptor implements Serializable {
     public Object logMethodCall(InvocationContext ctx) throws Exception {
         if (!LOGGER.isTraceEnabled()) return ctx.proceed();
 
-        Object[] parameters = ctx.getMethod().getParameters();
+        Object[] parameters = ctx.getParameters();
         if (parameters == null || parameters.length < 1) return ctx.proceed();
 
         Annotation[][] annotations = ctx.getMethod().getParameterAnnotations();

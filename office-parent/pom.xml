@@ -94,11 +94,6 @@
             </dependency>
             <dependency>
                 <groupId>de.kaiserpfalzedv.office</groupId>
-                <artifactId>office-store-infinispan</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>de.kaiserpfalzedv.office</groupId>
                 <artifactId>office-application</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
@@ -216,6 +211,12 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jackson</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jboss.slf4j</groupId>
+                    <artifactId>slf4j-jboss-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -795,6 +796,12 @@
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-rest-client</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.slf4j</groupId>
+                            <artifactId>slf4j-jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>io.quarkus</groupId>
@@ -816,10 +823,18 @@
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-vault</artifactId>
                 </dependency>
+                <!--
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-smallrye-reactive-messaging-amqp</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.logging</groupId>
+                            <artifactId>jboss-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
+                -->
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-smallrye-openapi</artifactId>

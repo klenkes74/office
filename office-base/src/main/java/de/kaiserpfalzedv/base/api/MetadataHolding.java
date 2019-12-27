@@ -18,26 +18,34 @@
 
 package de.kaiserpfalzedv.base.api;
 
+import org.immutables.value.Value;
+
 import java.io.Serializable;
 
 /**
  * @author rlichti
  * @since 2019-12-23 09:58
  */
-public interface MetadataHolding extends Serializable {
+public interface MetadataHolding extends KindHolding, Serializable {
     /**
      * The kind of the object. Defines the type of the object. Normally a fully qualified package and Type name.-
      *
      * @return The kind of the object.
      */
-    String getKind();
+    @Value.Lazy
+    default String getKind() {
+        return getMetadata().getIdentity().getKind();
+    }
 
     /**
      * The version of this kind.
      *
      * @return the version as string conforming to {@linkplain <a href="https://semver.org/">semver.org</a>}.
      */
-    String getVersion();
+    @Value.Lazy
+    default String getVersion() {
+        return getMetadata().getIdentity().getVersion();
+    }
 
 
     /**

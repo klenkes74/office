@@ -16,14 +16,15 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store.jpa.contacts;
+package de.kaiserpfalzedv.base.store.jpa.folders.changes;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
+import de.kaiserpfalzedv.base.store.jpa.JPAObjectReferenceHistory;
 import de.kaiserpfalzedv.base.store.jpa.JPAWorkflowData;
-import de.kaiserpfalzedv.contacts.ImmutableModifyNaturalPerson;
-import de.kaiserpfalzedv.contacts.ModifyNaturalPerson;
-import de.kaiserpfalzedv.contacts.NaturalPerson;
+import de.kaiserpfalzedv.folders.Folder;
+import de.kaiserpfalzedv.folders.ImmutableRemoveContent;
+import de.kaiserpfalzedv.folders.RemoveContent;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -31,37 +32,35 @@ import java.time.OffsetDateTime;
 
 /**
  * @author rlichti
- * @since 2019-20-22 13:40
+ * @since 2019-12-27T12:02Z
  */
 @Entity
-@DiscriminatorValue(ModifyNaturalPerson.KIND)
-public class JPANaturalPersonModify extends JPANaturalPersonChangeWithSpec<ModifyNaturalPerson> {
-    @SuppressWarnings({"unchecked", "rawtypes"})
+@DiscriminatorValue(RemoveContent.KIND)
+public class JPAFolderContentRemove extends JPAFolderChangeWithContent<RemoveContent> {
     @Override
-    public JPANaturalPersonModify fromModel(final ModifyNaturalPerson event) {
+    public JPAFolderContentRemove fromModel(final RemoveContent event) {
+        identity = new JPAIdentity().fromModel(event.getMetadata().getIdentity());
         command = new JPAIdentity().fromModel(event.getMetadata().getIdentity());
         workflow = new JPAWorkflowData().fromModel(event.getMetadata().getWorkflowdata());
-        spec = new JPAPersonSpec().fromModel(event.getSpec());
-        data = new JPANaturalPersonData().fromModel(event.getSpec());
         created = OffsetDateTime.now();
+
+        this.persist();
+        event.getData().forEach(d -> addContent(JPAObjectReferenceHistory.fromModel(d)));
 
         return this;
     }
 
     @Override
-    public ModifyNaturalPerson toModel() {
-        return ImmutableModifyNaturalPerson.builder()
-                .kind(ModifyNaturalPerson.KIND)
-                .version(ModifyNaturalPerson.VERSION)
-
+    public RemoveContent toModel() {
+        return ImmutableRemoveContent.builder()
+                .kind(RemoveContent.KIND)
+                .version(RemoveContent.VERSION)
                 .metadata(ImmutableMetadata.builder()
-                        .identity(command.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
+                        .identity(command.toModel(Folder.KIND, Folder.VERSION))
                         .workflowdata(workflow.toModel())
                         .build()
                 )
-
-                .spec(data.toModel(spec))
-
+                .data(getDataModel())
                 .build();
     }
 }

@@ -18,14 +18,16 @@
 
 package de.kaiserpfalzedv.base;
 
-import de.kaiserpfalzedv.base.api.Metadata;
+import de.kaiserpfalzedv.base.api.ImmutableMetadata;
+import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /*
  *
@@ -36,12 +38,22 @@ import java.io.Serializable;
 public class ObjectListTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ObjectListTest.class);
 
-    private static final ObjectList<SingleObject<Serializable>> SERVICE = new ObjectList<SingleObject<Serializable>>() {
-        @Override
-        public Metadata getMetadata() {
-            return null;
-        }
-    };
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static final ObjectList<ObjectReference> SERVICE = (ObjectList<ObjectReference>) ImmutableObjectList.builder()
+            .metadata(ImmutableMetadata.builder()
+                    .identity(ImmutableObjectIdentity.builder()
+                            .kind(ObjectList.KIND)
+                            .version(ObjectList.VERSION)
+
+                            .uuid(UUID.randomUUID())
+                            .tenant("tenant")
+                            .name("key")
+                            .build()
+                    )
+                    .build()
+            )
+            .spec((ConcurrentSkipListSet) new ConcurrentSkipListSet<ObjectReference>())
+            .build();
 
     @Test
     public void shouldReturnCorrectKindOfObjectList() {
