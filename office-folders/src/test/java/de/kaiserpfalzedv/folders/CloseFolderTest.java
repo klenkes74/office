@@ -21,6 +21,7 @@ package de.kaiserpfalzedv.folders;
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.base.api.ImmutableWorkflowData;
+import de.kaiserpfalzedv.folders.store.TestDefaultFolder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

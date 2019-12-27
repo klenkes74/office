@@ -16,52 +16,42 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.base.store.jpa.contacts;
+package de.kaiserpfalzedv.base.store.jpa.folders.changes;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
 import de.kaiserpfalzedv.base.store.jpa.JPAWorkflowData;
-import de.kaiserpfalzedv.contacts.ImmutableModifyNaturalPerson;
-import de.kaiserpfalzedv.contacts.ModifyNaturalPerson;
-import de.kaiserpfalzedv.contacts.NaturalPerson;
+import de.kaiserpfalzedv.folders.DeleteFolder;
+import de.kaiserpfalzedv.folders.Folder;
+import de.kaiserpfalzedv.folders.ImmutableDeleteFolder;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.time.OffsetDateTime;
 
-/**
- * @author rlichti
- * @since 2019-20-22 13:40
- */
 @Entity
-@DiscriminatorValue(ModifyNaturalPerson.KIND)
-public class JPANaturalPersonModify extends JPANaturalPersonChangeWithSpec<ModifyNaturalPerson> {
-    @SuppressWarnings({"unchecked", "rawtypes"})
+@DiscriminatorValue(DeleteFolder.KIND)
+public class JPAFolderDelete extends JPAFolderChangeWithoutSpec<DeleteFolder> {
     @Override
-    public JPANaturalPersonModify fromModel(final ModifyNaturalPerson event) {
-        command = new JPAIdentity().fromModel(event.getMetadata().getIdentity());
+    public JPAFolderDelete fromModel(DeleteFolder event) {
+        identity = new JPAIdentity().fromModel(event.getMetadata().getIdentity());
+        command = identity;
         workflow = new JPAWorkflowData().fromModel(event.getMetadata().getWorkflowdata());
-        spec = new JPAPersonSpec().fromModel(event.getSpec());
-        data = new JPANaturalPersonData().fromModel(event.getSpec());
         created = OffsetDateTime.now();
 
         return this;
     }
 
     @Override
-    public ModifyNaturalPerson toModel() {
-        return ImmutableModifyNaturalPerson.builder()
-                .kind(ModifyNaturalPerson.KIND)
-                .version(ModifyNaturalPerson.VERSION)
-
+    public DeleteFolder toModel() {
+        return ImmutableDeleteFolder.builder()
+                .kind(DeleteFolder.KIND)
+                .version(DeleteFolder.VERSION)
                 .metadata(ImmutableMetadata.builder()
-                        .identity(command.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
+                        .identity(command.toModel(Folder.KIND, Folder.VERSION))
                         .workflowdata(workflow.toModel())
                         .build()
                 )
-
-                .spec(data.toModel(spec))
-
                 .build();
     }
 }

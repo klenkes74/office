@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.base.store.jpa.folders;
 
 
 import de.kaiserpfalzedv.base.cdi.JPA;
+import de.kaiserpfalzedv.base.store.jpa.folders.changes.JPAFolderReadAdapter;
 import de.kaiserpfalzedv.folders.Folder;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Tag;
@@ -72,13 +73,17 @@ public class JPAFolderReadAdapterTest {
         assert result.isPresent();
         Folder data = result.get();
 
-        assert ID.equals(data.getSpec().getIdentity().getUuid());
-        assert TENANT.equals(data.getSpec().getIdentity().getTenant());
-        assert KEY.equals(data.getSpec().getIdentity().getName().orElse(null));
-        assert NAME.equals(data.getSpec().getName());
-        assert DISPLAYNAME.equals(data.getSpec().getDisplayname());
-        assert DESCRIPTION.equals(data.getSpec().getDescription().orElse(null));
-        assert !data.getSpec().getClosed().isPresent();
+        LOGGER.error("modified (exp/cur): {}, {}", MODIFIED, data.getEnvelope().getModified());
+
+        assert ID.equals(data.getEnvelope().getIdentity().getUuid());
+        assert TENANT.equals(data.getEnvelope().getIdentity().getTenant());
+        assert KEY.equals(data.getEnvelope().getIdentity().getName().orElse(null));
+        assert NAME.equals(data.getEnvelope().getName());
+        assert DISPLAYNAME.equals(data.getEnvelope().getDisplayname());
+        assert CREATED.isEqual(data.getEnvelope().getCreated());
+        assert MODIFIED.isBefore(data.getEnvelope().getModified()) || MODIFIED.isEqual(data.getEnvelope().getModified());
+        assert DESCRIPTION.equals(data.getEnvelope().getDescription().orElse(null));
+        assert !data.getEnvelope().getClosed().isPresent();
     }
 
     @Test

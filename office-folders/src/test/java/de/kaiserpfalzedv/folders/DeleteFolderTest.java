@@ -20,13 +20,14 @@ package de.kaiserpfalzedv.folders;
 
 import de.kaiserpfalzedv.base.api.ImmutableMetadata;
 import de.kaiserpfalzedv.base.api.ImmutableObjectIdentity;
+import de.kaiserpfalzedv.folders.store.TestDefaultFolder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.kaiserpfalzedv.folders.TestDefaultFolder.FOLDER_SPEC;
+import static de.kaiserpfalzedv.folders.store.TestDefaultFolder.FOLDER_SPEC;
 
 /**
  * @author rlichti

@@ -26,8 +26,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.kaiserpfalzedv.folders.TestDefaultFolder.FOLDER_IDENTITY;
-import static de.kaiserpfalzedv.folders.TestDefaultFolder.FOLDER_METADATA;
+import static de.kaiserpfalzedv.folders.store.TestDefaultFolder.FOLDER_IDENTITY;
+import static de.kaiserpfalzedv.folders.store.TestDefaultFolder.FOLDER_METADATA;
 
 /*
  *
