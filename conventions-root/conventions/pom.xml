@@ -39,6 +39,11 @@
         </dependency>
         <dependency>
             <groupId>de.kaiserpfalzedv.office</groupId>
+            <artifactId>office-contacts</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.kaiserpfalzedv.office</groupId>
             <artifactId>office-security</artifactId>
         </dependency>
     </dependencies>
