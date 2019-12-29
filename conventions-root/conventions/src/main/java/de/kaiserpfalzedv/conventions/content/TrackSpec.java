@@ -20,6 +20,7 @@ package de.kaiserpfalzedv.conventions.content;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.commons.ObjectList;
 import de.kaiserpfalzedv.commons.ObjectReference;
 import de.kaiserpfalzedv.commons.api.Spec;
 import org.immutables.value.Value;
@@ -44,6 +45,13 @@ public interface TrackSpec extends Spec<TrackSpec>, Comparable<TrackSpec> {
      * @return a reference to the topic.
      */
     Optional<ObjectReference> getTopic();
+
+    /**
+     * The events of this track.
+     *
+     * @return a list of events of this track.
+     */
+    ObjectList<? extends Event<?>> getEvents();
 
     /**
      * Compares different tracks.

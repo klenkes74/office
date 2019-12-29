@@ -37,7 +37,7 @@ public interface EventSpec<T extends EventSpec<?>> extends Spec<T>, Comparable<T
      *
      * @return a reference to the topic.
      */
-    ObjectReference getTopic();
+    Topic getTopic();
 
     /**
      * The speaker or moderator of this event.
