@@ -53,30 +53,14 @@ public class ObjectIdentityTest {
                 .version(VERSION)
                 .uuid(ID)
                 .tenant(TENANT)
+                .key(KEY)
                 .build();
 
         assert KIND.equals(service.getKind());
         assert VERSION.equals(service.getVersion());
         assert ID.equals(service.getUuid());
         assert !service.getTenant().isEmpty();
-        assert !service.getName().isPresent();
-    }
-
-    @Test
-    public void shouldWorkWhenthStaticFactoryMethodWithScopeAndKey() {
-        ObjectIdentity service = ImmutableObjectIdentity.builder()
-                .kind(KIND)
-                .version(VERSION)
-                .uuid(ID)
-                .tenant(TENANT)
-                .name(KEY)
-                .build();
-
-        assert KIND.equals(service.getKind());
-        assert VERSION.equals(service.getVersion());
-        assert service.getUuid() != null;
-        assert TENANT.equals(service.getTenant());
-        assert KEY.equals(service.getName().orElse(null));
+        assert !service.getKey().isEmpty();
     }
 
     @Test

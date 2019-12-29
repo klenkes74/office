@@ -7,7 +7,7 @@
       "version": "1.0.0",
       "uuid": "cdf466c6-db5c-47eb-bb2f-ff066e1d08c8",
       "tenant": "de.kaiserpfalz-edv",
-      "name": "I'19-5315"
+      "key": "I'19-5315"
     },
     "workflowdata": {
       "request": "15fc687b-452b-4815-b69a-b2cd5315958a",
@@ -19,7 +19,7 @@
         "version": "2.5.1",
         "uuid": "99e40891-d8b3-4d18-bcb5-1c83bdc618d3",
         "tenant": "lichti.de",
-        "name": "CreateNewCustomer"
+        "key": "CreateNewCustomer"
       }
     }
   },
@@ -29,7 +29,7 @@
       "version": "1.0.0",
       "uuid": "b88f0e4e-74ea-4daf-812b-c798014e991b",
       "tenant": "de.kaiserpfalz-edv",
-      "name": "I'19-5315"
+      "key": "I'19-5315"
     },
     "name": "Softwaretest Akte",
     "displayname": "Softwaretest",

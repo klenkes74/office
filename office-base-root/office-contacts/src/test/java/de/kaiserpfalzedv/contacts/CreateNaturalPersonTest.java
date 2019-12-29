@@ -113,7 +113,7 @@ public class CreateNaturalPersonTest {
                     .version(NaturalPerson.VERSION)
                     .uuid(ID)
                     .tenant(TENANT)
-                    .name(KEY)
+                    .key(KEY)
                     .build();
         }
 
@@ -148,7 +148,7 @@ public class CreateNaturalPersonTest {
                             .version(CreateNaturalPerson.VERSION)
                             .uuid(ID)
                             .tenant(TENANT)
-                            .name(KEY)
+                            .key(KEY)
                             .build()
                     )
                     .build();

@@ -65,7 +65,7 @@ public class BaseObjectTest {
                             .version(VERSION)
                             .uuid(UUID)
                             .tenant(SCOPE)
-                            .name(NAME)
+                            .key(NAME)
                             .build()
                     )
                     .build();

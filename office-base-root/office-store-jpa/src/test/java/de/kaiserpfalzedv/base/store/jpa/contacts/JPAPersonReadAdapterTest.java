@@ -72,7 +72,7 @@ public class JPAPersonReadAdapterTest {
 
         assert ID.equals(data.getMetadata().getIdentity().getUuid());
         assert TENANT.equals(data.getMetadata().getIdentity().getTenant());
-        assert KEY.equals(data.getMetadata().getIdentity().getName().orElse(null));
+        assert KEY.equals(data.getMetadata().getIdentity().getKey());
         assert DISPLAYNAME.equals(data.getSpec().getDisplayname());
         assert CREATED.isEqual(data.getSpec().getCreated());
         assert MODIFIED.isEqual(data.getSpec().getModified());

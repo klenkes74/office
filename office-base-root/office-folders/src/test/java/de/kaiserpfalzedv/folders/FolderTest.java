@@ -53,7 +53,7 @@ public class FolderTest {
         Folder other = ImmutableFolder.copyOf(SERVICE)
                 .withMetadata(ImmutableMetadata.copyOf(SERVICE.getMetadata())
                         .withIdentity(ImmutableObjectIdentity.copyOf(SERVICE.getMetadata().getIdentity())
-                                .withName("akey")
+                                .withKey("akey")
                         )
                 );
         LOGGER.debug("Comparing {} and {} result: {}", SERVICE, other, SERVICE.compareTo(other));
@@ -74,7 +74,7 @@ public class FolderTest {
         Folder other = ImmutableFolder.copyOf(SERVICE)
                 .withMetadata(ImmutableMetadata.copyOf(SERVICE.getMetadata())
                         .withIdentity(ImmutableObjectIdentity.copyOf(SERVICE.getMetadata().getIdentity())
-                                .withName("natural-key")
+                                .withKey("natural-key")
                         )
                 );
         LOGGER.debug("Comparing {} and {} result: {}", SERVICE, other, SERVICE.compareTo(other));
@@ -87,7 +87,7 @@ public class FolderTest {
         Folder other = ImmutableFolder.copyOf(SERVICE)
                 .withMetadata(ImmutableMetadata.copyOf(SERVICE.getMetadata())
                         .withIdentity(ImmutableObjectIdentity.copyOf(SERVICE.getMetadata().getIdentity())
-                                .withName("natural-key")
+                                .withKey("natural-key")
                                 .withTenant("akey")
                         )
                 );
@@ -101,7 +101,7 @@ public class FolderTest {
         Folder other = ImmutableFolder.copyOf(SERVICE)
                 .withMetadata(ImmutableMetadata.copyOf(SERVICE.getMetadata())
                         .withIdentity(ImmutableObjectIdentity.copyOf(SERVICE.getMetadata().getIdentity())
-                                .withName("akey")
+                                .withKey("akey")
                                 .withTenant("very-large-tenant")
                         )
                 );

@@ -46,10 +46,8 @@ public class JPANaturalPersonService implements NaturalPersonResultService<Natur
             throw new WrappingException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
-        if (spec.getIdentity().getName().isPresent()) {
-            if (JPANaturalPerson.findByTenantAndKey(spec.getIdentity().getTenant(), spec.getIdentity().getName().orElse(null)).count() != 0) {
-                throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
-            }
+        if (JPANaturalPerson.findByTenantAndKey(spec.getIdentity().getTenant(), spec.getIdentity().getKey()).count() != 0) {
+            throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
         }
 
         try {

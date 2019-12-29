@@ -58,7 +58,7 @@ public class TestDefaultFolder {
             .version(Folder.VERSION)
             .uuid(FOLDER_UUID)
             .tenant(FOLDER_TENANT)
-            .name(FOLDER_KEY)
+            .key(FOLDER_KEY)
             .build();
 
     public static final Metadata FOLDER_METADATA = ImmutableMetadata.builder()
@@ -90,7 +90,7 @@ public class TestDefaultFolder {
                                             .version("0.0.0")
                                             .uuid(UUID.randomUUID())
                                             .tenant(FOLDER_TENANT)
-                                            .name("fck-" + counter)
+                                            .key("fck-" + counter)
                                             .build()
                                     )
                                     .build()

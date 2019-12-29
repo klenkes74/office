@@ -182,6 +182,7 @@ public class ContactsWebService {
                                     .version(DeleteNaturalPerson.VERSION)
                                     .tenant(tenant)
                                     .uuid(uuid)
+                                    .key("delete " + uuid.toString())
                                     .build()
                             )
                             .build()

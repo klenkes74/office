@@ -50,7 +50,7 @@ public class ObjectListTest {
 
                             .uuid(UUID.randomUUID())
                             .tenant("tenant")
-                            .name("key")
+                            .key("key")
                             .build()
                     )
                     .build()

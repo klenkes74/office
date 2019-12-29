@@ -57,7 +57,7 @@ public interface ModifyFolder extends FolderCommandWithSpec, ModifyCommand<Folde
         return ImmutableFolderSpec.copyOf(orig)
                 .withIdentity(ImmutableObjectIdentity.builder()
                         .from(getSpec().getIdentity())
-                        .name(getSpec().getName())
+                        .key(getSpec().getName())
                         .build()
                 )
                 .withName(getSpec().getName())

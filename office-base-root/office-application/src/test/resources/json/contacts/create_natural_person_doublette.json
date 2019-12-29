@@ -7,7 +7,7 @@
       "version": "1.0.0",
       "uuid": "4ebc5f12-783d-4e41-87d6-ea39abee1d1d",
       "tenant": "de.kaiserpfalz-edv",
-      "name": "D20000"
+      "key": "D20000"
     },
     "workflowdata": {
       "request": "fb4375ce-3d05-4e37-b4e8-1f55f7b077bf",
@@ -19,7 +19,7 @@
         "version": "2.5.1",
         "uuid": "99e40891-d8b3-4d18-bcb5-1c83bdc618d3",
         "tenant": "lichti.de",
-        "name": "CreateNewCustomer"
+        "key": "CreateNewCustomer"
       }
     }
   },
@@ -29,7 +29,7 @@
       "version": "1.0.0",
       "uuid": "5e71f32f-83bf-41f6-b3f5-ef9f64bdc718",
       "tenant": "de.kaiserpfalz-edv",
-      "name": "D20000"
+      "key": "D20000"
     },
     "displayname": "Roland T. Lichti",
     "data": {

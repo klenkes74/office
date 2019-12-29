@@ -111,7 +111,7 @@ public class NaturalPersonDataTest {
                     .version(NaturalPerson.VERSION)
                     .uuid(ID)
                     .tenant(TENANT)
-                    .name(KEY)
+                    .key(KEY)
                     .build();
         }
 

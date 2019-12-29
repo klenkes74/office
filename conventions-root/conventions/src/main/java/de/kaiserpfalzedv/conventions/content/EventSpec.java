@@ -24,6 +24,8 @@ import de.kaiserpfalzedv.commons.api.Spec;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 /**
  * @author rlichti
  * @since 2019-12-29T11:50
@@ -37,7 +39,7 @@ public interface EventSpec<T extends EventSpec<?>> extends Spec<T>, Comparable<T
      *
      * @return a reference to the topic.
      */
-    Topic getTopic();
+    Optional<Topic> getTopic();
 
     /**
      * The speaker or moderator of this event.
@@ -69,8 +71,10 @@ public interface EventSpec<T extends EventSpec<?>> extends Spec<T>, Comparable<T
     @Value.Lazy
     default int compareTo(@NotNull T other) {
         if (getClass().getSimpleName().equals(other.getClass().getSimpleName())) {
-            if (getTopic().getKind().equals(other.getTopic().getKind())) {
-                return getTopic().compareTo(other.getTopic());
+            if (getTopic().isPresent() && other.getTopic().isPresent()) {
+                if (getTopic().get().compareTo(other.getTopic().get()) != 0) {
+                    return getTopic().get().compareTo(other.getTopic().get());
+                }
             }
             return getDisplayname().compareTo(other.getDisplayname());
         }

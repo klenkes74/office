@@ -77,7 +77,7 @@ public class CloseFolderTest {
                                         .version("1.0.0")
                                         .uuid(UUID.randomUUID())
                                         .tenant("test")
-                                        .name("close-folder")
+                                        .key("close-folder")
                                         .build()
                                 )
                                 .correlation(UUID.randomUUID())

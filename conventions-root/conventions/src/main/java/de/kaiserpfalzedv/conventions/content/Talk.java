@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.commons.SingleObject;
 import org.immutables.value.Value;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -31,7 +32,14 @@ import org.immutables.value.Value;
 @Value.Immutable
 @JsonSerialize(as = ImmutableTalk.class)
 @JsonDeserialize(builder = ImmutableTalk.Builder.class)
-public interface Talk extends SingleObject<TalkSpec> {
+public interface Talk extends SingleObject<TalkSpec>, Comparable<Talk> {
     String KIND = "de.kaiserpfalzedv.conventions.content.Talk";
     String VERSION = "1.0.0";
+
+    @Override
+    @Value.Default
+    @Value.Lazy
+    default int compareTo(@NotNull final Talk other) {
+        return getSpec().compareTo(other.getSpec());
+    }
 }

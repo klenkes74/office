@@ -50,7 +50,6 @@ public abstract class DataException extends Exception {
     static String formatObjectIdentifier(ObjectIdentity identifier) {
         return " (Object: uuid=" + identifier.getUuid()
                 + ", tenant='" + identifier.getTenant() + "'"
-                + (identifier.getName().isPresent() ? ", key='" + identifier.getName().get() + "'" : "")
-                + ")";
+                + "key='" + identifier.getKey() + "')";
     }
 }

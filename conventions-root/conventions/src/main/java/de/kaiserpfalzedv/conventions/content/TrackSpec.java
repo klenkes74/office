@@ -51,7 +51,7 @@ public interface TrackSpec extends Spec<TrackSpec>, Comparable<TrackSpec> {
      *
      * @return a list of events of this track.
      */
-    ObjectList<? extends Event<?>> getEvents();
+    ObjectList<Talk> getTalks();
 
     /**
      * Compares different tracks.
@@ -63,6 +63,12 @@ public interface TrackSpec extends Spec<TrackSpec>, Comparable<TrackSpec> {
     @Value.Default
     @Value.Lazy
     default int compareTo(@NotNull TrackSpec other) {
+        if (getTopic().isPresent() && other.getTopic().isPresent()) {
+            if (getTopic().get().compareTo(other.getTopic().get()) != 0) {
+                return getTopic().get().compareTo(other.getTopic().get());
+            }
+        }
+
         return getDisplayname().compareTo(other.getDisplayname());
     }
 }

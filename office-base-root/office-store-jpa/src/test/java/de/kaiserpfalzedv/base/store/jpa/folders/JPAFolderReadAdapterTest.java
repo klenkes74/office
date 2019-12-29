@@ -77,7 +77,7 @@ public class JPAFolderReadAdapterTest {
 
         assert ID.equals(data.getEnvelope().getIdentity().getUuid());
         assert TENANT.equals(data.getEnvelope().getIdentity().getTenant());
-        assert KEY.equals(data.getEnvelope().getIdentity().getName().orElse(null));
+        assert KEY.equals(data.getEnvelope().getIdentity().getKey());
         assert NAME.equals(data.getEnvelope().getName());
         assert DISPLAYNAME.equals(data.getEnvelope().getDisplayname());
         assert CREATED.isEqual(data.getEnvelope().getCreated());

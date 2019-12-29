@@ -75,7 +75,7 @@ public class JPANaturalPersonReadAdapterTest {
 
         assert ID.equals(data.getSpec().getIdentity().getUuid());
         assert TENANT.equals(data.getSpec().getIdentity().getTenant());
-        assert KEY.equals(data.getSpec().getIdentity().getName().orElse(null));
+        assert KEY.equals(data.getSpec().getIdentity().getKey());
         assert DISPLAYNAME.equals(data.getSpec().getDisplayname());
         assert GIVENNAME.equals(data.getSpec().getData().getGivenname());
         assert SURNAME.equals(data.getSpec().getData().getSurname());

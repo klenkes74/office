@@ -28,10 +28,16 @@ import java.io.Serializable;
  * @author rlichti
  * @since 2019-12-08
  */
-public interface SingleObject<T extends Serializable & Comparable<T>> extends BaseObject<T>, SpecHolding<T>, Comparable<SingleObject<?>> {
-    @Override
+public interface SingleObject<T extends Serializable> extends BaseObject<T>, SpecHolding<T> {
+    @Value.Default
     @Value.Lazy
-    default int compareTo(@NotNull SingleObject other) {
+    default int compareTo(@NotNull SingleObject<T> other) {
+        if (getSpec() instanceof Comparable && other.getSpec() instanceof Comparable) {
+            //noinspection unchecked,rawtypes
+            return ((Comparable) getSpec()).compareTo(other.getSpec());
+
+        }
+
         return getMetadata().getIdentity().compareTo(other.getMetadata().getIdentity());
     }
 

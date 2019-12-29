@@ -51,7 +51,7 @@ public interface ObjectIdentity extends KindHolding, Serializable, Comparable<Ob
      *
      * @return the name that is unique within the scope for a certain kind of objects.
      */
-    Optional<String> getName();
+    String getKey();
 
     /**
      * This is the owning object. The exact meaning may differ between different domains.
@@ -63,7 +63,7 @@ public interface ObjectIdentity extends KindHolding, Serializable, Comparable<Ob
     @Override
     default int compareTo(@NotNull ObjectIdentity other) {
         int tenantComparison = getTenant().compareTo(other.getTenant());
-        int nameComparison = getName().orElse("").compareTo(other.getName().orElse(""));
+        int nameComparison = getKey().compareTo(other.getKey());
 
         return tenantComparison != 0 ? tenantComparison : nameComparison;
     }

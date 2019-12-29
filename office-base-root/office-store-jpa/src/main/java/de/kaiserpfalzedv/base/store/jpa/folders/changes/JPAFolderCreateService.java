@@ -56,14 +56,9 @@ public class JPAFolderCreateService implements FolderCommandService<CreateFolder
             throw new WrappingException(new UuidAlreadyExistsException(spec.getIdentity()));
         }
 
-        if (spec.getIdentity().getName().isPresent()) {
-            if (JPAFolder.findByTenantAndKey(
-                    spec.getIdentity().getTenant(),
-                    spec.getIdentity().getName().orElse(null)
-            ).count() != 0
-            ) {
-                throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
-            }
+        if (JPAFolder.findByTenantAndKey(spec.getIdentity().getTenant(), spec.getIdentity().getKey()).count() != 0
+        ) {
+            throw new WrappingException(new KeyAlreadyExistsException(spec.getIdentity()));
         }
 
         JPAFolderCreate jpa;

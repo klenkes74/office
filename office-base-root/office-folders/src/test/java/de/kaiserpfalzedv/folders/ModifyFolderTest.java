@@ -75,7 +75,7 @@ public class ModifyFolderTest {
         assert SERVICE.getSpec().getIdentity().getUuid().equals(result.getIdentity().getUuid());
         assert Objects.equals(SERVICE.getSpec().getIdentity().getTenant(), result.getIdentity().getTenant());
         assert FOLDER_DISPLAYNAME.equals(result.getDisplayname());
-        assert FOLDER_NAME.equals(result.getIdentity().getName().orElse(null));
+        assert FOLDER_NAME.equals(result.getIdentity().getKey());
         assert SERVICE.getSpec().getName().equals(result.getName());
         assert SERVICE.getSpec().getDescription().equals(result.getDescription());
         assert SERVICE.getSpec().getModified().equals(result.getModified());

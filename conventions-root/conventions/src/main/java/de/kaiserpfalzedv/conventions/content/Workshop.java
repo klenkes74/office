@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.commons.SingleObject;
 import org.immutables.value.Value;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -31,7 +32,14 @@ import org.immutables.value.Value;
 @Value.Immutable
 @JsonSerialize(as = ImmutableWorkshop.class)
 @JsonDeserialize(builder = ImmutableWorkshop.Builder.class)
-public interface Workshop extends SingleObject<WorkshopSpec> {
+public interface Workshop extends SingleObject<WorkshopSpec>, Comparable<Workshop> {
     String KIND = "de.kaiserpfalzedv.conventions.content.Workshop";
     String VERSION = "1.0.0";
+
+    @Override
+    @Value.Default
+    @Value.Lazy
+    default int compareTo(@NotNull final Workshop other) {
+        return getSpec().compareTo(other.getSpec());
+    }
 }
