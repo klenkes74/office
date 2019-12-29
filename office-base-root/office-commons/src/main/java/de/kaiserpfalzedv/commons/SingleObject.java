@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @author rlichti
  * @since 2019-12-08
  */
-public interface SingleObject<T extends Serializable & Comparable<SingleObject<T>>> extends BaseObject<T>, SpecHolding<T>, Comparable<SingleObject<?>> {
+public interface SingleObject<T extends Serializable & Comparable<T>> extends BaseObject<T>, SpecHolding<T>, Comparable<SingleObject<?>> {
     @Override
     @Value.Lazy
     default int compareTo(@NotNull SingleObject other) {

@@ -18,6 +18,9 @@
 
 package de.kaiserpfalzedv.commons.api;
 
+import org.immutables.value.Value;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
@@ -26,7 +29,7 @@ import java.time.OffsetDateTime;
  * @author rlichti
  * @since 2019-12-15 12:02
  */
-public interface Spec<T extends Serializable> extends Serializable, DisplaynameHolding {
+public interface Spec<T extends Serializable> extends Serializable, DisplaynameHolding, Comparable<T> {
     /**
      * The creation date of the spec data.
      *
@@ -40,4 +43,15 @@ public interface Spec<T extends Serializable> extends Serializable, DisplaynameH
      * @return when the spec has been modified latest. If there has been no modification it is the creation timestamp.
      */
     OffsetDateTime getModified();
+
+    @Override
+    @Value.Default
+    @Value.Lazy
+    default int compareTo(@NotNull T other) {
+        if (other instanceof DisplaynameHolding) {
+            return getDisplayname().compareTo(((DisplaynameHolding)other).getDisplayname());
+        }
+
+        return System.identityHashCode(this) - System.identityHashCode(other);
+    }
 }
