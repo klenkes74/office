@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+  ~
+  ~  This file is part of Kaiserpfalz EDV-Service Office.
+  ~
+  ~  This is free software: you can redistribute it and/or modify it under the terms of
+  ~  the GNU Lesser General Public License as published by the Free Software
+  ~  Foundation, either version 3 of the License.
+  ~
+  ~  This file is distributed in the hope that it will be useful, but WITHOUT ANY
+  ~  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+  ~  License for more details.
+  ~
+  ~  You should have received a copy of the GNU Lesser General Public License along
+  ~  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  -->
+
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.kaiserpfalzedv.office</groupId>
+        <artifactId>office-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../../office-base-root/office-parent/pom.xml</relativePath>
+    </parent>
+
+    <groupId>de.kaiserpfalzedv.conventions</groupId>
+    <artifactId>conventions-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>KP Conventions :: Parent POM</name>
+
+    <properties>
+        <amqp.username>office-conventions</amqp.username>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>de.kaiserpfalzedv.office</groupId>
+                <artifactId>office-bom</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>de.kaiserpfalzedv.conventions</groupId>
+                <artifactId>conventions-bom</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jackson</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jboss.slf4j</groupId>
+                    <artifactId>slf4j-jboss-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.immutables</groupId>
+            <artifactId>value</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.immutables</groupId>
+            <artifactId>encode</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>15.0</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+</project>
