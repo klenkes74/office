@@ -28,10 +28,10 @@ import java.util.Optional;
 @Value.Immutable
 @JsonSerialize(as = ImmutableMetadata.class)
 @JsonDeserialize(builder = ImmutableMetadata.Builder.class)
-public interface Metadata extends Serializable {
+public interface Metadata extends Serializable, IdentityHolding {
     /**
      * This is the identity of the object, not the request. To identify the request, please use
-     * {@link #getWorkflowdata()}.
+     * {@link WorkflowData#getRequest()}.
      *
      * @return the identity of the object maintained.
      */

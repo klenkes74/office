@@ -24,6 +24,8 @@ import de.kaiserpfalzedv.commons.api.ObjectIdentity;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 @Value.Immutable
 @JsonSerialize(as = ImmutableObjectReference.class)
 @JsonDeserialize(builder = ImmutableObjectReference.Builder.class)
@@ -40,6 +42,13 @@ public interface ObjectReference extends BaseObject<ObjectIdentity>, Comparable<
     default String getVersion() {
         return VERSION;
     }
+
+    /**
+     * An optional display name. Sometimes we only need a name for lists.
+     *
+     * @return The displayname for lists or other purposes.
+     */
+    Optional<String> getDisplayname();
 
     @Value.Default
     @Override
