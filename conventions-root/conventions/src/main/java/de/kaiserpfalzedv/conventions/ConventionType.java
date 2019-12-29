@@ -16,20 +16,13 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.conventions.content;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.immutables.value.Value;
+package de.kaiserpfalzedv.conventions;
 
 /**
  * @author rlichti
- * @since 2019-12-29T11:50
+ * @since 2019-12-29T15:18
  */
-@Value.Immutable
-@JsonSerialize(as = ImmutableGroupSpec.class)
-@JsonDeserialize(builder = ImmutableGroupSpec.Builder.class)
-public interface GroupSpec extends EventSpec<GroupSpec> {
-    String KIND = Group.KIND;
-    String VERSION = Group.VERSION;
+public enum ConventionType {
+    PUBLIC_CONVENTION,
+    INVITATION_ONLY_CONVENTION
 }

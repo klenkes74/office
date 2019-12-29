@@ -18,18 +18,13 @@
 
 package de.kaiserpfalzedv.conventions.content;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.immutables.value.Value;
-
 /**
  * @author rlichti
- * @since 2019-12-29T11:50
+ * @since 2019-12-29T15:47
  */
-@Value.Immutable
-@JsonSerialize(as = ImmutableTalkSpec.class)
-@JsonDeserialize(builder = ImmutableTalkSpec.Builder.class)
-public interface TalkSpec extends EventSpec<TalkSpec> {
-    String KIND = Group.KIND;
-    String VERSION = Group.VERSION;
+public enum EventType {
+    TRACK,
+    PLAY,
+    TALK,
+    WORKSHOP
 }

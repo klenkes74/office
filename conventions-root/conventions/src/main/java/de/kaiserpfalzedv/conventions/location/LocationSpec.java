@@ -16,13 +16,14 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.conventions.content;
+package de.kaiserpfalzedv.conventions.location;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.commons.ObjectList;
 import de.kaiserpfalzedv.commons.ObjectReference;
 import de.kaiserpfalzedv.commons.api.Spec;
+import de.kaiserpfalzedv.conventions.organisation.ResponsibleJobHolding;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,40 +34,39 @@ import java.util.Optional;
  * @since 2019-12-29T11:50
  */
 @Value.Immutable
-@JsonSerialize(as = ImmutableTrackSpec.class)
-@JsonDeserialize(builder = ImmutableTrackSpec.Builder.class)
-public interface TrackSpec extends Spec<TrackSpec>, Comparable<TrackSpec> {
-    String KIND = Track.KIND;
-    String VERSION = Track.VERSION;
+@JsonSerialize(as = ImmutableLocationSpec.class)
+@JsonDeserialize(builder = ImmutableLocationSpec.Builder.class)
+public interface LocationSpec extends Spec<LocationSpec>, Comparable<LocationSpec>, ResponsibleJobHolding {
+    String KIND = Location.KIND;
+    String VERSION = Location.VERSION;
+
+    Optional<ObjectReference> getContainingLocation();
+
+    ObjectList<Location> getSubLocations();
+
+    ObjectList<ObjectReference> getSlots();
 
     /**
-     * The topic of the event.
+     * Compares different events. It tries to group events following this priority:
+     * <ol>
+     *     <li>{@link #getDisplayname()} of the event.</li>
+     * </ol>
      *
-     * @return a reference to the topic.
-     */
-    Optional<ObjectReference> getTopic();
-
-    /**
-     * The events of this track.
-     *
-     * @return a list of events of this track.
-     */
-    ObjectList<Talk> getTalks();
-
-    /**
-     * Compares different tracks.
-     *
-     * @param other The track to be compared with.
+     * @param other The event to be compared with.
      * @return The order of the two elements.
      */
     @Override
     @Value.Default
     @Value.Lazy
-    default int compareTo(@NotNull TrackSpec other) {
-        if (getTopic().isPresent() && other.getTopic().isPresent()) {
-            if (getTopic().get().compareTo(other.getTopic().get()) != 0) {
-                return getTopic().get().compareTo(other.getTopic().get());
+    default int compareTo(@NotNull LocationSpec other) {
+        if (getContainingLocation().isPresent() && other.getContainingLocation().isPresent()) {
+            if (getContainingLocation().get().compareTo(other.getContainingLocation().get()) != 0) {
+                return getContainingLocation().get().compareTo(other.getContainingLocation().get());
             }
+        }
+
+        if (getContainingLocation().isPresent() && !other.getContainingLocation().isPresent()) {
+            return 1; // a location in a structure is always preferred.
         }
 
         return getDisplayname().compareTo(other.getDisplayname());

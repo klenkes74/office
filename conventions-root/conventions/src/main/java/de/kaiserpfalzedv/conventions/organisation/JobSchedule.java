@@ -16,7 +16,7 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.conventions.content;
+package de.kaiserpfalzedv.conventions.organisation;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -26,19 +26,20 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author rlichti
- * @since 2019-12-29T11:59
+ * @since 2019-12-29T14:48
  */
 @Value.Immutable
-@JsonSerialize(as = ImmutableEvent.class)
-@JsonDeserialize(builder = ImmutableEvent.Builder.class)
-public interface Event extends SingleObject<EventSpec>, Comparable<Event> {
-    String KIND = "de.kaiserpfalzedv.conventions.content.Event";
+@JsonSerialize(as = ImmutableJobSchedule.class)
+@JsonDeserialize(builder = ImmutableJobSchedule.Builder.class)
+public interface JobSchedule extends SingleObject<JobScheduleSpec>, Comparable<JobSchedule> {
+    String KIND = "de.kaiserpfalzedv.conventions.organisation.Job";
     String VERSION = "1.0.0";
 
     @Override
     @Value.Default
     @Value.Lazy
-    default int compareTo(@NotNull final Event event) {
-        return event.getSpec().compareTo(event.getSpec());
+    default int compareTo(@NotNull final JobSchedule other) {
+        return getSpec().compareTo(other.getSpec());
     }
+
 }

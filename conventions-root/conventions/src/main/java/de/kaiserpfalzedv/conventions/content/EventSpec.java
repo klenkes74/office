@@ -18,6 +18,8 @@
 
 package de.kaiserpfalzedv.conventions.content;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.commons.ObjectList;
 import de.kaiserpfalzedv.commons.ObjectReference;
 import de.kaiserpfalzedv.commons.api.Spec;
@@ -30,9 +32,28 @@ import java.util.Optional;
  * @author rlichti
  * @since 2019-12-29T11:50
  */
-public interface EventSpec<T extends EventSpec<?>> extends Spec<T>, Comparable<T> {
-    String KIND = "de.kaiserpfalzedv.conventions.content.TopicSpec";
-    String VERSION = Topic.VERSION;
+@Value.Immutable
+@JsonSerialize(as = ImmutableEventSpec.class)
+@JsonDeserialize(builder = ImmutableEventSpec.Builder.class)
+public interface EventSpec extends Spec<EventSpec>, Comparable<EventSpec> {
+    String KIND = Event.KIND;
+    String VERSION = Event.VERSION;
+
+    ObjectReference getContainingEvent();
+
+    ObjectList<ObjectReference> getSubEvents();
+
+    ObjectList<ObjectReference> getSlots();
+
+    EventType getType();
+
+    String getAbstract();
+
+    String getDescription();
+
+    Optional<Integer> getMinumAttendees();
+
+    Optional<Integer> getMaximumAttendees();
 
     /**
      * The topic of the event.
@@ -58,7 +79,6 @@ public interface EventSpec<T extends EventSpec<?>> extends Spec<T>, Comparable<T
     /**
      * Compares different events. It tries to group events following this priority:
      * <ol>
-     *     <li>Type of talk ({@link Group}, {@link Talk], {@link Workshop}}.</li>
      *     <li>{@link Topic} of the event.</li>
      *     <li>{@link #getDisplayname()} of the event.</li>
      * </ol>
@@ -69,16 +89,27 @@ public interface EventSpec<T extends EventSpec<?>> extends Spec<T>, Comparable<T
     @Override
     @Value.Default
     @Value.Lazy
-    default int compareTo(@NotNull T other) {
-        if (getClass().getSimpleName().equals(other.getClass().getSimpleName())) {
-            if (getTopic().isPresent() && other.getTopic().isPresent()) {
-                if (getTopic().get().compareTo(other.getTopic().get()) != 0) {
-                    return getTopic().get().compareTo(other.getTopic().get());
-                }
-            }
-            return getDisplayname().compareTo(other.getDisplayname());
+    default int compareTo(@NotNull EventSpec other) {
+        if (getContainingEvent().compareTo(other.getContainingEvent()) != 0) {
+            return getContainingEvent().compareTo(other.getContainingEvent());
         }
 
-        return getClass().getSimpleName().compareTo(other.getClass().getSimpleName());
+        if (getTopic().isPresent() && other.getTopic().isPresent()) {
+            if (getTopic().get().compareTo(other.getTopic().get()) != 0) {
+                return getTopic().get().compareTo(other.getTopic().get());
+            }
+        }
+
+        if (getTopic().isPresent() && !other.getTopic().isPresent()) {
+            return 1;
+        } else if (!getTopic().isPresent() && other.getTopic().isPresent()) {
+            return -1;
+        }
+
+        if (getType().compareTo(other.getType()) != 0) {
+            return getType().compareTo(other.getType());
+        }
+
+        return getDisplayname().compareTo(other.getDisplayname());
     }
 }

@@ -26,6 +26,7 @@ import de.kaiserpfalzedv.commons.api.Spec;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 /**
@@ -40,6 +41,21 @@ public interface ConventionSpec extends Spec<ConventionSpec>, Comparable<Convent
     String VERSION = Convention.VERSION;
 
     /**
+     * The location of the convetion.
+     *
+     * @return
+     */
+    ObjectReference getLocation();
+
+    OffsetDateTime getStart();
+
+    OffsetDateTime getEnd();
+
+    String getDescription();
+
+    String getURL();
+
+    /**
      * The topic of the event.
      *
      * @return a reference to the topic.
@@ -51,7 +67,31 @@ public interface ConventionSpec extends Spec<ConventionSpec>, Comparable<Convent
      *
      * @return the tracks of the convention.
      */
-    ObjectList<ObjectReference> getTracks();
+    ObjectList<ObjectReference> getContent();
+
+    /**
+     * Can be used to list all possible speakers of the convention.
+     *
+     * @return a list of speakers. Perhaps a special flag is needed for this list to be filled.
+     */
+    ObjectList<ObjectReference> getSpeakers();
+
+    /**
+     * The convention type is the switch to allow self registration or not.
+     *
+     * @return
+     */
+    ConventionType getConventionType();
+
+    /**
+     * If the convention is an {@link ConventionType#INVITATION_ONLY_CONVENTION} this list can be filled with the
+     * registered attendees.
+     *
+     * @return a list of regerences to the attendee registrations. Perhaps a special flag is needed for this list to be
+     * filled.
+     */
+    ObjectList<ObjectReference> getAttendees();
+
 
     /**
      * Compares different tracks.

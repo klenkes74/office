@@ -20,6 +20,8 @@ package de.kaiserpfalzedv.conventions.content;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.commons.ObjectList;
+import de.kaiserpfalzedv.commons.ObjectReference;
 import de.kaiserpfalzedv.commons.api.Spec;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
@@ -35,10 +37,22 @@ public interface TopicSpec extends Spec<TopicSpec>, Comparable<TopicSpec> {
     String KIND = Topic.KIND;
     String VERSION = Topic.VERSION;
 
-    @Value.Lazy
-    @Value.Default
+    ObjectReference getMasterTopic();
+
+    ObjectList<ObjectReference> getSubTopics();
+
+    String getAbstract();
+
+    String getDescription();
+
     @Override
-    default int compareTo(@NotNull final TopicSpec other) {
+    @Value.Default
+    @Value.Lazy
+    default int compareTo(@NotNull TopicSpec other) {
+        if (getMasterTopic().compareTo(other.getMasterTopic()) != 0) {
+            return getMasterTopic().compareTo(other.getMasterTopic());
+        }
+
         return getDisplayname().compareTo(other.getDisplayname());
     }
 }

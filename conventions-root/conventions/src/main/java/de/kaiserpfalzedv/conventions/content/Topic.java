@@ -24,10 +24,9 @@ import de.kaiserpfalzedv.commons.SingleObject;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 
-
 /**
  * @author rlichti
- * @since 2019-12-29T11:49
+ * @since 2019-12-29T11:59
  */
 @Value.Immutable
 @JsonSerialize(as = ImmutableTopic.class)
@@ -39,7 +38,7 @@ public interface Topic extends SingleObject<TopicSpec>, Comparable<Topic> {
     @Override
     @Value.Default
     @Value.Lazy
-    default int compareTo(@NotNull final Topic other) {
-        return getSpec().compareTo(other.getSpec());
+    default int compareTo(@NotNull final Topic event) {
+        return event.getSpec().compareTo(event.getSpec());
     }
 }

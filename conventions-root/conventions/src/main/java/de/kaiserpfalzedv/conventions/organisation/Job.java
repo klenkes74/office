@@ -16,7 +16,7 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.conventions.content;
+package de.kaiserpfalzedv.conventions.organisation;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -24,22 +24,22 @@ import de.kaiserpfalzedv.commons.SingleObject;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 
-
 /**
  * @author rlichti
- * @since 2019-12-29T11:49
+ * @since 2019-12-29T14:48
  */
 @Value.Immutable
-@JsonSerialize(as = ImmutableTrack.class)
-@JsonDeserialize(builder = ImmutableTrack.Builder.class)
-public interface Track extends SingleObject<TrackSpec>, Comparable<Track> {
-    String KIND = "de.kaiserpfalzedv.conventions.content.Convention";
+@JsonSerialize(as = ImmutableJob.class)
+@JsonDeserialize(builder = ImmutableJob.Builder.class)
+public interface Job extends SingleObject<JobSpec>, Comparable<Job> {
+    String KIND = "de.kaiserpfalzedv.conventions.organisation.Job";
     String VERSION = "1.0.0";
 
     @Override
     @Value.Default
     @Value.Lazy
-    default int compareTo(@NotNull final Track other) {
+    default int compareTo(@NotNull final Job other) {
         return getSpec().compareTo(other.getSpec());
     }
+
 }

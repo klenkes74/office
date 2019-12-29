@@ -16,30 +16,47 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.conventions.content;
+package de.kaiserpfalzedv.conventions.location;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.kaiserpfalzedv.commons.SingleObject;
+import de.kaiserpfalzedv.commons.ObjectReference;
+import de.kaiserpfalzedv.commons.api.Spec;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.OffsetDateTime;
 
 /**
  * @author rlichti
- * @since 2019-12-29T11:49
+ * @since 2019-12-29T14:48
  */
 @Value.Immutable
-@JsonSerialize(as = ImmutableGroup.class)
-@JsonDeserialize(builder = ImmutableGroup.Builder.class)
-public interface Group extends SingleObject<GroupSpec>, Comparable<Group> {
-    String KIND = "de.kaiserpfalzedv.conventions.content.Group";
+@JsonSerialize(as = ImmutableEventSlotSpec.class)
+@JsonDeserialize(builder = ImmutableEventSlotSpec.Builder.class)
+public interface EventSlotSpec extends Spec<EventSlotSpec>, Comparable<EventSlotSpec> {
+    String KIND = "de.kaiserpfalzedv.conventions.location.EventSlot";
     String VERSION = "1.0.0";
+
+    ObjectReference getLocation();
+
+    ObjectReference getEvent();
+
+    OffsetDateTime getStarting();
+
+    OffsetDateTime getEnding();
 
     @Override
     @Value.Default
     @Value.Lazy
-    default int compareTo(@NotNull final Group other) {
-        return getSpec().compareTo(other.getSpec());
+    default int compareTo(@NotNull final EventSlotSpec other) {
+        //noinspection unchecked
+        if (getLocation().compareTo(other.getLocation()) != 0) {
+            //noinspection unchecked
+            return getLocation().compareTo(other.getLocation());
+        }
+
+        return getStarting().compareTo(other.getStarting());
     }
+
 }
