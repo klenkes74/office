@@ -16,23 +16,11 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.security;
+package de.kaiserpfalzedv.security.tenant;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.immutables.value.Value;
-
-import java.io.Serializable;
-
-/*
- *
- *
+/**
  * @author rlichti
- * @since 2019-12-21 19:47
+ * @since 2019-12-29T16:20
  */
-@Value.Immutable
-@JsonSerialize(as = ImmutableTenant.class)
-@JsonDeserialize(builder = ImmutableTenant.Builder.class)
-public interface Tenant extends Serializable {
-    String getTenant();
+public interface TenantManagementService {
 }

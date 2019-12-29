@@ -16,8 +16,10 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.security;
+package de.kaiserpfalzedv.security.cdi;
 
+import de.kaiserpfalzedv.security.tenant.cdi.Slf4jMDCTenant;
+import de.kaiserpfalzedv.security.tenant.cdi.TenantProvider;
 import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import io.quarkus.security.identity.SecurityIdentity;

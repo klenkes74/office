@@ -16,7 +16,7 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.security;/*
+package de.kaiserpfalzedv.security.tenant;/*
  *
  *
  * @author rlichti
@@ -25,6 +25,7 @@ package de.kaiserpfalzedv.security;/*
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.security.ImmutableEmptyTenant;
 import org.immutables.value.Value;
 
 @Value.Immutable

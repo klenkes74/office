@@ -22,22 +22,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.kaiserpfalzedv.office</groupId>
-    <artifactId>root</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <name>KP Office :: Root</name>
-    <packaging>pom</packaging>
+    <parent>
+        <groupId>de.kaiserpfalzedv.office</groupId>
+        <artifactId>office-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../office-parent/pom.xml</relativePath>
+    </parent>
 
-    <modules>
-        <module>office-parent</module>
-        <module>office-bom</module>
+    <artifactId>office-security-keycloak</artifactId>
+    <name>KP Office :: Security :: Keycloak</name>
 
-        <module>office-commons</module>
-        <module>office-security</module>
-        <module>office-security-keycloak</module>
-        <module>office-folders</module>
-        <module>office-contacts</module>
-        <module>office-store-jpa</module>
-        <module>office-application</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>de.kaiserpfalzedv.office</groupId>
+            <artifactId>office-security</artifactId>
+        </dependency>
+    </dependencies>
 </project>

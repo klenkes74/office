@@ -16,26 +16,41 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.security;
+package de.kaiserpfalzedv.security.tenant.http;
+
+import de.kaiserpfalzedv.security.ImmutableTenant;
+import de.kaiserpfalzedv.security.tenant.Tenant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-@Priority(20)
-public class TenantResponseFilter implements ContainerResponseFilter {
-    private static final EmptyTenant EMPTY_TENANT = ImmutableEmptyTenant.builder().build();
+@Priority(Priorities.AUTHORIZATION + 20)
+public class TenantRequestFilter implements ContainerRequestFilter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TenantRequestFilter.class);
+
+    @Context
+    UriInfo info;
 
     @Inject
-    Event<EmptyTenant> responseEvent;
+    Event<Tenant> tenantEvent;
 
     @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-        responseEvent.fire(EMPTY_TENANT);
+    public void filter(ContainerRequestContext context) {
+        String data = info.getPathParameters().getFirst("tenant");
+        if (data != null) {
+            tenantEvent.fire(ImmutableTenant.builder().tenant(data).build());
+        } else {
+            LOGGER.debug("Can't set the tenant. No tenant given in request.");
+        }
     }
 }

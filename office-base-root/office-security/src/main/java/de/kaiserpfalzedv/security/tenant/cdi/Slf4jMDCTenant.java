@@ -16,29 +16,25 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.security;
+package de.kaiserpfalzedv.security.tenant.cdi;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import de.kaiserpfalzedv.security.tenant.Tenant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * A custom annotation for marking which tenant based role will be allowed to execute a certain method.
- *
  * @author rlichti
- * @since 2019-12-24T22:43
+ * @since 2019-12-26T14:24
  */
-@Documented
-@Retention(RUNTIME)
-@Target({TYPE, METHOD})
-public @interface RoleAllowed {
-    /**
-     * List of roles that are permitted access.
-     */
-    String value();
-}
+public class Slf4jMDCTenant implements Tenant {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Slf4jMDCTenant.class);
 
+
+    @Override
+    public String getTenant() {
+        LOGGER.warn("Providing tenant from MDC instead from real provider: {}", MDC.get("tenant"));
+        return MDC.get("tenant");
+    }
+}

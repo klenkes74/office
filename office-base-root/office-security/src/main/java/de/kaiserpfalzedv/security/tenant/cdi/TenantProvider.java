@@ -16,9 +16,11 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.security;
+package de.kaiserpfalzedv.security.tenant.cdi;
 
 import de.kaiserpfalzedv.commons.cdi.CurrentRequest;
+import de.kaiserpfalzedv.security.tenant.EmptyTenant;
+import de.kaiserpfalzedv.security.tenant.Tenant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;

@@ -16,24 +16,22 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.security;
+package de.kaiserpfalzedv.security.tenant;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.security.ImmutableTenant;
+import org.immutables.value.Value;
 
+import java.io.Serializable;
 
 /**
  * @author rlichti
- * @since 2019-12-26T14:24
+ * @since 2019-12-21T19:47
  */
-public class Slf4jMDCTenant implements Tenant {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Slf4jMDCTenant.class);
-
-
-    @Override
-    public String getTenant() {
-        LOGGER.warn("Providing tenant from MDC instead from real provider: {}", MDC.get("tenant"));
-        return MDC.get("tenant");
-    }
+@Value.Immutable
+@JsonSerialize(as = ImmutableTenant.class)
+@JsonDeserialize(builder = ImmutableTenant.Builder.class)
+public interface Tenant extends Serializable {
+    String getTenant();
 }
