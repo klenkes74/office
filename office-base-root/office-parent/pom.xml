@@ -243,6 +243,7 @@
                         <excludedGroups>integration</excludedGroups>
                         <systemProperties>
                             <quarkus.profile>test</quarkus.profile>
+                            <!--suppress MavenModelInspection -->
                             <quarkus.datasource.url>jdbc:h2:tcp://localhost:${h2.test.tcp.port}/quarkus
                             </quarkus.datasource.url>
                             <quarkus.datasource.driver>org.h2.Driver</quarkus.datasource.driver>
@@ -484,6 +485,7 @@
                         <trace>true</trace>
                         <allowOthers>true</allowOthers>
                         <shutdownPassword>${db.password}</shutdownPassword>
+                        <!--suppress MavenModelInspection -->
                         <port>${h2.test.tcp.port}</port>
                     </configuration>
                 </plugin>
@@ -510,6 +512,7 @@
                             </goals>
                             <configuration>
                                 <spawn>true</spawn>
+                                <!--suppress MavenModelInspection -->
                                 <testURI>tcp://localhost:${amqp.test.artemis.tcp.port}</testURI>
                                 <args>
                                     <param>run</param>

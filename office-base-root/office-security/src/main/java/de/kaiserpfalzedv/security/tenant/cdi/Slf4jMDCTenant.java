@@ -1,5 +1,5 @@
 /*
- * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+ * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2020. All rights reserved.
  *
  *  This file is part of Kaiserpfalz EDV-Service Office.
  *
@@ -18,6 +18,9 @@
 
 package de.kaiserpfalzedv.security.tenant.cdi;
 
+import de.kaiserpfalzedv.commons.api.ImmutableObjectIdentity;
+import de.kaiserpfalzedv.commons.api.InvalidObjectIdentity;
+import de.kaiserpfalzedv.commons.api.ObjectIdentity;
 import de.kaiserpfalzedv.security.tenant.Tenant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +36,24 @@ public class Slf4jMDCTenant implements Tenant {
 
 
     @Override
-    public String getTenant() {
-        LOGGER.warn("Providing tenant from MDC instead from real provider: {}", MDC.get("tenant"));
-        return MDC.get("tenant");
+    public String getKey() {
+        return getIdentity().getKey();
+    }
+
+    @Override
+    public ObjectIdentity getIdentity() {
+        ObjectIdentity result;
+
+        String key = MDC.get(TenantProvider.TENANT_MDC_MARKER);
+        if (key != null) {
+            LOGGER.warn("Providing tenant identity from MDC instead from real provider: {}", key);
+
+            result = ImmutableObjectIdentity.copyOf(InvalidObjectIdentity.INSTANCE).withKey(key);
+        } else {
+            LOGGER.warn("No tenant set in MDC. Will return the tenant InvalidObjectIdentity instead!");
+            result = InvalidObjectIdentity.INSTANCE;
+        }
+
+        return result;
     }
 }

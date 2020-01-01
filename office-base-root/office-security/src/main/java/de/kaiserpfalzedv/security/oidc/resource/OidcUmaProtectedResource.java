@@ -16,28 +16,34 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.commons;
+package de.kaiserpfalzedv.security.oidc.resource;
 
+import javax.interceptor.InterceptorBinding;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-import de.kaiserpfalzedv.commons.api.KindHolding;
-import de.kaiserpfalzedv.commons.api.MetadataHolding;
-
-import java.io.Serializable;
-import java.util.UUID;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * The annotation for UMA resources.
+ *
  * @author rlichti
- * @since 2019-12-04
+ * @since 2020-01-01T19:02Z
  */
-public interface BaseObject<T extends Serializable> extends KindHolding, MetadataHolding, Serializable {
-    /**
-     * This marks an empty string. It is for example used to mark a tenantless data entry.
-     */
-    String EMPTY_STRING_MARKER = "./.";
+@Inherited
+@InterceptorBinding
+@Retention(RUNTIME)
+@Target({METHOD, TYPE, PARAMETER})
+public @interface OidcUmaProtectedResource {
+    String getId() default "";
 
-    /**
-     * This marks an invalid UUID.
-     */
-    UUID INVALID_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+    String getName() default "";
 
+    String getUri() default "";
+
+    String getDisplayname() default "";
+
+    String getIconUri() default "";
 }

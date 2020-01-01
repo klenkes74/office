@@ -1,5 +1,5 @@
 /*
- * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+ * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2020. All rights reserved.
  *
  *  This file is part of Kaiserpfalz EDV-Service Office.
  *
@@ -94,6 +94,6 @@ public class MultitenantRoleInterceptor implements Serializable {
     }
 
     private String getTenant() {
-        return tenantProvider.getTenant().orElse(new Slf4jMDCTenant()).getTenant();
+        return tenantProvider.getTenant().orElse(new Slf4jMDCTenant()).getKey();
     }
 }

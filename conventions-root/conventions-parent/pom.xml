@@ -59,43 +59,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jackson</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss.slf4j</groupId>
-                    <artifactId>slf4j-jboss-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.immutables</groupId>
-            <artifactId>value</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.immutables</groupId>
-            <artifactId>encode</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>15.0</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 </project>

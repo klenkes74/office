@@ -18,18 +18,30 @@
 
 package de.kaiserpfalzedv.security.tenant;
 
+import de.kaiserpfalzedv.commons.BaseObject;
 import de.kaiserpfalzedv.commons.api.InvalidObjectIdentity;
-import de.kaiserpfalzedv.commons.api.ObjectIdentity;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * @author rlichti
- * @since 2019-12-21T19:46Z
+ * @since 2020-01-01T20:23Z
  */
-public class EmptyTenant implements Tenant {
-    public static final Tenant INSTANCE = new EmptyTenant();
+public class EmptyTenantTest {
+    private static final Tenant SERVICE = EmptyTenant.INSTANCE;
 
-    @Override
-    public ObjectIdentity getIdentity() {
-        return InvalidObjectIdentity.INSTANCE;
+    @Test
+    public void shouldReturnInvalidIdentityWhenAskedForIt() {
+        assert InvalidObjectIdentity.INSTANCE.equals(SERVICE.getIdentity());
+    }
+
+    @Test
+    public void shouldReturnEmptyStringMarkerWhenAskedForDisplayname() {
+        assert BaseObject.EMPTY_STRING_MARKER.equals(SERVICE.getDisplayname());
+    }
+
+    @Test
+    public void shouldReturnEmptyStringMarkerWhenAskedForKey() {
+        assert BaseObject.EMPTY_STRING_MARKER.equals(SERVICE.getKey());
     }
 }

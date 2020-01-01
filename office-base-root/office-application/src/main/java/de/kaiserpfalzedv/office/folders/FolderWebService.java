@@ -25,6 +25,7 @@ import de.kaiserpfalzedv.folders.CreateFolder;
 import de.kaiserpfalzedv.folders.Folder;
 import de.kaiserpfalzedv.folders.ImmutableCreateFolder;
 import de.kaiserpfalzedv.folders.store.FolderReadAdapter;
+import de.kaiserpfalzedv.security.tenant.cdi.TenantProvider;
 import org.eclipse.microprofile.metrics.annotation.ConcurrentGauge;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
@@ -63,7 +64,7 @@ public class FolderWebService {
     @Counted(name = "folders.loadByUuid.count")
     @ConcurrentGauge(name = "folders.loadByUuid.concurrent")
     public Folder getByUuid(
-            @PathParam("tenant") final String tenant,
+            @PathParam(TenantProvider.TENANT_MDC_MARKER) final String tenant,
             @QueryParam("uuid") final UUID uuid
     ) {
         Optional<Folder> result = reader.loadById(tenant, uuid);
@@ -85,7 +86,7 @@ public class FolderWebService {
     @Counted(name = "folders.loadByKey.count")
     @ConcurrentGauge(name = "folders.loadByKey.concurrent")
     public Folder getByKey(
-            @PathParam("tenant") final String tenant,
+            @PathParam(TenantProvider.TENANT_MDC_MARKER) final String tenant,
             @PathParam("key") final String key
     ) {
         Optional<Folder> result = reader.loadbyKey(tenant, key);
@@ -107,7 +108,7 @@ public class FolderWebService {
     @Counted(name = "folders.createFolder.count")
     @ConcurrentGauge(name = "folders.createFolder.concurrent")
     public void createFolder(
-            @PathParam("tenant") final String tenant,
+            @PathParam(TenantProvider.TENANT_MDC_MARKER) final String tenant,
             final ImmutableCreateFolder command
     ) {
         if (

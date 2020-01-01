@@ -1,5 +1,5 @@
 /*
- * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+ * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2020. All rights reserved.
  *
  *  This file is part of Kaiserpfalz EDV-Service Office.
  *
@@ -18,8 +18,11 @@
 
 package de.kaiserpfalzedv.security.tenant.http;
 
-import de.kaiserpfalzedv.security.ImmutableTenant;
+import de.kaiserpfalzedv.commons.BaseObject;
+import de.kaiserpfalzedv.security.store.TenantReadAdapter;
+import de.kaiserpfalzedv.security.tenant.EmptyTenant;
 import de.kaiserpfalzedv.security.tenant.Tenant;
+import de.kaiserpfalzedv.security.tenant.cdi.TenantProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +35,7 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
+import java.util.Optional;
 
 @Provider
 @Priority(Priorities.AUTHORIZATION + 20)
@@ -42,15 +46,25 @@ public class TenantRequestFilter implements ContainerRequestFilter {
     UriInfo info;
 
     @Inject
-    Event<Tenant> tenantEvent;
+    TenantReadAdapter tenantReadAdapter;
+
+    @Inject
+    Event<Tenant> tenantEventSink;
 
     @Override
     public void filter(ContainerRequestContext context) {
-        String data = info.getPathParameters().getFirst("tenant");
+        String data = info.getPathParameters().getFirst(TenantProvider.TENANT_MDC_MARKER);
         if (data != null) {
-            tenantEvent.fire(ImmutableTenant.builder().tenant(data).build());
-        } else {
-            LOGGER.debug("Can't set the tenant. No tenant given in request.");
+            Optional<Tenant> tenant = tenantReadAdapter.loadbyKey(BaseObject.EMPTY_STRING_MARKER, data);
+
+            if (tenant.isPresent()) {
+                tenantEventSink.fire(tenant.get());
+                return; // tenant is set we don't need to do anything else
+            }
         }
+
+        tenantEventSink.fire(new EmptyTenant());
+
+        LOGGER.debug("Can't set the tenant. No tenant given in request.");
     }
 }

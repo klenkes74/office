@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.base.store.jpa;
 
+import de.kaiserpfalzedv.commons.BaseObject;
 import de.kaiserpfalzedv.commons.api.ImmutableWorkflowData;
 import de.kaiserpfalzedv.commons.api.WorkflowData;
 
@@ -79,7 +80,7 @@ public class JPAWorkflowData implements Serializable {
         }
 
         workflow = new JPAIdentity();
-        workflow.tenant = workflow.key = kind = version = "./."; // fill NOT NULL columns.
+        workflow.tenant = workflow.key = kind = version = BaseObject.EMPTY_STRING_MARKER; // fill NOT NULL columns.
         workflow.uuid = UUID.randomUUID();
         timestamp = OffsetDateTime.now();
 

@@ -1,5 +1,5 @@
 /*
- * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+ * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2020. All rights reserved.
  *
  *  This file is part of Kaiserpfalz EDV-Service Office.
  *
@@ -16,28 +16,16 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.commons;
-
-
-import de.kaiserpfalzedv.commons.api.KindHolding;
-import de.kaiserpfalzedv.commons.api.MetadataHolding;
+package de.kaiserpfalzedv.security.oidc;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
+ * Returns an URL for an icon to be displayed.
+ *
  * @author rlichti
- * @since 2019-12-04
+ * @since 2020-01-01T19:47
  */
-public interface BaseObject<T extends Serializable> extends KindHolding, MetadataHolding, Serializable {
-    /**
-     * This marks an empty string. It is for example used to mark a tenantless data entry.
-     */
-    String EMPTY_STRING_MARKER = "./.";
-
-    /**
-     * This marks an invalid UUID.
-     */
-    UUID INVALID_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
-
+public interface IconUriHolding extends Serializable {
+    String getIconUri();
 }

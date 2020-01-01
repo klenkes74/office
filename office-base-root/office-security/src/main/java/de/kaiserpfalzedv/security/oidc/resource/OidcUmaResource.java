@@ -16,30 +16,39 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.security.tenant;
+package de.kaiserpfalzedv.security.oidc.resource;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import de.kaiserpfalzedv.commons.ObjectReference;
 import de.kaiserpfalzedv.commons.api.DisplaynameHolding;
 import de.kaiserpfalzedv.commons.api.IdentityHolding;
+import de.kaiserpfalzedv.security.oidc.IconUriHolding;
+import de.kaiserpfalzedv.security.oidc.OidcScope;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author rlichti
- * @since 2019-12-21T19:47
+ * @since 2020-01-01T18:36Z
  */
 @Value.Immutable
-@JsonSerialize(as = ImmutableTenant.class)
-@JsonDeserialize(builder = ImmutableTenant.Builder.class)
-public interface Tenant extends Serializable, IdentityHolding, DisplaynameHolding {
-    default String getKey() {
-        return getIdentity().getKey();
+@JsonSerialize(as = ImmutableOidcUmaResource.class)
+@JsonDeserialize(builder = ImmutableOidcUmaResource.Builder.class)
+public interface OidcUmaResource extends Serializable, DisplaynameHolding, IdentityHolding, IconUriHolding {
+    ImmutableSet<String> getUris();
+
+    ImmutableSet<OidcScope> getScopes();
+
+    default ObjectReference getOwner() {
+        return getIdentity().getOwner().orElseThrow(SecurityException::new);
     }
 
-    @Override
-    default String getDisplayname() {
-        return getKey();
-    }
+    Boolean getOwnerManagedAccess();
+
+    ImmutableMap<String, List<String>> getAttributes();
 }

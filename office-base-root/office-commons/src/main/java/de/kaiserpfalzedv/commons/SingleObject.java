@@ -29,11 +29,11 @@ import java.io.Serializable;
  * @since 2019-12-08
  */
 public interface SingleObject<T extends Serializable> extends BaseObject<T>, SpecHolding<T> {
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Value.Default
     @Value.Lazy
     default int compareTo(@NotNull SingleObject<T> other) {
         if (getSpec() instanceof Comparable && other.getSpec() instanceof Comparable) {
-            //noinspection unchecked,rawtypes
             return ((Comparable) getSpec()).compareTo(other.getSpec());
 
         }

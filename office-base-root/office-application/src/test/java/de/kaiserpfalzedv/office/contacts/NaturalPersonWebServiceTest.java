@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.office.contacts;
 
+import de.kaiserpfalzedv.security.tenant.cdi.TenantProvider;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ public class NaturalPersonWebServiceTest {
     public void shouldReturnCorrectNaturalPersonWhenGivenTheUuid() {
         given()
                 .when()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .get("/contacts/{tenant}/natural/?uuid=f422fcf1-ebe1-4b1e-adc2-0a0cfdeb0d81")
                 .then()
@@ -59,7 +60,7 @@ public class NaturalPersonWebServiceTest {
     public void shouldReturnNotFoundWhenGivenTheWrongUuid() {
         given()
                 .when()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .get("/contacts/{tenant}/natural/?uuid=00000000-0000-0000-0000-000000000000")
                 .then()
@@ -69,7 +70,7 @@ public class NaturalPersonWebServiceTest {
     @Test
     public void shouldReturnNotFoundWhenGivenAnUnknownKey() {
         given()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .pathParam("key", "not-there")
                 .when()
                 .auth().preemptive().basic(USER, PASSWORD)
@@ -81,7 +82,7 @@ public class NaturalPersonWebServiceTest {
     @Test
     public void shouldReturnForbiddenWhenGivenWrongTenant() {
         given()
-                .pathParam("tenant", "wrong-tenant")
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, "wrong-tenant")
                 .pathParam("key", "not-there")
                 .when()
                 .auth().preemptive().basic(USER, PASSWORD)
@@ -93,7 +94,7 @@ public class NaturalPersonWebServiceTest {
     @Test
     public void shouldReturnCorrectNaturalPersonWhenGivenTheCorrectScopeAndKey() {
         given()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .pathParam("key", "D10005")
                 .when()
                 .auth().preemptive().basic(USER, PASSWORD)
@@ -111,7 +112,7 @@ public class NaturalPersonWebServiceTest {
 
         given()
                 .when()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
@@ -128,7 +129,7 @@ public class NaturalPersonWebServiceTest {
 
         given()
                 .when()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
@@ -146,7 +147,7 @@ public class NaturalPersonWebServiceTest {
 
         given()
                 .when()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
@@ -163,7 +164,7 @@ public class NaturalPersonWebServiceTest {
 
         given()
                 .when()
-                .pathParam("tenant", "de.lichti")
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, "de.lichti")
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
@@ -176,7 +177,7 @@ public class NaturalPersonWebServiceTest {
     public void shouldDeletePersonWhenCorrectUuidIsGiven() {
         given()
                 .when()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .delete("/contacts/{tenant}/natural/?uuid=41d56361-c099-4a55-82cc-3c25680b7df6")

@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.office.folders;
 
+import de.kaiserpfalzedv.security.tenant.cdi.TenantProvider;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ public class FolderWebServiceTest {
     public void shouldReturnCorrectFolderWhenGivenTheUuid() {
         given()
                 .when()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .get("/folders/{tenant}/?uuid=3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8")
                 .then()
@@ -59,7 +60,7 @@ public class FolderWebServiceTest {
     public void shouldReturnNotFoundWhenGivenTheWrongUuid() {
         given()
                 .when()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .get("/folders/{tenant}/?uuid=00000000-0000-0000-0000-000000000000")
                 .then()
@@ -69,7 +70,7 @@ public class FolderWebServiceTest {
     @Test
     public void shouldReturnNotFoundWhenGivenAnUnknownKey() {
         given()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .pathParam("key", "not-there")
                 .when()
                 .auth().preemptive().basic(USER, PASSWORD)
@@ -81,7 +82,7 @@ public class FolderWebServiceTest {
     @Test
     public void shouldReturnForbiddenWhenGivenWrongTenant() {
         given()
-                .pathParam("tenant", "wrong-tenant")
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, "wrong-tenant")
                 .pathParam("key", "not-there")
                 .when()
                 .auth().preemptive().basic(USER, PASSWORD)
@@ -93,7 +94,7 @@ public class FolderWebServiceTest {
     @Test
     public void shouldReturnCorrectFolderWhenGivenTheCorrectScopeAndKey() {
         given()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .pathParam("key", "I-19-0001")
                 .when()
                 .auth().preemptive().basic(USER, PASSWORD)
@@ -111,7 +112,7 @@ public class FolderWebServiceTest {
 
         given()
                 .when()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
@@ -128,7 +129,7 @@ public class FolderWebServiceTest {
 
         given()
                 .when()
-                .pathParam("tenant", TENANT)
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
@@ -145,7 +146,7 @@ public class FolderWebServiceTest {
 
         given()
                 .when()
-                .pathParam("tenant", "de.lichti")
+                .pathParam(TenantProvider.TENANT_MDC_MARKER, "de.lichti")
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)

@@ -20,6 +20,8 @@ package de.kaiserpfalzedv.commons.api;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.commons.BaseObject;
+import de.kaiserpfalzedv.commons.ObjectReference;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +33,7 @@ import java.util.UUID;
 @JsonSerialize(as = ImmutableObjectIdentity.class)
 @JsonDeserialize(builder = ImmutableObjectIdentity.Builder.class)
 public interface ObjectIdentity extends KindHolding, Serializable, Comparable<ObjectIdentity> {
+
     /**
      * The single point of truth of uniqueness. No two objects of the world should have the same UUID.
      *
@@ -44,7 +47,10 @@ public interface ObjectIdentity extends KindHolding, Serializable, Comparable<Ob
      *
      * @return the tenant of this object.
      */
-    String getTenant();
+    @Value.Default
+    default String getTenant() {
+        return BaseObject.EMPTY_STRING_MARKER;
+    }
 
     /**
      * A unique within scope name for the object. The tuple (Kind, Scope, Name) has to be unique.
@@ -58,7 +64,7 @@ public interface ObjectIdentity extends KindHolding, Serializable, Comparable<Ob
      *
      * @return The owning object of the current one.
      */
-    Optional<ObjectIdentity> getOwner();
+    Optional<ObjectReference> getOwner();
 
     @Override
     default int compareTo(@NotNull ObjectIdentity other) {

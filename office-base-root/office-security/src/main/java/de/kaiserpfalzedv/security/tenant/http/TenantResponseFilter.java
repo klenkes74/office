@@ -1,5 +1,5 @@
 /*
- * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+ * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2020. All rights reserved.
  *
  *  This file is part of Kaiserpfalz EDV-Service Office.
  *
@@ -18,8 +18,8 @@
 
 package de.kaiserpfalzedv.security.tenant.http;
 
-import de.kaiserpfalzedv.security.ImmutableEmptyTenant;
 import de.kaiserpfalzedv.security.tenant.EmptyTenant;
+import de.kaiserpfalzedv.security.tenant.Tenant;
 
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
@@ -32,13 +32,11 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @Priority(20)
 public class TenantResponseFilter implements ContainerResponseFilter {
-    private static final EmptyTenant EMPTY_TENANT = ImmutableEmptyTenant.builder().build();
-
     @Inject
-    Event<EmptyTenant> responseEvent;
+    Event<Tenant> responseEventSink;
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-        responseEvent.fire(EMPTY_TENANT);
+        responseEventSink.fire(EmptyTenant.INSTANCE);
     }
 }

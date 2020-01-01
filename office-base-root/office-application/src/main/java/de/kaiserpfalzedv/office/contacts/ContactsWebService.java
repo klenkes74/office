@@ -25,6 +25,7 @@ import de.kaiserpfalzedv.commons.cdi.CorrelationLogged;
 import de.kaiserpfalzedv.commons.cdi.JPA;
 import de.kaiserpfalzedv.contacts.*;
 import de.kaiserpfalzedv.contacts.store.NaturalPersonReadAdapter;
+import de.kaiserpfalzedv.security.tenant.cdi.TenantProvider;
 import org.eclipse.microprofile.metrics.annotation.ConcurrentGauge;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
@@ -68,7 +69,7 @@ public class ContactsWebService {
     @Counted(name = "contacts.loadByUuid.count")
     @ConcurrentGauge(name = "contacts.loadByUuid.concurrent")
     public NaturalPerson getByUuid(
-            @PathParam("tenant") final String tenant,
+            @PathParam(TenantProvider.TENANT_MDC_MARKER) final String tenant,
             @QueryParam("uuid") final UUID uuid
     ) {
         Optional<NaturalPerson> result = reader.loadById(tenant, uuid);
@@ -90,7 +91,7 @@ public class ContactsWebService {
     @Counted(name = "contacts.loadByKey.count")
     @ConcurrentGauge(name = "contacts.loadByKey.concurrent")
     public NaturalPerson getByKey(
-            @PathParam("tenant") final String tenant,
+            @PathParam(TenantProvider.TENANT_MDC_MARKER) final String tenant,
             @PathParam("key") final String key
     ) {
         Optional<NaturalPerson> result = reader.loadbyKey(tenant, key);
@@ -113,7 +114,7 @@ public class ContactsWebService {
     @Counted(name = "contacts.createNaturalPerson.count")
     @ConcurrentGauge(name = "contacts.createNaturalPerson.concurrent")
     public void createNaturalPerson(
-            @PathParam("tenant") final String tenant,
+            @PathParam(TenantProvider.TENANT_MDC_MARKER) final String tenant,
             final CreateNaturalPerson command
     ) {
         if (
@@ -140,7 +141,7 @@ public class ContactsWebService {
     @Counted(name = "contacts.modifyNaturalPerson.count")
     @ConcurrentGauge(name = "contacts.modifyNaturalPerson.concurrent")
     public void modifyNaturalPerson(
-            @PathParam("tenant") final String tenant,
+            @PathParam(TenantProvider.TENANT_MDC_MARKER) final String tenant,
             final ModifyNaturalPerson command
     ) {
         if (
@@ -169,7 +170,7 @@ public class ContactsWebService {
     @Counted(name = "contacts.deleteByUuid.count")
     @ConcurrentGauge(name = "contacts.deleteByUuid.concurrent")
     public Response deleteNaturalPerson(
-            @PathParam("tenant") final String tenant,
+            @PathParam(TenantProvider.TENANT_MDC_MARKER) final String tenant,
             @QueryParam("uuid") final UUID uuid
     ) {
         DeleteNaturalPerson event;

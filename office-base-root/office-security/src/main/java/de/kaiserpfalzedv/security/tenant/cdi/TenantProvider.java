@@ -1,5 +1,5 @@
 /*
- * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+ * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2020. All rights reserved.
  *
  *  This file is part of Kaiserpfalz EDV-Service Office.
  *
@@ -18,8 +18,8 @@
 
 package de.kaiserpfalzedv.security.tenant.cdi;
 
+import de.kaiserpfalzedv.commons.BaseObject;
 import de.kaiserpfalzedv.commons.cdi.CurrentRequest;
-import de.kaiserpfalzedv.security.tenant.EmptyTenant;
 import de.kaiserpfalzedv.security.tenant.Tenant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +38,8 @@ import java.util.Optional;
 public class TenantProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(TenantProvider.class);
 
+    public static final String TENANT_MDC_MARKER = "tenant";
+
     private ThreadLocal<Tenant> tenants = new ThreadLocal<>();
 
     @Produces
@@ -46,20 +48,21 @@ public class TenantProvider {
         Tenant tenant = tenants.get();
 
         LOGGER.trace("Providing tenant: {}", tenant);
-        return Optional.of(tenant);
+        return Optional.ofNullable(tenant);
     }
 
     public void setTenant(@Observes Tenant tenant) {
-        MDC.put("tenant", tenant.getTenant());
-        LOGGER.debug("Saving tenant to thread: {}", tenant);
+        if (!BaseObject.EMPTY_STRING_MARKER.equals(tenant.getKey())) {
+            MDC.put(TenantProvider.TENANT_MDC_MARKER, tenant.getKey());
 
-        tenants.set(tenant);
-    }
+            LOGGER.debug("Saving tenant to thread: {}", tenant);
+            tenants.set(tenant);
+        } else {
+            LOGGER.debug("Removing tenant from thread: {}", tenants.get());
 
-    public void unsetTenant(@Observes EmptyTenant empty) {
-        LOGGER.debug("Removing tenant from thread: {}", tenants.get());
-        MDC.remove("tenant");
+            tenants.remove();
+            MDC.remove(TenantProvider.TENANT_MDC_MARKER);
+        }
 
-        tenants.remove();
     }
 }
