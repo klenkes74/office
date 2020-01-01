@@ -43,6 +43,10 @@
         </dependency>
         <dependency>
             <groupId>de.kaiserpfalzedv.office</groupId>
+            <artifactId>office-security-keycloak</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.kaiserpfalzedv.office</groupId>
             <artifactId>office-folders</artifactId>
         </dependency>
         <dependency>

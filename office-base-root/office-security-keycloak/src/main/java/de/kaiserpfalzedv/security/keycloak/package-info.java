@@ -16,21 +16,11 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.security.tenant;
-
-
-import de.kaiserpfalzedv.commons.api.InvalidObjectIdentity;
-import de.kaiserpfalzedv.commons.api.ObjectIdentity;
-
 /**
+ * The keycloak implementation of the Tenant storing subsystem. Tenants are not stored on JPA level but only within
+ * Keycloak as resources.
+ *
  * @author rlichti
- * @since 2019-12-21T19:46Z
+ * @since 2020-01-01T21:12Z
  */
-public class EmptyTenant implements Tenant {
-    public static final Tenant INSTANCE = new EmptyTenant();
-
-    @Override
-    public ObjectIdentity getIdentity() {
-        return InvalidObjectIdentity.INSTANCE;
-    }
-}
+package de.kaiserpfalzedv.security.keycloak;

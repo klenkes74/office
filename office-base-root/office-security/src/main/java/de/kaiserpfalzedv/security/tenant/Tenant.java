@@ -18,6 +18,7 @@
 
 package de.kaiserpfalzedv.security.tenant;
 
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.commons.api.DisplaynameHolding;
@@ -34,11 +35,13 @@ import java.io.Serializable;
 @JsonSerialize(as = ImmutableTenant.class)
 @JsonDeserialize(builder = ImmutableTenant.Builder.class)
 public interface Tenant extends Serializable, IdentityHolding, DisplaynameHolding {
+    @Value.Lazy
     default String getKey() {
         return getIdentity().getKey();
     }
 
     @Override
+    @Value.Lazy
     default String getDisplayname() {
         return getKey();
     }
