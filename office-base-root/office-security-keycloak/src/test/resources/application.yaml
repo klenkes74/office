@@ -1,0 +1,73 @@
+#
+# Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+#
+#  This file is part of Kaiserpfalz EDV-Service Office.
+#
+#  This is free software: you can redistribute it and/or modify it under the terms of
+#  the GNU Lesser General Public License as published by the Free Software
+#  Foundation, either version 3 of the License.
+#
+#  This file is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+#  License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public License along
+#  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
+#
+office:
+  baseservice:
+    name: ${project.artifactId}
+    version: ${project.version}
+    tz: UTC
+
+oidc:
+  uma:
+    config-url: https://sso.kaiserpfalz-edv.de/auth
+    client-id: tenant-service
+
+"%dev":
+  oidc:
+    uma:
+      auth-realm: kp-office-development
+    client-secret: 4eacddbf-5f67-4cd9-9e13-9f22af914aec
+  quarkus:
+    oidc:
+      enabled: false
+      auth-server-url: https://sso.kaiserpfalz-edv.de/auth/realms/kp-office-development
+
+"%test":
+  oidc:
+    uma:
+      auth-realm: kp-office-development
+      client-secret: 4eacddbf-5f67-4cd9-9e13-9f22af914aec
+  quarkus:
+    oidc:
+      enabled: false
+      auth-server-url: https://sso.kaiserpfalz-edv.de/auth/realms/kp-office-test
+
+"%prod":
+  oidc:
+    uma:
+      auth-realm: kp-office-production
+  quarkus:
+    oidc:
+      enabled: true
+      auth-server-url: https://sso.kaiserpfalz-edv.de/auth/realms/kp-office-prod
+
+quarkus:
+  http:
+    auth:
+      basic: true
+    oidc:
+      client-id: tenant-service
+  index-dependency:
+    com.google.common.collect:
+      group-id: com.google.guava
+      artifact-id: guava
+  log:
+    min-level: TRACE
+    level: INFO
+    category:
+      "de.kaiserpfalzedv":
+        level: TRACE

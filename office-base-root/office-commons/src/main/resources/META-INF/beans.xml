@@ -23,5 +23,6 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
     <interceptors>
         <class>de.kaiserpfalzedv.commons.cdi.EventLoggedInterceptor</class>
+        <class>de.kaiserpfalzedv.commons.cdi.CorrelationIdInterceptor</class>
     </interceptors>
 </beans>

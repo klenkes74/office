@@ -18,17 +18,29 @@
 
 package de.kaiserpfalzedv.base.store.jpa.contacts;
 
+import de.kaiserpfalzedv.base.store.jpa.JPAIdentity;
+import de.kaiserpfalzedv.base.store.jpa.JPAWorkflowData;
 import de.kaiserpfalzedv.contacts.api.NaturalPersonCommandWithSpec;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import java.time.OffsetDateTime;
 
 
 @Entity
 public abstract class JPANaturalPersonChangeWithSpec<T extends NaturalPersonCommandWithSpec> extends JPANaturalPersonChange<T> {
     @Embedded
-    public JPAPersonSpec<?,?,?> spec;
+    public JPAPersonSpec<?, ?> spec;
 
     @Embedded
     public JPANaturalPersonData data;
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public void fillData(final NaturalPersonCommandWithSpec event) {
+        command = new JPAIdentity().fromModel(event.getMetadata().getIdentity());
+        workflow = new JPAWorkflowData().fromModel(event.getMetadata().getWorkflowdata());
+        spec = new JPAPersonSpec().fromModel(event.getSpec());
+        data = new JPANaturalPersonData().fromModel(event.getSpec());
+        created = OffsetDateTime.now();
+    }
 }

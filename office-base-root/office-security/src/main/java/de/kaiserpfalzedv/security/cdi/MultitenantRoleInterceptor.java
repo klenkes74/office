@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
-import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -43,10 +42,9 @@ import java.lang.annotation.Annotation;
  * @author rlichti
  * @since 2019-12-18 22:56
  */
-@SuppressWarnings("CdiInterceptorInspection")
 @RequestScoped
 @Interceptor
-@RolesAllowed("") // TODO 2019-20-25 rlichti Check how to handle the parameter correctly.
+@MultitenantRolesAllowed("")
 @Priority(1)
 public class MultitenantRoleInterceptor implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(MultitenantRoleInterceptor.class);
@@ -64,8 +62,8 @@ public class MultitenantRoleInterceptor implements Serializable {
 
         String[] permissions = null;
         for (Annotation a : annotations) {
-            if (a instanceof RolesAllowed) {
-                permissions = ((RolesAllowed) a).value();
+            if (a instanceof MultitenantRolesAllowed) {
+                permissions = ((MultitenantRolesAllowed) a).value();
             }
         }
 

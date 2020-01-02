@@ -1,5 +1,5 @@
 /*
- * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+ * Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2020. All rights reserved.
  *
  *  This file is part of Kaiserpfalz EDV-Service Office.
  *
@@ -16,9 +16,8 @@
  *  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
  */
 
-package de.kaiserpfalzedv.security.oidc.resource;
+package de.kaiserpfalzedv.security.oidc;
 
-import javax.interceptor.InterceptorBinding;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -27,23 +26,12 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * The annotation for UMA resources.
- *
  * @author rlichti
- * @since 2020-01-01T19:02Z
+ * @since 2020-01-02T07:04Z
  */
 @Inherited
-@InterceptorBinding
 @Retention(RUNTIME)
-@Target({METHOD, TYPE, PARAMETER})
-public @interface OidcUmaProtectedResource {
-    String getId() default "";
+@Target({TYPE, METHOD, PARAMETER, FIELD})
 
-    String getName() default "";
-
-    String getUri() default "";
-
-    String getDisplayname() default "";
-
-    String getIconUri() default "";
+public @interface OidcUmaClient {
 }

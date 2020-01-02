@@ -25,6 +25,7 @@ import de.kaiserpfalzedv.commons.cdi.CorrelationLogged;
 import de.kaiserpfalzedv.commons.cdi.JPA;
 import de.kaiserpfalzedv.contacts.*;
 import de.kaiserpfalzedv.contacts.store.NaturalPersonReadAdapter;
+import de.kaiserpfalzedv.security.cdi.MultitenantRolesAllowed;
 import de.kaiserpfalzedv.security.tenant.cdi.TenantProvider;
 import org.eclipse.microprofile.metrics.annotation.ConcurrentGauge;
 import org.eclipse.microprofile.metrics.annotation.Counted;
@@ -32,7 +33,6 @@ import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -64,7 +64,7 @@ public class ContactsWebService {
 
     @GET
     @Path("natural/")
-    @RolesAllowed({"viewer", "editor", "admin"})
+    @MultitenantRolesAllowed({"viewer", "editor", "admin"})
     @Metered(name = "contacts.loadByUuid")
     @Counted(name = "contacts.loadByUuid.count")
     @ConcurrentGauge(name = "contacts.loadByUuid.concurrent")
@@ -86,7 +86,7 @@ public class ContactsWebService {
 
     @GET
     @Path("natural/{key}")
-    @RolesAllowed({"viewer", "editor", "admin"})
+    @MultitenantRolesAllowed({"viewer", "editor", "admin"})
     @Metered(name = "contacts.loadByKey")
     @Counted(name = "contacts.loadByKey.count")
     @ConcurrentGauge(name = "contacts.loadByKey.concurrent")
@@ -109,7 +109,7 @@ public class ContactsWebService {
 
     @PUT
     @Path("natural")
-    @RolesAllowed({"editor", "admin"})
+    @MultitenantRolesAllowed({"editor", "admin"})
     @Metered(name = "contacts.createNaturalPerson")
     @Counted(name = "contacts.createNaturalPerson.count")
     @ConcurrentGauge(name = "contacts.createNaturalPerson.concurrent")
@@ -136,7 +136,7 @@ public class ContactsWebService {
 
     @POST
     @Path("natural/")
-    @RolesAllowed({"editor", "admin"})
+    @MultitenantRolesAllowed({"editor", "admin"})
     @Metered(name = "contacts.modifyNaturalPerson")
     @Counted(name = "contacts.modifyNaturalPerson.count")
     @ConcurrentGauge(name = "contacts.modifyNaturalPerson.concurrent")
@@ -165,7 +165,7 @@ public class ContactsWebService {
 
     @DELETE
     @Path("natural/")
-    @RolesAllowed({"editor", "admin"})
+    @MultitenantRolesAllowed({"editor", "admin"})
     @Metered(name = "contacts.deleteByUuid")
     @Counted(name = "contacts.deleteByUuid.count")
     @ConcurrentGauge(name = "contacts.deleteByUuid.concurrent")

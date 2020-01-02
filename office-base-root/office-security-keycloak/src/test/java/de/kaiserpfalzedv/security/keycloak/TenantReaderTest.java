@@ -20,69 +20,34 @@ package de.kaiserpfalzedv.security.keycloak;
 
 import de.kaiserpfalzedv.commons.BaseObject;
 import de.kaiserpfalzedv.security.tenant.Tenant;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
+import javax.inject.Inject;
 import java.util.Optional;
-import java.util.Properties;
 
 
 /**
  * @author rlichti
  * @since 2020-01-01T21:13Z
  */
+@QuarkusTest
+@Tag("integration")
 public class TenantReaderTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(TenantReaderTest.class);
 
-    private static final Properties applicationProperties = new Properties();
-
-    private TenantReader service;
-
+    @Inject
+    TenantReader service;
 
     @Test
     public void shouldLoadWhenCorrectConfigurationIsSet() {
-        LOGGER.info("The service is created correctly, otherwise an exception should have been issued already");
-
         Optional<Tenant> result = service.loadbyKey(BaseObject.EMPTY_STRING_MARKER, "de.kaiserpfalz-edv");
-        LOGGER.info("loaded tenant: {}", result);
+        LOGGER.trace("loaded tenant: {}", result);
 
         assert result.isPresent();
         assert "de.kaiserpfalz-edv".equals(result.get().getKey());
-    }
-
-
-    @BeforeAll
-    public static void setUpProperties() throws IOException {
-        LOGGER.trace("Loading file: {}", ClassLoader.getSystemResource("application.properties"));
-
-        try (final InputStream stream = ClassLoader.getSystemResourceAsStream("application.properties")) {
-            applicationProperties.load(stream);
-            /* or properties.loadFromXML(...) */
-        }
-
-        LOGGER.debug(
-                "Set up properties: oidc.uma.auth-realm={}, oidc.uma.client-id={}, oidc.uma.client-secret=***, oidc.uma.config-url={}",
-                applicationProperties.getProperty("%test.oidc.uma.auth-realm", "---unset---"),
-                applicationProperties.getProperty("oidc.uma.client-id", "---unset---"),
-                applicationProperties.getProperty("oidc.uma.config-url", "---unset---")
-        );
-    }
-
-    @BeforeEach
-    public void setUpService() {
-        service = new TenantReader();
-
-        service.umaConfigUri = applicationProperties.getProperty("oidc.uma.config-url", "---unset---");
-        service.umaConfigRealm = applicationProperties.getProperty("%test.oidc.uma.auth-realm", "---unset---");
-
-        service.umaConfigClientId = applicationProperties.getProperty("oidc.uma.client-id", "---unset---");
-        service.umaConfigClientSecret = applicationProperties.getProperty("%test.oidc.uma.client-secret", "---unset---");
-
-        service.createClient();
     }
 }

@@ -1,0 +1,113 @@
+#
+# Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+#
+#  This file is part of Kaiserpfalz EDV-Service Office.
+#
+#  This is free software: you can redistribute it and/or modify it under the terms of
+#  the GNU Lesser General Public License as published by the Free Software
+#  Foundation, either version 3 of the License.
+#
+#  This file is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+#  License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public License along
+#  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
+#
+quarkus:
+  datasource:
+    new-connection-sql: select 1
+    initial-size: 5
+    min-size: 5
+    max-size: 20
+    max-lifetime: 60M
+    background-validation-interval: 1M
+    idle-removal-interval: 5M
+    enable-metrics: true
+  hibernate-orm:
+    database:
+      generation: none
+    jdbc:
+      timezone: UTC
+  flyway:
+    table: FLYWAY_HISTORY
+    migrate-at-start: true
+    connect-retries: 10
+    schemas: BASE,FOLDERS
+    locations: db
+    sql-migration-prefix: V
+    repeatable-sql-migration-prefix: I
+  #    baseline-on-migrate: true
+  #    baseline-version: 1.0.0
+  #    baseline-description: Initial DB
+  log:
+    min-level: TRACE
+    level: INFO
+  index-dependency:
+    com.google.common.collect:
+      group-id: com.google.guava
+      artifact-id: guava
+"%dev":
+  quarkus:
+    datasource:
+      url: jdbc:h2:tcp://localhost:9092/quarkus
+      driver: org.h2.Driver
+      username: h2
+      password: h2
+    hibernate-orm:
+      dialect: org.hibernate.dialect.H2Dialect
+      database:
+        generation: none
+      log:
+        sql: true
+    oidc:
+      enabled: false
+    log:
+      min-level: TRACE
+      category:
+        "de.kaiserpfalzedv":
+          level: TRACE
+        "io.quarkus.flyway":
+          level: DEBUG
+        "io.quarkus.agroal":
+          level: TRACE
+        "org.hibernate":
+          level: DEBUG
+"%test":
+  quarkus:
+    datasource:
+      url: jdbc:h2:tcp://localhost:9092/quarkus
+      driver: org.h2.Driver
+      username: h2
+      password: h2
+    hibernate-orm:
+      dialect: org.hibernate.dialect.H2Dialect
+      database:
+        generation: none
+      log:
+        sql: true
+    oidc:
+      enabled: false
+    log:
+      min-level: TRACE
+      category:
+        "de.kaiserpfalzedv":
+          level: DEBUG
+        "io.quarkus.flyway":
+          level: DEBUG
+        "io.quarkus.agroal":
+          level: DEBUG
+        "org.hibernate":
+          level: DEBUG
+"%prod":
+  quarkus:
+    datasource:
+      url: jdbc:postgresql://office-base-db:5432/office-base-db
+      driver: org.postgresql.Driver
+      username: h2
+      password: h2
+    hibernate-orm:
+      dialect: org.hibernate.dialect.PostgreSQL95Dialect
+    oidc:
+      enabled: false

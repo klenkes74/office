@@ -15,22 +15,20 @@
 #  You should have received a copy of the GNU Lesser General Public License along
 #  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
 #
-office.baseservice.name=office-base
-office.baseservice.version=1.0.0.alpha
-office.tz=UTC
-#
-#
-quarkus.http.auth.basic=true
-%dev.quarkus.oidc.enabled=false
-%test.quarkus.oidc.enabled=false
-%prod.quarkus.oidc.enabled=true
-%dev.quarkus.oidc.auth-server-url=https://sso.kaiserpfalz-edv.de/auth/realms/kp-office-development
-%test.quarkus.oidc.auth-server-url=https://sso.kaiserpfalz-edv.de/auth/realms/kp-office-test
-%prod.quarkus.oidc.auth-server-url=https://sso.kaiserpfalz-edv.de/auth/realms/kp-office-prod
-quarkus.oidc.client-id=tenant-service
-#
-#
-quarkus.log.min-level=TRACE
-quarkus.log.level=INFO
-quarkus.log.category."de.kaiserpfalzedv".min-level=TRACE
-quarkus.log.category."de.kaiserpfalzedv".level=TRACE
+office:
+  baseservice:
+    name: ${project.artifactId}
+    version: ${project.version}
+    tz: UTC
+
+quarkus:
+  index-dependency:
+    com.google.common.collect:
+      group-id: com.google.guava
+      artifact-id: guava
+  log:
+    min-level: TRACE
+    level: INFO
+    category:
+      "de.kaiserpfalzedv":
+        level: TRACE

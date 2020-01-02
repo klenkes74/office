@@ -25,6 +25,7 @@ import de.kaiserpfalzedv.folders.CreateFolder;
 import de.kaiserpfalzedv.folders.Folder;
 import de.kaiserpfalzedv.folders.ImmutableCreateFolder;
 import de.kaiserpfalzedv.folders.store.FolderReadAdapter;
+import de.kaiserpfalzedv.security.cdi.MultitenantRolesAllowed;
 import de.kaiserpfalzedv.security.tenant.cdi.TenantProvider;
 import org.eclipse.microprofile.metrics.annotation.ConcurrentGauge;
 import org.eclipse.microprofile.metrics.annotation.Counted;
@@ -32,7 +33,6 @@ import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -59,7 +59,7 @@ public class FolderWebService {
 
 
     @GET
-    @RolesAllowed({"viewer", "editor", "admin"})
+    @MultitenantRolesAllowed({"viewer", "editor", "admin"})
     @Metered(name = "folders.loadByUuid")
     @Counted(name = "folders.loadByUuid.count")
     @ConcurrentGauge(name = "folders.loadByUuid.concurrent")
@@ -81,7 +81,7 @@ public class FolderWebService {
 
     @GET
     @Path("{key}")
-    @RolesAllowed({"viewer", "editor", "admin"})
+    @MultitenantRolesAllowed({"viewer", "editor", "admin"})
     @Metered(name = "folders.loadByKey")
     @Counted(name = "folders.loadByKey.count")
     @ConcurrentGauge(name = "folders.loadByKey.concurrent")
@@ -103,7 +103,7 @@ public class FolderWebService {
 
 
     @PUT
-    @RolesAllowed({"editor", "admin"})
+    @MultitenantRolesAllowed({"editor", "admin"})
     @Metered(name = "folders.createFolder")
     @Counted(name = "folders.createFolder.count")
     @ConcurrentGauge(name = "folders.createFolder.concurrent")

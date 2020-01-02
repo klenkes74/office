@@ -37,5 +37,10 @@
             <groupId>de.kaiserpfalzedv.office</groupId>
             <artifactId>office-commons</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-oidc</artifactId>
+        </dependency>
     </dependencies>
 </project>

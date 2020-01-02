@@ -20,10 +20,10 @@ package de.kaiserpfalzedv.commons.api;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ImmutableMap;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Optional;
 
 @Value.Immutable
@@ -40,5 +40,5 @@ public interface Metadata extends Serializable, IdentityHolding {
 
     Optional<WorkflowData> getWorkflowdata();
 
-    ImmutableMap<String, String> getLabels();
+    Map<String, String> getLabels();
 }

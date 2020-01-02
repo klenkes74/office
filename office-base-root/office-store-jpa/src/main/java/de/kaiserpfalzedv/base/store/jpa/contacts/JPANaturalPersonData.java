@@ -74,7 +74,7 @@ public class JPANaturalPersonData extends JPAPersonData {
         return this;
     }
 
-    public NaturalPersonSpec toModel(JPAPersonSpec<?,?,?> spec) {
+    public NaturalPersonSpec toModel(JPAPersonSpec<?, ?> spec) {
         return ImmutableNaturalPersonSpec.builder()
                 .identity(spec.identity.toModel(NaturalPerson.KIND, NaturalPerson.VERSION))
                 .displayname(spec.displayname)

@@ -1,5 +1,5 @@
 #
-# Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2019. All rights reserved.
+# Copyright Kaiserpfalz EDV-Service, Roland T. Lichti , 2020. All rights reserved.
 #
 #  This file is part of Kaiserpfalz EDV-Service Office.
 #
@@ -15,12 +15,8 @@
 #  You should have received a copy of the GNU Lesser General Public License along
 #  with this file. If not, see <http://www.gnu.org/licenses/lgpl-3.0.html>.
 #
-office.baseservice.name=office-base
-office.baseservice.version=1.0.0.alpha
-office.tz=UTC
-#
-#
-quarkus.log.min-level=TRACE
-quarkus.log.level=INFO
-quarkus.log.category."de.kaiserpfalzedv".min-level=TRACE
-quarkus.log.category."de.kaiserpfalzedv".level=TRACE
+quarkus:
+  index-dependency:
+    com.google.common.collect:
+      group-id: com.google.guava
+      artifact-id: guava

@@ -69,8 +69,8 @@ public class JPANaturalPerson extends JPAPerson<JPANaturalPerson, NaturalPerson,
                 .build();
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public JPANaturalPerson fromModel(final NaturalPersonSpec model) {
-        //noinspection unchecked,rawtypes
         spec = new JPAPersonSpec().fromModel(model);
         data = new JPANaturalPersonData().fromModel(model);
 

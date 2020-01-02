@@ -35,16 +35,16 @@ import java.util.UUID;
 @Entity
 @Table(schema = "BASE", name = "PERSONS")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class JPAPerson<T extends JPAPerson<?,?,?>, P extends BasePerson, S extends BasePersonSpec> extends PanacheEntity implements KindHolding {
+public class JPAPerson<T extends JPAPerson<?, ?, ?>, P extends BasePerson<?, ?>, S extends BasePersonSpec> extends PanacheEntity implements KindHolding {
     @Embedded
-    public JPAPersonSpec<JPAPersonSpec<?,?,?>, PersonSpec, JPAPersonData> spec;
+    public JPAPersonSpec<JPAPersonSpec<?, ?>, PersonSpec> spec;
 
 
-    public static <T extends JPAPerson<?,?,?>> PanacheQuery<T> findByUuid(final String tenant, final UUID uuid) {
+    public static <T extends JPAPerson<?, ?, ?>> PanacheQuery<T> findByUuid(final String tenant, final UUID uuid) {
         return find("spec.identity.tenant=?1 and spec.identity.uuid=?2", tenant, uuid);
     }
 
-    public static <T extends JPAPerson<?,?,?>> PanacheQuery<T> findByTenant(final String tenant) {
+    public static <T extends JPAPerson<?, ?, ?>> PanacheQuery<T> findByTenant(final String tenant) {
         return find("spec.identity.tenant=?1", tenant);
     }
 
@@ -52,8 +52,8 @@ public class JPAPerson<T extends JPAPerson<?,?,?>, P extends BasePerson, S exten
         return find("spec.identity.tenant=?1 and spec.identity.key=?2", tenant, key);
     }
 
+    @SuppressWarnings("unchecked")
     public P toModel() {
-        //noinspection unchecked
         return (P) ImmutablePerson.builder()
                 .kind(getKind())
                 .version(getVersion())

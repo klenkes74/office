@@ -36,7 +36,7 @@ import java.time.OffsetDateTime;
  */
 @Embeddable
 @MappedSuperclass
-public class JPAPersonSpec<T extends JPAPersonSpec<?,?,?>, S extends BasePersonSpec, D extends JPAPersonData> implements Serializable {
+public class JPAPersonSpec<T extends JPAPersonSpec<?, ?>, S extends BasePersonSpec> implements Serializable {
     @Embedded
     public JPAIdentity identity;
 
@@ -48,18 +48,18 @@ public class JPAPersonSpec<T extends JPAPersonSpec<?,?,?>, S extends BasePersonS
     @Column(name = "_MODIFIED", nullable = false)
     public OffsetDateTime modified;
 
+    @SuppressWarnings("unchecked")
     public T fromModel(S model) {
         identity = new JPAIdentity().fromModel(model.getIdentity());
         displayname = model.getDisplayname();
         created = model.getCreated();
         modified = model.getModified();
 
-        //noinspection unchecked
         return (T) this;
     }
 
+    @SuppressWarnings("unchecked")
     public S toModel() {
-        //noinspection unchecked
         return (S) ImmutablePersonSpec.builder()
                 .identity(identity.toModel(Person.KIND, Person.VERSION))
 

@@ -45,19 +45,15 @@
         <db.username>h2</db.username>
         <h2.version>1.4.197</h2.version>
 
-        <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
-        <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>1.0.1.Final</quarkus.platform.version>
         <imutables.version>2.8.2</imutables.version>
         <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
-        <logback-classic.version>1.2.3</logback-classic.version>
 
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
         <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
-        <quarkus-plugin.version>1.0.1.Final</quarkus-plugin.version>
+        <quarkus-plugin.version>1.1.0.Final</quarkus-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -73,43 +69,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jackson</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss.slf4j</groupId>
-                    <artifactId>slf4j-jboss-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.immutables</groupId>
-            <artifactId>value</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.immutables</groupId>
-            <artifactId>encode</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>15.0</version>
-            <scope>compile</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -215,6 +174,11 @@
                     </executions>
                 </plugin>
                 <plugin>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-bootstrap-maven-plugin</artifactId>
+                    <version>${quarkus-plugin.version}</version>
+                </plugin>
+                <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire-plugin.version}</version>
                     <executions>
@@ -232,10 +196,6 @@
                                     <jacoco-agent.destfile>${project.build.directory}/jacoco-it.exec
                                     </jacoco-agent.destfile>
                                 </systemProperties>
-                                <classpathDependencyExcludes>
-                                    <classpathDependencyExclude>org.jboss.slf4j:slf4j-jboss-logging
-                                    </classpathDependencyExclude>
-                                </classpathDependencyExcludes>
                             </configuration>
                         </execution>
                     </executions>
@@ -243,16 +203,6 @@
                         <excludedGroups>integration</excludedGroups>
                         <systemProperties>
                             <quarkus.profile>test</quarkus.profile>
-                            <!--suppress MavenModelInspection -->
-                            <quarkus.datasource.url>jdbc:h2:tcp://localhost:${h2.test.tcp.port}/quarkus
-                            </quarkus.datasource.url>
-                            <quarkus.datasource.driver>org.h2.Driver</quarkus.datasource.driver>
-                            <quarkus.hibernate-orm.dialect>org.hibernate.dialect.H2Dialect
-                            </quarkus.hibernate-orm.dialect>
-                            <quarkus.hibernate-orm.database.generation>none</quarkus.hibernate-orm.database.generation>
-                            <quarkus.datasource.username>h2</quarkus.datasource.username>
-                            <quarkus.datasource.password>h2</quarkus.datasource.password>
-
                             <jacoco-agent.destfile>${project.build.directory}/jacoco-ut.exec</jacoco-agent.destfile>
                             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         </systemProperties>
@@ -536,11 +486,52 @@
 
             <dependencies>
                 <dependency>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>org.jacoco.agent</artifactId>
-                    <classifier>runtime</classifier>
+                    <groupId>org.immutables</groupId>
+                    <artifactId>value</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.immutables</groupId>
+                    <artifactId>encode</artifactId>
                 </dependency>
 
+                <dependency>
+                    <groupId>jakarta.enterprise</groupId>
+                    <artifactId>jakarta.enterprise.cdi-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-core</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-config-yaml</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-logging-json</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </dependency>
+
+
+                <dependency>
+                    <groupId>org.jetbrains</groupId>
+                    <artifactId>annotations</artifactId>
+                    <version>15.0</version>
+                    <scope>compile</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-junit5</artifactId>
+                    <scope>test</scope>
+                </dependency>
                 <dependency>
                     <groupId>org.junit.jupiter</groupId>
                     <artifactId>junit-jupiter-api</artifactId>
@@ -556,22 +547,17 @@
                     <artifactId>junit-platform-launcher</artifactId>
                     <scope>test</scope>
                 </dependency>
+                <dependency>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>org.jacoco.agent</artifactId>
+                    <classifier>runtime</classifier>
+                    <scope>test</scope>
+                </dependency>
 
                 <dependency>
                     <groupId>org.hamcrest</groupId>
                     <artifactId>hamcrest</artifactId>
                     <version>2.1</version>
-                </dependency>
-
-                <dependency>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>jul-to-slf4j</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                    <scope>test</scope>
                 </dependency>
             </dependencies>
 
@@ -599,6 +585,11 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
                     </plugin>
+                    <plugin>
+                        <groupId>io.quarkus</groupId>
+                        <artifactId>quarkus-bootstrap-maven-plugin</artifactId>
+                    </plugin>
+
                 </plugins>
             </build>
         </profile>
@@ -640,6 +631,48 @@
                         <groupId>com.edugility</groupId>
                         <artifactId>h2-maven-plugin</artifactId>
                     </plugin>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${surefire-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>integration-tests</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <excludedGroups>!integration</excludedGroups>
+                                    <groups>integration</groups>
+                                    <systemProperties>
+                                        <quarkus.profile>test</quarkus.profile>
+                                        <jacoco-agent.destfile>${project.build.directory}/jacoco-it.exec
+                                        </jacoco-agent.destfile>
+                                    </systemProperties>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <excludedGroups>integration</excludedGroups>
+                            <systemProperties>
+                                <quarkus.profile>test</quarkus.profile>
+                                <!--suppress MavenModelInspection -->
+                                <quarkus.datasource.url>jdbc:h2:tcp://localhost:${h2.test.tcp.port}/quarkus
+                                </quarkus.datasource.url>
+                                <quarkus.datasource.driver>org.h2.Driver</quarkus.datasource.driver>
+                                <quarkus.hibernate-orm.dialect>org.hibernate.dialect.H2Dialect
+                                </quarkus.hibernate-orm.dialect>
+                                <quarkus.hibernate-orm.database.generation>none
+                                </quarkus.hibernate-orm.database.generation>
+                                <quarkus.datasource.username>h2</quarkus.datasource.username>
+                                <quarkus.datasource.password>h2</quarkus.datasource.password>
+
+                                <jacoco-agent.destfile>${project.build.directory}/jacoco-ut.exec</jacoco-agent.destfile>
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+
                 </plugins>
             </build>
         </profile>
@@ -665,78 +698,9 @@
             <id>quarkus-it</id>
             <activation>
                 <file>
-                    <exists>./src/test/resources/application.properties</exists>
+                    <exists>./src/test/resources/application.yaml</exists>
                 </file>
             </activation>
-
-            <dependencies>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-resteasy-jackson</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-rest-client</artifactId>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>org.jboss.slf4j</groupId>
-                            <artifactId>slf4j-jboss-logging</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-health</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-scheduler</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-elytron-security</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-vault</artifactId>
-                </dependency>
-                <!--
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-reactive-messaging-amqp</artifactId>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>org.jboss.logging</groupId>
-                            <artifactId>jboss-logging</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-                -->
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-smallrye-openapi</artifactId>
-                    <version>1.0.1.Final</version>
-                </dependency>
-
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-junit5</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>io.rest-assured</groupId>
-                    <artifactId>rest-assured</artifactId>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
 
             <build>
                 <plugins>

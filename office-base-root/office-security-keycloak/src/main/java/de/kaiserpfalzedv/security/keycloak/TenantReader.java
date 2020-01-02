@@ -23,23 +23,23 @@ import de.kaiserpfalzedv.commons.ImmutableObjectReference;
 import de.kaiserpfalzedv.commons.api.ImmutableMetadata;
 import de.kaiserpfalzedv.commons.api.ImmutableObjectIdentity;
 import de.kaiserpfalzedv.commons.api.InvalidObjectIdentity;
+import de.kaiserpfalzedv.security.oidc.OidcUmaClient;
 import de.kaiserpfalzedv.security.store.TenantReadAdapter;
 import de.kaiserpfalzedv.security.tenant.ImmutableTenant;
 import de.kaiserpfalzedv.security.tenant.Tenant;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.keycloak.authorization.client.AuthzClient;
-import org.keycloak.authorization.client.Configuration;
-import org.keycloak.authorization.client.resource.AuthorizationResource;
 import org.keycloak.authorization.client.resource.ProtectionResource;
 import org.keycloak.representations.idm.authorization.ResourceRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -51,43 +51,11 @@ import java.util.*;
 public class TenantReader implements TenantReadAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(TenantReader.class);
 
-    @Inject
-    @ConfigProperty(name = "oidc.uma.client-id")
-    String umaConfigClientId;
 
     @Inject
-    @ConfigProperty(name = "oidc.uma.client-secret")
-    String umaConfigClientSecret;
+    @OidcUmaClient
+    AuthzClient client;
 
-    @Inject
-    @ConfigProperty(name = "oidc.uma.auth-ream")
-    String umaConfigRealm;
-
-    @Inject
-    @ConfigProperty(name = "oidc.uma.config-url")
-    String umaConfigUri;
-
-    private AuthzClient client;
-
-
-    @PostConstruct
-    public void createClient() {
-        Configuration config = new Configuration();
-
-        config.setAuthServerUrl(umaConfigUri);
-        config.setRealm(umaConfigRealm);
-
-        config.setResource(umaConfigClientId);
-
-        Map<String, Object> credentials = new HashMap<>(1);
-        credentials.put("secret", umaConfigClientSecret);
-        config.setCredentials(credentials);
-
-        client = AuthzClient.create(config);
-
-        AuthorizationResource authorization = client.authorization();
-        LOGGER.debug("Created keycloak auth client: client={}, authorization={}", client, authorization);
-    }
 
     @Override
     public Optional<Tenant> loadById(final String tenant, final UUID id) {

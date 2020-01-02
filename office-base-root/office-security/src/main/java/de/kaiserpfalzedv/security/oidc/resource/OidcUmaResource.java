@@ -20,7 +20,6 @@ package de.kaiserpfalzedv.security.oidc.resource;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import de.kaiserpfalzedv.commons.ObjectReference;
 import de.kaiserpfalzedv.commons.api.DisplaynameHolding;
@@ -31,6 +30,7 @@ import org.immutables.value.Value;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author rlichti
@@ -50,5 +50,5 @@ public interface OidcUmaResource extends Serializable, DisplaynameHolding, Ident
 
     Boolean getOwnerManagedAccess();
 
-    ImmutableMap<String, List<String>> getAttributes();
+    Map<String, List<String>> getAttributes();
 }
