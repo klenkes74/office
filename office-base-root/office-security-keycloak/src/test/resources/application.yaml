@@ -19,7 +19,7 @@ office:
   baseservice:
     name: ${project.artifactId}
     version: ${project.version}
-    tz: UTC
+  tz: UTC
 
 oidc:
   uma:

@@ -41,6 +41,9 @@ quarkus:
   #    baseline-on-migrate: true
   #    baseline-version: 1.0.0
   #    baseline-description: Initial DB
+  oidc:
+    auth-server-url: https://sso.kaiserpfalz-edv.de/auth/realms/quarkus
+    client-id: backend-service
   log:
     min-level: TRACE
     level: INFO

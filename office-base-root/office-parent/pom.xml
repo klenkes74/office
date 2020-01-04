@@ -558,6 +558,7 @@
                     <groupId>org.hamcrest</groupId>
                     <artifactId>hamcrest</artifactId>
                     <version>2.1</version>
+                    <scope>test</scope>
                 </dependency>
             </dependencies>
 
@@ -601,29 +602,6 @@
                     <exists>./src/test/resources/db</exists>
                 </file>
             </activation>
-
-            <dependencies>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-hibernate-orm-panache</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-agroal</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-flyway</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-jdbc-h2</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-jdbc-postgresql</artifactId>
-                </dependency>
-            </dependencies>
 
             <build>
                 <plugins>
@@ -672,7 +650,6 @@
                             </systemProperties>
                         </configuration>
                     </plugin>
-
                 </plugins>
             </build>
         </profile>
