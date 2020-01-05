@@ -18,7 +18,6 @@
 
 package de.kaiserpfalzedv.office.folders;
 
-import de.kaiserpfalzedv.security.tenant.cdi.TenantProvider;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -49,7 +48,7 @@ public class FolderWebServiceTest {
     public void shouldReturnCorrectFolderWhenGivenTheUuid() {
         given()
                 .when()
-                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
+                .pathParam("tenant", TENANT)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .get("/folders/{tenant}/?uuid=3ca1aa42-4ae0-4066-ae5b-1ab2d1eab7f8")
                 .then()
@@ -60,17 +59,17 @@ public class FolderWebServiceTest {
     public void shouldReturnNotFoundWhenGivenTheWrongUuid() {
         given()
                 .when()
-                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
+                .pathParam("tenant", TENANT)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .get("/folders/{tenant}/?uuid=00000000-0000-0000-0000-000000000000")
                 .then()
-                .statusCode(404);
+                .statusCode(NOT_FOUND.getStatusCode());
     }
 
     @Test
     public void shouldReturnNotFoundWhenGivenAnUnknownKey() {
         given()
-                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
+                .pathParam("tenant", TENANT)
                 .pathParam("key", "not-there")
                 .when()
                 .auth().preemptive().basic(USER, PASSWORD)
@@ -82,7 +81,7 @@ public class FolderWebServiceTest {
     @Test
     public void shouldReturnForbiddenWhenGivenWrongTenant() {
         given()
-                .pathParam(TenantProvider.TENANT_MDC_MARKER, "wrong-tenant")
+                .pathParam("tenant", "wrong-tenant")
                 .pathParam("key", "not-there")
                 .when()
                 .auth().preemptive().basic(USER, PASSWORD)
@@ -94,14 +93,14 @@ public class FolderWebServiceTest {
     @Test
     public void shouldReturnCorrectFolderWhenGivenTheCorrectScopeAndKey() {
         given()
-                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
+                .pathParam("tenant", TENANT)
                 .pathParam("key", "I-19-0001")
                 .when()
                 .auth().preemptive().basic(USER, PASSWORD)
                 .get("/folders/{tenant}/{key}")
                 .prettyPeek()
                 .then()
-                .statusCode(200);
+                .statusCode(allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
 
     @Test
@@ -112,11 +111,11 @@ public class FolderWebServiceTest {
 
         given()
                 .when()
-                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
+                .pathParam("tenant", TENANT)
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
-                .put("/folders/{tenant}")
+                .post("/folders/{tenant}")
                 .then()
                 .statusCode(allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
@@ -129,11 +128,11 @@ public class FolderWebServiceTest {
 
         given()
                 .when()
-                .pathParam(TenantProvider.TENANT_MDC_MARKER, TENANT)
+                .pathParam("tenant", TENANT)
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
-                .put("/folders/{tenant}")
+                .post("/folders/{tenant}")
                 .then()
                 .statusCode(409);
     }
@@ -146,11 +145,11 @@ public class FolderWebServiceTest {
 
         given()
                 .when()
-                .pathParam(TenantProvider.TENANT_MDC_MARKER, "de.lichti")
+                .pathParam("tenant", "de.lichti")
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
-                .put("/folders/{tenant}")
+                .post("/folders/{tenant}")
                 .then()
                 .statusCode(FORBIDDEN.getStatusCode());
     }
@@ -162,7 +161,7 @@ public class FolderWebServiceTest {
                 .auth().preemptive().basic(USER, PASSWORD)
                 .get("/health/ready")
                 .then()
-                .statusCode(200);
+                .statusCode(allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
 
     @Test
@@ -172,6 +171,6 @@ public class FolderWebServiceTest {
                 .auth().preemptive().basic(USER, PASSWORD)
                 .get("/health/live")
                 .then()
-                .statusCode(200);
+                .statusCode(allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
 }

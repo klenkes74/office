@@ -35,14 +35,6 @@
     <dependencies>
         <dependency>
             <groupId>de.kaiserpfalzedv.office</groupId>
-            <artifactId>office-commons</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.kaiserpfalzedv.office</groupId>
-            <artifactId>office-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.kaiserpfalzedv.office</groupId>
             <artifactId>office-security-keycloak</artifactId>
         </dependency>
         <dependency>
@@ -99,6 +91,11 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-kubernetes</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-logging-json</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <dependency>
             <groupId>io.rest-assured</groupId>
@@ -113,6 +110,7 @@
         <dependency>
             <groupId>org.jboss.spec.javax.xml.bind</groupId>
             <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

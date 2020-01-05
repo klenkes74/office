@@ -116,7 +116,7 @@ public class NaturalPersonWebServiceTest {
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
-                .put("/contacts/{tenant}/natural")
+                .post("/contacts/{tenant}/natural")
                 .then()
                 .statusCode(allOf(greaterThanOrEqualTo(200), lessThan(300)));
     }
@@ -133,7 +133,7 @@ public class NaturalPersonWebServiceTest {
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
-                .post("/contacts/{tenant}/natural/")
+                .put("/contacts/{tenant}/natural/")
                 .prettyPeek()
                 .then()
                 .statusCode(allOf(greaterThanOrEqualTo(200), lessThan(300)));
@@ -151,7 +151,7 @@ public class NaturalPersonWebServiceTest {
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
-                .put("/contacts/{tenant}/natural/")
+                .post("/contacts/{tenant}/natural/")
                 .then()
                 .statusCode(409);
     }
@@ -168,7 +168,7 @@ public class NaturalPersonWebServiceTest {
                 .header("content-type", MediaType.APPLICATION_JSON)
                 .auth().preemptive().basic(USER, PASSWORD)
                 .body(body)
-                .put("/contacts/{tenant}/natural/")
+                .post("/contacts/{tenant}/natural/")
                 .then()
                 .statusCode(FORBIDDEN.getStatusCode());
     }

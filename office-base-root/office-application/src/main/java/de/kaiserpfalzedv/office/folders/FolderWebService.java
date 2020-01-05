@@ -102,7 +102,7 @@ public class FolderWebService {
     }
 
 
-    @PUT
+    @POST
     @MultitenantRolesAllowed({"editor", "admin"})
     @Metered(name = "folders.createFolder")
     @Counted(name = "folders.createFolder.count")

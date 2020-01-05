@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import javax.ws.rs.Priorities;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
@@ -45,7 +46,7 @@ import java.lang.annotation.Annotation;
 @RequestScoped
 @Interceptor
 @MultitenantRolesAllowed("")
-@Priority(1)
+@Priority(Priorities.AUTHORIZATION + 1)
 public class MultitenantRoleInterceptor implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(MultitenantRoleInterceptor.class);
 
@@ -57,8 +58,9 @@ public class MultitenantRoleInterceptor implements Serializable {
 
 
     @AroundInvoke
-    public Object logMethodCall(InvocationContext ctx) throws Exception {
+    public Object checkPermission(InvocationContext ctx) throws Exception {
         Annotation[] annotations = ctx.getMethod().getDeclaredAnnotations();
+
 
         String[] permissions = null;
         for (Annotation a : annotations) {

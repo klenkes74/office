@@ -107,7 +107,7 @@ public class ContactsWebService {
     }
 
 
-    @PUT
+    @POST
     @Path("natural")
     @MultitenantRolesAllowed({"editor", "admin"})
     @Metered(name = "contacts.createNaturalPerson")
@@ -134,7 +134,7 @@ public class ContactsWebService {
         }
     }
 
-    @POST
+    @PUT
     @Path("natural/")
     @MultitenantRolesAllowed({"editor", "admin"})
     @Metered(name = "contacts.modifyNaturalPerson")
