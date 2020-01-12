@@ -27,6 +27,7 @@ import de.kaiserpfalzedv.security.oidc.OidcUmaClient;
 import de.kaiserpfalzedv.security.store.TenantReadAdapter;
 import de.kaiserpfalzedv.security.tenant.ImmutableTenant;
 import de.kaiserpfalzedv.security.tenant.Tenant;
+import org.jetbrains.annotations.NotNull;
 import org.keycloak.authorization.client.AuthzClient;
 import org.keycloak.authorization.client.resource.ProtectionResource;
 import org.keycloak.representations.idm.authorization.ResourceRepresentation;
@@ -59,7 +60,17 @@ public class TenantReader implements TenantReadAdapter {
 
     @Override
     public Optional<Tenant> loadById(final String tenant, final UUID id) {
-        throw new UnsupportedOperationException("Loading tenants by UUID is not supported!");
+        LOGGER.debug("Loading tenant: id={}", id);
+
+        ProtectionResource permission = client.protection();
+        ResourceRepresentation resource = permission.resource().findById(id.toString());
+
+        if (resource == null) {
+            LOGGER.warn("No tenant found. id={}", id);
+            return Optional.empty();
+        }
+
+        return createTenantFromResource(resource);
     }
 
     @Override
@@ -67,7 +78,7 @@ public class TenantReader implements TenantReadAdapter {
         LOGGER.debug("Loading tenant: key={}", key);
 
         ProtectionResource permission = client.protection();
-        List<ResourceRepresentation> resources = permission.resource().findByMatchingUri("/tenants/de.kaiserpfalz-edv");
+        List<ResourceRepresentation> resources = permission.resource().findByMatchingUri("/tenants/" + key);
 
         if (resources.isEmpty()) {
             LOGGER.debug("No tenant found. key={}", key);
@@ -75,6 +86,11 @@ public class TenantReader implements TenantReadAdapter {
         }
         ResourceRepresentation resource = resources.get(0);
 
+        return createTenantFromResource(resource);
+    }
+
+    @NotNull
+    public Optional<Tenant> createTenantFromResource(ResourceRepresentation resource) {
         Tenant result = ImmutableTenant.builder()
                 .identity(ImmutableObjectIdentity.builder()
                         .kind(resource.getType())
@@ -95,13 +111,13 @@ public class TenantReader implements TenantReadAdapter {
                                                 .version(InvalidObjectIdentity.INVALID_VERSION)
                                                 .uuid(UUID.fromString(resource.getOwner().getId()))
                                                 .tenant(BaseObject.EMPTY_STRING_MARKER)
-                                                .key(resource.getOwner().getName())
+                                                .key(getOwnerNameOrId(resource))
                                                 .build()
                                         )
                                         .build()
                                 )
 
-                                .displayname(resource.getOwner().getName())
+                                .displayname(getOwnerNameOrId(resource))
                                 .build())
 
                         .build()
@@ -112,18 +128,33 @@ public class TenantReader implements TenantReadAdapter {
         return Optional.of(result);
     }
 
+    public String getOwnerNameOrId(ResourceRepresentation resource) {
+        return resource.getOwner().getName() != null ?
+                resource.getOwner().getName()
+                : resource.getOwner().getId();
+    }
+
     @Override
     public ArrayList<Tenant> loadByTenant(final String tenant) {
-        throw new UnsupportedOperationException("Can't load tenant by tenant!");
+        ArrayList<Tenant> result = new ArrayList<>(1);
+
+        loadbyKey(BaseObject.EMPTY_STRING_MARKER, tenant)
+                .ifPresent(result::add);
+
+        return result;
     }
 
     @Override
     public ArrayList<Tenant> loadByTenant(final String tenant, final int index, final int size) {
-        throw new UnsupportedOperationException("Can't load tenant by tenant!");
+        return loadByTenant(tenant);
     }
 
     @Override
     public long count() {
-        throw new UnsupportedOperationException("Can't count tenants!");
+        ProtectionResource permission = client.protection();
+
+        List<ResourceRepresentation> resources = permission.resource().findByMatchingUri("/tenants");
+
+        return resources.size();
     }
 }

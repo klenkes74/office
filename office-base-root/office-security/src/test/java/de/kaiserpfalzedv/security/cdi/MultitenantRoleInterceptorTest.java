@@ -19,14 +19,18 @@
 package de.kaiserpfalzedv.security.cdi;
 
 import de.kaiserpfalzedv.commons.BaseObject;
+import io.quarkus.security.ForbiddenException;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
@@ -42,8 +46,16 @@ public class MultitenantRoleInterceptorTest {
     TestedClassForMultitenantInterceptor intercepted;
 
     @Test
-    public void shouldCreateACorrelationIdWhenNoParameterIsGiven() {
-        intercepted.callWithoutParameter();
+    public void shouldThrowForbiddenExceptionWhenNoRolesAreGiven() {
+        MDC.put("tenant", "test");
+
+        try {
+            intercepted.callWithoutParameter();
+
+            fail("There should have been a ForboddenException!");
+        } catch (ForbiddenException ignored) {
+            // everything is fine. We expected the Exception.
+        }
     }
 }
 
@@ -54,7 +66,7 @@ class TestedClassForMultitenantInterceptor {
 
     @MultitenantRolesAllowed("test")
     void callWithoutParameter() {
-        LOGGER.info("MethodWithoutParameter called");
+        LOGGER.info("MethodWithoutParameter called.");
     }
 
     @MultitenantRolesAllowed("test")

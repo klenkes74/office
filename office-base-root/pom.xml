@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.kaiserpfalzedv.office</groupId>
-    <artifactId>root</artifactId>
+    <artifactId>office-base-root</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>KP Office :: Root</name>
     <packaging>pom</packaging>

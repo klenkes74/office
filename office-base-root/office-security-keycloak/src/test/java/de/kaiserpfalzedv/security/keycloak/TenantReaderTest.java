@@ -18,7 +18,6 @@
 
 package de.kaiserpfalzedv.security.keycloak;
 
-import de.kaiserpfalzedv.commons.BaseObject;
 import de.kaiserpfalzedv.security.tenant.Tenant;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Tag;
@@ -28,9 +27,14 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.Optional;
+import java.util.UUID;
+
+import static de.kaiserpfalzedv.commons.BaseObject.EMPTY_STRING_MARKER;
 
 
 /**
+ * A fairly fragile test. It assumes that a special resource with a certain ID exists.
+ *
  * @author rlichti
  * @since 2020-01-01T21:13Z
  */
@@ -39,15 +43,36 @@ import java.util.Optional;
 public class TenantReaderTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(TenantReaderTest.class);
 
+    private static final String EXISTING_RESOURCE_NAME = "de.kaiserpfalz-edv";
+    private static final UUID EXISTING_ID = UUID.fromString("1b9dac8b-55f5-418a-a46a-90fdcdbfcaeb");
+
     @Inject
     TenantReader service;
 
     @Test
     public void shouldLoadWhenCorrectConfigurationIsSet() {
-        Optional<Tenant> result = service.loadbyKey(BaseObject.EMPTY_STRING_MARKER, "de.kaiserpfalz-edv");
+        Optional<Tenant> result = service.loadbyKey(EMPTY_STRING_MARKER, EXISTING_RESOURCE_NAME);
         LOGGER.trace("loaded tenant: {}", result);
 
         assert result.isPresent();
-        assert "de.kaiserpfalz-edv".equals(result.get().getKey());
+        assert EXISTING_ID.equals(result.get().getIdentity().getUuid());
+        assert EXISTING_RESOURCE_NAME.equals(result.get().getKey());
+    }
+
+    @Test
+    public void shouldLoadWhenCorrectIdIsGiven() {
+        Optional<Tenant> result = service.loadById(EMPTY_STRING_MARKER, EXISTING_ID);
+        LOGGER.trace("loaded tenant: {}", result);
+
+        assert result.isPresent();
+        assert EXISTING_ID.equals(result.get().getIdentity().getUuid());
+        assert EXISTING_RESOURCE_NAME.equals(result.get().getKey());
+    }
+
+    @Test
+    public void shouldCountAllTenants() {
+        LOGGER.trace("Number of tenants: {}", service.count());
+
+        assert service.count() >= 1;
     }
 }

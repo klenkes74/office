@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.kaiserpfalzedv.conventions</groupId>
-    <artifactId>root</artifactId>
+    <artifactId>conventions-root</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>KP Conventions :: Root</name>
     <packaging>pom</packaging>

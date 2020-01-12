@@ -23,5 +23,6 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
     <interceptors>
         <class>de.kaiserpfalzedv.security.cdi.MultitenantRoleInterceptor</class>
+        <class>de.kaiserpfalzedv.security.tenant.cdi.TenantProvider</class>
     </interceptors>
 </beans>
