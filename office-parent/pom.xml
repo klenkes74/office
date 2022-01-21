@@ -48,7 +48,7 @@
 
         <db.password>h2</db.password>
         <db.username>h2</db.username>
-        <h2.version>1.4.197</h2.version>
+        <h2.version>2.1.210</h2.version>
 
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
